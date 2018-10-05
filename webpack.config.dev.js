@@ -1,46 +1,63 @@
-import webpack from 'webpack';
-import path from 'path';
+const webpack = require('webpack');
+const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-export default {
-  debug: true,
-  devtool: 'inline-source-map',
-  noInfo: false,
-  entry: [
-    'eventsource-polyfill',
-    path.resolve(__dirname, 'src/index')
-  ],
+module.exports = {
+  devtool: 'cheap-module-eval-source-map',
+  mode: 'production',
+  entry: {
+    home: [   path.resolve(__dirname, '../src/public/scripts/homeScript'),
+              'webpack-hot-middleware/client?reload=true' ],
+    survive: [  path.resolve(__dirname, '../src/public/scripts/survive'),
+                'webpack-hot-middleware/client?reload=true' ],
+    gamesuite: [  path.resolve(__dirname, '../src/public/scripts/gamesuiteScript'),
+                  'webpack-hot-middleware/client?reload=true' ]
+  },
   target: 'web',
   output: {
-    path: __dirname + '/dist',
-    publicPath: '/',
-    filename: 'bundle.js'
+    path: __dirname + '../dist',
+    publicPath: '../',
+    filename: '[name]Bundle.js'
   },
   devServer: {
-    contentBase: path.resolve(__dirname, 'src')
+    contentBase: path.resolve(__dirname, '../src/server/home')
   },
   plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
   module: {
-    loaders: [
-      {test: /\.js$/, include: path.join(__dirname, 'src'), loaders: ['babel']},
-      {test: /(\.css)$/, loaders: ['style', 'css']},
-      {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file'},
-      {test: /\.(woff|woff2)$/, loader: 'url?prefix=font/&limit=5000'},
-      {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream'},
-      {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml'}
-    ],
     rules: [
       {
         enforce: 'pre',
         test: /\.js$/,
-        use: 'eslint-loader',
+        use: 'eslint-loader'
       },
       {
         test: /\.js?$/,
         use: 'babel-loader',
         exclude: /node_modules/,
+      },
+      {
+        test: /\.html$/,
+        use: 'html-loader'
+      }
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          },
+          { loader: 'sass-loader' }
+        ]
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader'
       }
     ]
   }

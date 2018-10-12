@@ -10,14 +10,3 @@ export function normalizePort(val) {
   }
   return false;
 }
-
-export function onServerListen(server) {
-  const addr = server.address();
-  const bind = `${
-    typeof addr === 'string' ? 'pipe' : 'port'
-  } ${
-    typeof addr === 'string' ? addr : addr.port
-  }`;
-  log(`Server is listening on ${bind}`);
-  log(`Visit: http://localhost:${addr.port}`);
-}

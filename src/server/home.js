@@ -2,11 +2,16 @@
 
 //DEPENDENCIES
 import http from 'http';
+import path from 'path';
+import fs from 'fs';
+
 import app from '../app/expressApp';
+import dbConnect from '../app/connectBot';
+import logger from '../app/logWriter';
+import gameSuite from '../app/gamesuite';
 import {
   normalizePort
 } from './utilityscripts.js';
-import path from 'path';
 
 //Start Express server
 const expressApp = http.createServer(app);
@@ -18,6 +23,21 @@ startListening(availablePort);
 expressApp.on('listening', onListening);
 expressApp.on('error', onError);
 
+//Connect to db
+let connectBot = undefined;
+let dbauth = '';
+fs.readFile('D:/Misc/auth/wegotdb.txt', 'utf8', function(err, data) {
+  if(err) {
+    logger.info('!!! Error in retrieving database authentication info. !!!');
+  }
+  dbauth = data;
+});
+setTimeout(function() {
+  connectBot = dbConnect.getConnectionPool('connectBot', dbauth);
+  testDBConnection();
+}, 2000);
+
+//===========================================================================================================================
 //Server utility functions
 function onError(error) {
   if (error.syscall !== 'listen') {
@@ -29,7 +49,7 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      writeToLog(`${bind} requires elevated privileges`);
+      logger.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
@@ -38,7 +58,7 @@ function onError(error) {
         startListening(availablePort);
         expressApp.set('port', availablePort);
       } else {
-        writeToLog(`${bind} is already in use`);
+        logger.error(`${bind} is already in use`);
         process.exit(1);
       }
       break;
@@ -54,14 +74,26 @@ function onListening() {
   } ${
     typeof addr === 'string' ? addr : addr.port
   }`;
-  writeToLog(`Server is listening on port ${bind}`);
-  writeToLog(`Visit: http://localhost:${addr.port}`);
+  logger.info(`Server is listening on port ${bind}`);
+  logger.info(`Visit: http://localhost:${addr.port}`);
 }
 
 function startListening(servport) {
   expressApp.listen(servport);
 }
 
-function writeToLog(message) {
-  process.stdout.write(`${message}\n`);
+function testDBConnection() {
+  connectBot.getConnection(function(err, connection) {
+    if(err) {
+      logger.error('Unable to establish database connection');
+      dbConnect.dbEnabled = false;
+    } else {
+      logger.info('Database connection successfully established');
+    }
+    connection.release();
+    connection.on('error', function(err) {
+      logger.error('Unable to establish database connection');
+      dbConnect.dbEnabled = false;
+    });
+  });
 }

@@ -8,10 +8,11 @@ import cookieParser from 'cookie-parser';
 
 //LOCAL DEPENDENCIES
 import expressRoutes from '../routes/expressRoutes';
+import connectBot from './connectBot';
 
 //CONFIGURATION
 dotenv.config({
-  silent: true,
+  silent: true
 });
 
 const app = express();
@@ -20,7 +21,8 @@ app.use(logger('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/../public')));
+app.use(express.static(path.join(__dirname, '/../public'))); //DEVELOPMENT
+app.use(express.static(path.join(__dirname, '/../../dist'))); //PRODUCTION
 app.use('/', expressRoutes);
 
 //404

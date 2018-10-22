@@ -7,8 +7,9 @@ import fs from 'fs';
 
 import app from '../app/expressApp';
 import dbConnect from '../app/connectBot';
+import gameSuite from '../app/gamesuite/gameSuite';
+import getPoller from '../app/gamesuite/poller';
 import logger from '../app/logWriter';
-import gameSuite from '../app/gamesuite';
 import {
   normalizePort
 } from './utilityscripts.js';
@@ -36,6 +37,10 @@ setTimeout(function() {
   connectBot = dbConnect.getConnectionPool('connectBot', dbauth);
   testDBConnection();
 }, 2000);
+
+//Start GameSuite
+const gs = new gameSuite(1000, 4000);
+gs.startBase();
 
 //===========================================================================================================================
 //Server utility functions

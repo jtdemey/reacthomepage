@@ -2,13 +2,16 @@
 import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
-import logger from 'morgan';
+import serverLogger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
 //LOCAL DEPENDENCIES
 import expressRoutes from '../routes/expressRoutes';
 import connectBot from './connectBot';
+import gameSuite from './gamesuite/gameSuite';
+import logger from './logWriter';
+
 
 //CONFIGURATION
 dotenv.config({
@@ -17,7 +20,7 @@ dotenv.config({
 
 const app = express();
 
-app.use(logger('combined'));
+app.use(serverLogger('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -44,6 +47,40 @@ app.use((err, req, res, next) => {
   res.status(200);
   res.sendFile(path.join(__dirname + '/../public/html/errorpage.html'));
   next();
+});
+
+app.post('/gamesuite/scripts/makeGame', (req, res) => {
+  console.log('oohohoh');
+  res.contentType('application/json');
+  let pl = req.body;
+  if(pl.gametitle == 'pistolwhip') {
+    res.writeHead(301, { Location: '/pistolwhip' });
+    res.end();
+    return;
+  }
+  //Make game
+  let gameTitle = pl.gametitle;
+  let newGame = gameSuite.getNewGame(gameTitle);
+    newGame.players[1] = pl.name;
+    newGame.playerct += 1;
+    newGame.inProgress = true;
+  gameSuite.gameList[newGame.gameCode] = newGame;
+  //Make player
+  let playerid = Object.keys(gameSuite.playerList).length + 1;
+  let player = {
+    id: playerid,
+    slot: 1,
+    name: pl.name,
+    gameTitle: pl.gametitle,
+    gameCode: newGame.gameCode
+  }
+  gameSuite.playerList[player.id] = player;
+  logger.info(`Player ${player.id}: ${player.name} created`);
+  res.send({
+    'reqstatus': 'ready',
+    'gamecode': newGame.gameCode
+  });
+  res.end();
 });
 
 export default app;

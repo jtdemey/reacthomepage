@@ -1,3 +1,7 @@
+export function isFunction(func) {
+  return !!(func && func.constructor && func.call && func.apply);
+}
+
 export function normalizePort(val) {
   const port = parseInt(val, 10);
   if (Number.isNaN(port)) {

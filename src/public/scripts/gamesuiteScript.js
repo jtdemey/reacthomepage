@@ -57,7 +57,7 @@ $(document).ready(function() {
     };
     $.ajax({
       type: 'POST',
-      url: window.location + 'scripts/makeGame',
+      url: window.location + '/scripts/makeGame',
       contentType: 'application/json',
       dataType: 'json',
       cache: false,

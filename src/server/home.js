@@ -1,17 +1,32 @@
 //Credit to https://twitter.com/teefouad for a wonderfully comprehensive server creation tutorial and several core functions
 
 //DEPENDENCIES
+import express from 'express';
+import fs from 'fs';
 import http from 'http';
 import path from 'path';
-import fs from 'fs';
 
 import app from '../app/expressApp';
 import dbConnect from '../app/connectBot';
+import gameSuite from '../app/gamesuite/gameSuite';
+import getPoller from '../app/gamesuite/poller';
+import gameSuiteRoutes from '../routes/gameSuiteRoutes';
 import logger from '../app/logWriter';
-import gameSuite from '../app/gamesuite';
 import {
+  isFunction,
   normalizePort
 } from './utilityscripts.js';
+
+//Start GameSuite
+//let gs = new gameSuite(1000, 4000);
+//gs.startBase();
+gameSuite.startBase();
+
+/**const gsRouter = express.Router();
+const gsRoutes = new gameSuiteRoutes(gs);
+gsRouter.post('/scripts/makeGame', gsRoutes.lobbyCreate);
+gsRouter.post('/scripts/joinGame', gsRoutes.lobbyJoin);
+app.use('/gamesuite', gsRouter);**/
 
 //Start Express server
 const expressApp = http.createServer(app);

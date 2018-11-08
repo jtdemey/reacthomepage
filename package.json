@@ -6,6 +6,8 @@
   "scripts": {
     "builddev": "webpack --mode=development --config=webpack.config.dev.js",
     "buildprod": "webpack --mode=production --config=webpack.config.prod.js",
+    "starthot": "webpack-dev-server --mode development --config webpack.config.dev.js --open --hot",
+    "startsurvive": "webpack-dev-server --mode development --config webpack.config.survive.js --port 5261 --open --hot",
     "start": "nodemon --exec npm run open:src",
     "open:src": "babel-node src/server/home.js",
     "lint": "node_modules/.bin/esw webpack.config.* src",

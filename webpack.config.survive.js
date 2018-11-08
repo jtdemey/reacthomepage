@@ -3,21 +3,17 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const SERVER_ADDR = 'http://localhost:8000/';
+const SERVER_ADDR = 'http://localhost:5261/';
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
-  mode: 'production',
-  entry: {
-    home: path.join(__dirname, 'src/public/scripts/homeScript.js'),
-    survive: path.join(__dirname, 'src/public/survive/surviveIndex.js'),
-    gamesuite: path.join(__dirname, 'src/public/scripts/gamesuiteScript.js')
-  },
+  mode: 'development',
+  entry: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, './src/public/survive/surviveIndex.js')],
   target: 'web',
   output: {
     path: path.join(__dirname, 'dist'),
-    publicPath: SERVER_ADDR,
-    filename: '[name]Bundle.js'
+    publicPath: '/',
+    filename: 'bundle.js'
   },
   devServer: {
     port: 8000,
@@ -29,7 +25,7 @@ module.exports = {
     },
     noInfo: false,
     stats: 'minimal',
-    contentBase: 'src/public/survive/surviveIndex.js',
+    contentBase: path.join(__dirname, './src/public/survive'),
     hot: true,
     inline: true,
     open: true
@@ -62,8 +58,7 @@ module.exports = {
             options: {
               modules: true
             }
-          },
-          { loader: 'sass-loader' }
+          }
         ]
       },
       {

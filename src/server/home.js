@@ -5,12 +5,12 @@ import express from 'express';
 import fs from 'fs';
 import http from 'http';
 import path from 'path';
+import socketIO from 'socket.io';
 
 import app from '../app/expressApp';
 import dbConnect from '../app/connectBot';
 import gameSuite from '../app/gamesuite/gameSuite';
-import getPoller from '../app/gamesuite/poller';
-import gameSuiteRoutes from '../routes/gameSuiteRoutes';
+import gsSockets from '../app/gamesuite/gsSockets';
 import logger from '../app/logWriter';
 import {
   isFunction,
@@ -18,15 +18,7 @@ import {
 } from './utilityscripts.js';
 
 //Start GameSuite
-//let gs = new gameSuite(1000, 4000);
-//gs.startBase();
 gameSuite.startBase();
-
-/**const gsRouter = express.Router();
-const gsRoutes = new gameSuiteRoutes(gs);
-gsRouter.post('/scripts/makeGame', gsRoutes.lobbyCreate);
-gsRouter.post('/scripts/joinGame', gsRoutes.lobbyJoin);
-app.use('/gamesuite', gsRouter);**/
 
 //Start Express server
 const expressApp = http.createServer(app);
@@ -47,10 +39,14 @@ fs.readFile('D:/Misc/auth/wegotdb.txt', 'utf8', function(err, data) {
   }
   dbauth = data;
 });
-setTimeout(function() {
+setTimeout(() => {
   connectBot = dbConnect.getConnectionPool('connectBot', dbauth);
   testDBConnection();
 }, 2000);
+
+//Configure websockets
+let io = new socketIO(expressApp);
+//io.on('connection', gsSockets.baseSocket);
 
 //===========================================================================================================================
 //Server utility functions
@@ -71,7 +67,7 @@ function onError(error) {
       if (availablePort - port < 10) {
         availablePort += 1;
         startListening(availablePort);
-        expressApp.set('port', availablePort);
+        //expressApp.set('port', availablePort);
       } else {
         logger.error(`${bind} is already in use`);
         process.exit(1);

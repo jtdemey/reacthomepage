@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
+import { formatTime } from '../app/surviveUtilities';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -10,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
 const GameClock = ({ gameTime }) => (
   <div className="game-clock">
     <span className="game-time">
-      {gameTime}
+      {formatTime(gameTime)}
     </span>
   </div>
 );

@@ -7,8 +7,9 @@ export const getTimeFromTick = tick => {
 export const formatTime = gt => {
   const s = gt.split(' ');
   const d = s[0] + 'day ';
-  const t = s[4];
+  let t = s[4];
   if(t[0] == '0') {
-    
+    t = t.slice(1, t.length);
   }
+  return d + t;
 };

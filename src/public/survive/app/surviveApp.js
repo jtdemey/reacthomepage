@@ -1,5 +1,7 @@
 import React from 'react';
 import StatusBar from '../components/StatusBar';
+import GameView from '../components/GameView';
+import ButtonBar from '../components/ButtonBar';
 import '../styles/surviveLook.css';
 
 class SurviveApp extends React.Component {
@@ -21,6 +23,8 @@ class SurviveApp extends React.Component {
     return (
       <div className="survive-app">
         <StatusBar gameTime={this.state.gameTime} />
+        <GameView />
+        <ButtonBar />
       </div>
     );
   }

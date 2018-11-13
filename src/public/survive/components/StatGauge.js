@@ -1,6 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import GaugeLabel from './GaugeLabel';
 import GaugeFill from './GaugeFill.js';
+
+const mapStateToProps = (state, ownProps) => {
+  if(ownProps.type === 'energy') {
+    return {
+      amount: state.player.energy
+    };
+  } else if(ownProps.type === 'sanity') {
+    return {
+      amount: state.player.sanity
+    };
+  } else {
+    return {
+      amount: state.player.health
+    };
+  }
+};
 
 const getCssFromType = (statType) => {
   let look = '';
@@ -17,9 +34,12 @@ const getCssFromType = (statType) => {
 const StatGauge = (props) => {
   return (
     <div className={ getCssFromType(props.type) }>
-      <GaugeFill type={props.type} />
+      <GaugeLabel type={props.type} amount={props.amount} />
+      <GaugeFill type={props.type} amount={props.amount} />
     </div>
   );
 };
 
-export default StatGauge;
+const StatGaugeC = connect(mapStateToProps)(StatGauge);
+
+export default StatGaugeC;

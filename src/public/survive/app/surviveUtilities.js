@@ -1,7 +1,11 @@
 export const getTimeFromTick = tick => {
   const s = new Date(1987, 11, 12, 9, 44, 0, 0);
-  s.setSeconds(s.getSeconds() + tick);
-  return s;
+  s.setSeconds((1 * s.getSeconds()) + tick);
+  return s.toString();
+};
+
+export const iterateTick = (time, tick) => {
+  time.setSeconds(time.getSeconds() + (tick + 1));
 };
 
 export const formatTime = gt => {

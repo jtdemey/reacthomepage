@@ -146,6 +146,10 @@ canvas {
   border: 1px solid #333333;
 }
 
+.active-btn {
+  background-color: #211212;
+}
+
 .view-btn-icon {
   width: 60px;
   height: 60px;

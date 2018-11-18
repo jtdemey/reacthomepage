@@ -4,14 +4,14 @@ import { formatTime } from '../app/surviveUtilities';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    gameTime: state.gameTime
+    gameTime: state.clock.gameTime
   };
 };
 
-const GameClock = ({ gameTime }) => (
+const GameClock = (props) => (
   <div className="game-clock">
     <span className="game-time">
-      {formatTime(gameTime)}
+      {formatTime(props.gameTime)}
     </span>
   </div>
 );

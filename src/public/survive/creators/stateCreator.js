@@ -1,6 +1,8 @@
 export const initialState = {
-  tick: 0,
-  gameTime: new Date(1987, 11, 12, 10, 44, 0, 0).toString(),
+  clock: {
+    tick: 0,
+    gameTime: new Date(1987, 11, 12, 9, 44, 0, 0).toString()
+  },
   player: {
     health: 100,
     //100-75: sane, 74-50: afraid, 49-25: panicked, 24-10: insane, 9-1: delusional, 0: irrational

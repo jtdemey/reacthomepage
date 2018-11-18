@@ -10,7 +10,7 @@ class StatusBar extends React.Component {
   render() {
     return (
       <div className="status-bar">
-        <GameClock gameTime={this.props.gameTime} />
+        <GameClock />
         <StatGaugeBar />
       </div>
     );

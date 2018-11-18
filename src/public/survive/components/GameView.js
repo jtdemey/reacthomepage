@@ -16,13 +16,6 @@ const GameView = (props) => (
   </div>
 );
 
-/**
-<ConsoleView view="0"/>
-    <ItemView view="1" />
-    <MapView view="2" />
-    <StatusView view="3" />
-**/
-
 const GameViewCon = connect(mapStateToProps)(GameView);
 
 export default GameViewCon;

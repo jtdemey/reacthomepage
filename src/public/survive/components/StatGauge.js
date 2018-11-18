@@ -19,21 +19,9 @@ const mapStateToProps = (state, ownProps) => {
   }
 };
 
-const getCssFromType = (statType) => {
-  let look = '';
-  if(statType === 'health') {
-    look = 'stat-gauge health-bar';
-  } else if(statType === 'sanity') {
-    look = 'stat-gauge sanity-bar';
-  } else if(statType === 'energy') {
-    look = 'stat-gauge energy-bar';
-  }
-  return look;
-};
-
 const StatGauge = (props) => {
   return (
-    <div className={ getCssFromType(props.type) }>
+    <div className={props.look}>
       <GaugeLabel type={props.type} amount={props.amount} />
       <GaugeFill type={props.type} amount={props.amount} />
     </div>

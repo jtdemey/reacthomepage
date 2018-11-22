@@ -15,3 +15,11 @@ export const changeView = (newView) => ({
   type: 'CHANGE_VIEW',
   view: newView
 });
+
+export const submitCommand = (txt) => {
+  let res = txt.replace(/<{1}[^<>]{1,}>{1}/g, " ");
+  return {
+    type: 'SUBMIT_COMMAND',
+    input: res
+  }
+};

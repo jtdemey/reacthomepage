@@ -30,6 +30,8 @@ export const initialState = {
   ui: {
     currentView: 0,
     particleMode: 0,
-    lineIndex: 0
+    lineIndex: 0,
+    lastInput: '',
+    consoleLines: []
   }
 };

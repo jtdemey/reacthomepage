@@ -5,6 +5,11 @@ const uiReducer = (state = {}, action) => {
         ...state,
         currentView: action.view
       };
+    case 'SUBMIT_COMMAND':
+      return {
+        ...state,
+        lastInput: action.input
+      };
     default:
       return state;
   }

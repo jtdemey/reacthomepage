@@ -58,7 +58,7 @@ const getParticleConfig = mode => {
 
 const ViewParticles = props => {
   return (
-    <Particles params={getParticleConfig(parseInt(props.mode))} />
+    <Particles className={props.look} params={getParticleConfig(parseInt(props.mode))} width={props.clientWidth + 'px'} height={(props.clientHeight - 32) + 'px'} />
   );
 };
 

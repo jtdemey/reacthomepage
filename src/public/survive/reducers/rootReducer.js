@@ -1,4 +1,4 @@
-import { initialState } from '../creators/stateCreator';
+import initialState from '../creators/stateCreator';
 import clockReducer from './clockReducer';
 import uiReducer from './uiReducer';
 import {
@@ -14,7 +14,9 @@ const rootReducer = (state = initialState, action) => {
         clock: clockReducer(state.clock, action)
       };
     //state.ui
+    case 'APPEND_LINE':
     case 'CHANGE_VIEW':
+    case 'SUBMIT_COMMAND':
       return {
         ...state,
         ui: uiReducer(state.ui, action)

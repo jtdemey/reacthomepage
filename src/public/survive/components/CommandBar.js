@@ -10,8 +10,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setUserInput: (inp) => {
-      dispatch(setUserInput(inp));
+    submitCommand: (inp) => {
+      dispatch(submitCommand(inp));
     }
   };
 };
@@ -21,6 +21,9 @@ class CommandBar extends React.Component {
     super(props);
     this.textInput = React.createRef();
     this.getFocused = this.getFocused.bind(this);
+    this.state = {
+      currentInput: ''
+    };
   }
 
   componentDidMount() {
@@ -33,10 +36,17 @@ class CommandBar extends React.Component {
 
   onKeyPress(key) {
     if(key.key === 'Enter') {
-      console.log(this.textInput);
-      //setUserInput(this.textInput.value);
-      this.textInput.value = '';
+      this.props.submitCommand(this.state.currentInput);
+      this.setState({
+        currentInput: ''
+      });
     }
+  }
+
+  updateInput(inp) {
+    this.setState({
+      currentInput: inp
+    });
   }
 
   render() {
@@ -44,9 +54,10 @@ class CommandBar extends React.Component {
       <div className="command-bar">
           <input  type="text"
                   ref={this.textInput}
-                  value={this.props.userInput}
+                  value={this.state.currentInput}
                   className="user-input"
                   placeholder=">>"
+                  onChange={(inp) => this.updateInput(inp.target.value)}
                   onKeyPress={(e) => this.onKeyPress(e)}
                   onClick={this.getFocused} />
       </div>

@@ -1,4 +1,4 @@
-export const initialState = {
+let initialState = {
   clock: {
     tick: 0,
     gameTime: new Date(1987, 11, 12, 9, 44, 0, 0).toString()
@@ -32,6 +32,10 @@ export const initialState = {
     particleMode: 0,
     lineIndex: 0,
     lastInput: '',
-    consoleLines: []
+    consoleLines: [],
+    consoleYpos: 0,
+    commandBarFocus: true
   }
 };
+
+export default initialState;

@@ -3,9 +3,14 @@ const uiReducer = (state = {}, action) => {
     case 'APPEND_LINE':
       return {
         ...state,
-        consoleLines: [...state.consoleLines, action.line],
-        consoleYpos: action.ypos
-      }
+        consoleLines: action.lines,
+        lineIndex: action.lineIndex
+      };
+    case 'ELEVATE_LINES':
+      return {
+        ...state,
+        consoleLines: action.lines
+      };
     case 'CHANGE_VIEW':
       return {
         ...state,
@@ -15,6 +20,11 @@ const uiReducer = (state = {}, action) => {
       return {
         ...state,
         commandBarFocus: true
+      };
+    case 'SET_VIEW_HEIGHT':
+      return {
+        ...state,
+        viewHeight: action.amount
       };
     case 'SUBMIT_COMMAND':
       return {

@@ -13,17 +13,25 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const ConsoleView = (props) => (
-  <div className="console-view" style={{ width: props.clientWidth + 'px', height: props.clientHeight + 'px' }}>
-    <ConsoleList 
-      clientWidth={props.clientWidth}
-      clientHeight={props.clientHeight}
-      consoleLines={props.consoleLines}
-      consoleYpos={props.consoleYpos}
-      lineIndex={props.lineIndex} />
-    <CommandBar />
-  </div>
-);
+const ConsoleView = (props) => {
+  const look = {
+    display: props.isCurrentView ? 'block' : 'none',
+    width: props.clientWidth + 'px',
+    height: props.clientHeight + 'px'
+  };
+
+  return (
+    <div className="console-view" style={look}>
+      <ConsoleList
+        clientWidth={props.clientWidth}
+        clientHeight={props.clientHeight}
+        consoleLines={props.consoleLines}
+        consoleYpos={props.consoleYpos}
+        lineIndex={props.lineIndex} />
+      <CommandBar />
+    </div>
+  );
+};
 
 const ConsoleViewCon = connect(mapStateToProps)(ConsoleView);
 

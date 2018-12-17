@@ -1,4 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Special+Elite');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+
+/* REFERENCE
+  red gradient: #211212 #451417 #6a1117 #8f0911 #b30000
+  pale blue gradient: #404040 #4f5862 #5e7185 #6c8bab #79a6d2
+  gray gradient: #404040 #606060 #838383 #a7a7a7 #cccccc
+*/
 
 /* BASE */
 * {
@@ -160,24 +167,25 @@ canvas {
   width: 100%;
   height: 100%;
   position: relative;
-  top: 0px;
+  bottom: 0px;
   margin: auto;
   padding-left: 6px;
   padding-right: 6px;
   overflow: hidden;
-  -webkit-transition: top 0.5s ease-out;
-  transition: top 0.5s ease-out;
+  -webkit-transition: top 0.25s ease-out;
+  transition: top 0.25s ease-out;
   z-index: -1;
 }
 
 .console-line {
   width: 100%;
-  height: 2em;
-  position: relative;
-  top: 0px;
-  -webkit-transition: top 0.5s ease-out;
-  transition: top 0.5s ease-out;
+  height: 28px;
+  position: absolute;
+  bottom: 0px;
+  -webkit-transition: bottom 0.25s ease-out;
+  transition: bottom 0.25s ease-out;
   z-index: 1;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 .command-bar {
@@ -185,6 +193,12 @@ canvas {
   height: 32px;
   color: white;
   z-index: 2;
+}
+
+.user-input:focus {
+  outline: none !important;
+  border-top: 1px solid #a7a7a7;
+  border-bottom: 1px solid #a7a7a7;
 }
 
 .user-input {
@@ -195,6 +209,12 @@ canvas {
   background-color: #737373;
   border: 1px solid #808080;
   color: white;
+}
+
+/* ITEM VIEW */
+.item-view {
+  width: 100%;
+  height: 100%;
 }
 
 /* BUTTON BAR */

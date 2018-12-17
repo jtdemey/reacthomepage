@@ -24,7 +24,13 @@ let initialState = {
     inCombat: false,
     lastCombat: 0,
     currentEnemy: undefined,
-    items: [],
+    items: [
+      {
+        itemId: 0,
+        display: 'Test Item',
+        quantity: 1
+      }
+    ],
     equipped: []
   },
   ui: {
@@ -34,7 +40,8 @@ let initialState = {
     lastInput: '',
     consoleLines: [],
     consoleYpos: 0,
-    commandBarFocus: true
+    commandBarFocus: true,
+    viewHeight: 0
   }
 };
 

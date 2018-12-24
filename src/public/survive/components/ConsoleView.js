@@ -19,9 +19,10 @@ const ConsoleView = (props) => {
     width: props.clientWidth + 'px',
     height: props.clientHeight + 'px'
   };
+  const cssClass = props.isTransitioningOut === true ? 'console-view fadeout-slideout' : 'console-view fadein-slidein';
 
   return (
-    <div className="console-view" style={look}>
+    <div className={cssClass} style={look}>
       <ConsoleList
         clientWidth={props.clientWidth}
         clientHeight={props.clientHeight}

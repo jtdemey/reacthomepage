@@ -20,6 +20,7 @@ const rootReducer = (state = initialState, action) => {
     case 'FOCUS_COMMAND_BAR':
     case 'SET_VIEW_HEIGHT':
     case 'SUBMIT_COMMAND':
+    case 'TRANSITION_VIEW_OUT':
       return {
         ...state,
         ui: uiReducer(state.ui, action)

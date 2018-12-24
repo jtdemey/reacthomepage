@@ -1,14 +1,12 @@
-import { delay } from 'redux-saga';
 import { takeEvery, put } from 'redux-saga/effects';
-import { elevateLines } from './surviveActions';
-
-function* addLineSaga(action) {
-  yield delay(25);
-  yield put(elevateLines());
-}
+import {
+	addLineSaga,
+	changeViewSaga
+} from './uiSagas';
 
 function* rootSaga() {
   yield takeEvery('APPEND_LINE', addLineSaga);
+  yield takeEvery('TRANSITION_VIEW_OUT', changeViewSaga);
 }
 
 export default rootSaga;

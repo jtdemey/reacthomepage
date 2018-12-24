@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import ViewParticles from './ViewParticles';
 import ConsoleView from './ConsoleView';
 import ItemView from './ItemView';
-import { setViewHeight } from '../actions/surviveActions';
+import { setViewHeight } from '../actions/uiActions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    currentView: state.ui.currentView
+    currentView: state.ui.currentView,
+    viewTransitioningIn: state.ui.viewTransitioningIn,
+    viewTransitioningOut: state.ui.viewTransitioningOut
   };
 };
 
@@ -57,8 +59,14 @@ class GameView extends React.Component {
     return (
       <div className="game-view" style={{ height: this.state.viewHeight + 'px' }}>
         <ViewParticles mode="0" look="view-particles" clientWidth={this.state.viewWidth} clientHeight={this.state.viewHeight} />
-        <ConsoleView isCurrentView={this.props.currentView === 0 ? true : false} clientWidth={this.state.viewWidth} clientHeight={this.state.viewHeight} />
-        <ItemView isCurrentView={this.props.currentView === 1 ? true : false} clientWidth={this.state.viewWidth} clientHeight={this.state.viewHeight} />
+        <ConsoleView  isCurrentView={this.props.currentView === 0 ? true : false}
+                      clientWidth={this.state.viewWidth}
+                      clientHeight={this.state.viewHeight}
+                      isTransitioningOut={this.props.viewTransitioningOut === 0 ? true : false} />
+        <ItemView isCurrentView={this.props.currentView === 1 ? true : false}
+                  clientWidth={this.state.viewWidth}
+                  clientHeight={this.state.viewHeight}
+                  isTransitioningOut={this.props.viewTransitioningOut === 1 ? true : false} />
       </div>
     );
   }

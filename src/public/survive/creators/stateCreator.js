@@ -1,5 +1,5 @@
 let initialState = {
-  clock: {
+  game: {
     tick: 0,
     gameTime: new Date(1987, 11, 12, 9, 44, 0, 0).toString()
   },
@@ -41,7 +41,9 @@ let initialState = {
     consoleLines: [],
     consoleYpos: 0,
     commandBarFocus: true,
-    viewHeight: 0
+    viewHeight: 0,
+    viewTransitioningIn: null,
+    viewTransitioningOut: null
   }
 };
 

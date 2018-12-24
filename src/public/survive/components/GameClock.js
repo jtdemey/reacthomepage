@@ -4,7 +4,7 @@ import { formatTime } from '../app/surviveUtilities';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    gameTime: state.clock.gameTime
+    gameTime: state.game.gameTime
   };
 };
 

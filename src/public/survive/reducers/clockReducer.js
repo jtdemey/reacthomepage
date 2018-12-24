@@ -1,5 +1,3 @@
-
-
 const clockReducer = (state = {}, action) => {
   switch(action.type) {
     case 'MASTER_TICK':

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { submitCommand } from '../actions/surviveActions';
+import { submitCommand } from '../actions/uiActions';
 
 const mapStateToProps = (state, ownProps) => {
   return {

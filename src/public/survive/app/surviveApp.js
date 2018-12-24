@@ -4,11 +4,11 @@ import StatusBar from '../components/StatusBar';
 import GameView from '../components/GameView';
 import ButtonBar from '../components/ButtonBar';
 import '../styles/surviveLook.css';
-import { masterTick } from '../actions/surviveActions';
+import { masterTick } from '../actions/gameActions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    tick: state.clock.tick
+    tick: state.game.tick
   };
 };
 

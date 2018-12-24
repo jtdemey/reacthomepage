@@ -14,7 +14,9 @@ const uiReducer = (state = {}, action) => {
     case 'CHANGE_VIEW':
       return {
         ...state,
-        currentView: action.view
+        currentView: action.currentView,
+        viewTransitioningIn: action.currentView,
+        viewTransitioningOut: null
       };
     case 'FOCUS_COMMAND_BAR':
       return {
@@ -30,6 +32,11 @@ const uiReducer = (state = {}, action) => {
       return {
         ...state,
         lastInput: action.input
+      };
+    case 'TRANSITION_VIEW_OUT':
+      return {
+        ...state,
+        viewTransitioningOut: state.currentView
       };
     default:
       return state;

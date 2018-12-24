@@ -16,8 +16,10 @@ const ItemView = (props) => {
     width: props.clientWidth + 'px',
     height: props.clientHeight + 'px'
   };
+  const cssClass = props.isTransitioningOut === true ? 'item-view fadeout-slideout' : 'item-view fadein-slidein';
+
   return (
-    <div className="item-view" style={look}>
+    <div className={cssClass} style={look}>
       <InventoryList />
     </div>
   );

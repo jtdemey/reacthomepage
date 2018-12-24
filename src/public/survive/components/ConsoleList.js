@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ConsoleLine from './ConsoleLine';
-import { setListAnchors } from '../actions/surviveActions';
+import { setListAnchors } from '../actions/uiActions';
 
 const mapStateToProps = (state, ownProps) => {
   return {

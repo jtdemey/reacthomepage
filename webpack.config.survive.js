@@ -23,6 +23,7 @@ module.exports = {
         { from: /./, to: '/html/404.html' }
       ]
     },
+    disableHostCheck: true,
     noInfo: false,
     stats: 'minimal',
     contentBase: path.join(__dirname, './src/public/survive'),

@@ -4,14 +4,15 @@ import ListButtonItem from './ListButtonItem';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    items: state.player.items
+    display: state.player.locale.display,
+    items: state.player.locale.items
   };
 };
 
-const InventoryList = (props) => {
+const LocaleItemList = (props) => {
   return (
     <div className="inventory-list-area">
-      <h5 className="item-list-header inventory-header">INVENTORY</h5>
+      <h5 className="item-list-header inventory-header">{props.display}</h5>
       <ul className="item-list inventory-list">
         {props.items.map((item) => (
           <ListButtonItem key={item.itemId} text={item.display} />
@@ -21,6 +22,6 @@ const InventoryList = (props) => {
   );
 };
 
-const InventoryListCon = connect(mapStateToProps)(InventoryList);
+const LocaleItemListCon = connect(mapStateToProps)(LocaleItemList);
 
-export default InventoryListCon;
+export default LocaleItemListCon;

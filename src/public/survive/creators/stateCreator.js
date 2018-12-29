@@ -18,7 +18,17 @@ let initialState = {
     energy: 100,
     isExhausted: false,
     isImmobile: false,
-    locale: undefined,
+    locale: {
+      localeId: 0,
+      display: `A BIG OL BOX`,
+      items: [
+        {
+          itemId: 0,
+          display: 'Test Item',
+          quantity: 1
+        }
+      ]
+    },
     lastLocale: undefined,
     visited: [],
     inCombat: false,
@@ -41,6 +51,7 @@ let initialState = {
     consoleLines: [],
     consoleYpos: 0,
     commandBarFocus: true,
+    itemButtons: [],
     viewHeight: 0,
     viewTransitioningIn: null,
     viewTransitioningOut: null

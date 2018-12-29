@@ -44,23 +44,14 @@ const mapCreator = (initialState) => {
   };
 
   const addLocale = (name, displayName, exits, temperature, visibility, enterPhrase, comments) => {
-    
-  };
-
-
-
-
-
-  function addLocale(n, d, e, ep, t, v, en, c) {
-    var locale = {
-      name: n,
-      display: d,
-      exits: e,
-      exitPhrases: ep,
-      temperature: t,
-      visibility: v,
-      enterPhrase: en,
-      comments: c,
+    let locale = {
+      name: name,
+      display: displayName,
+      exits: exits,
+      temperature: temperature,
+      visibility: visibility,
+      enterPhrase: enterPhrase,
+      comments: comments,
       items: [],
       loot: [],
       containers: [],
@@ -69,10 +60,11 @@ const mapCreator = (initialState) => {
       visits: 0
     };
     gameMap[locale.name] = locale;
-  }
-  function addLoot(n, l, w, c) {
-    var loots = [n, w, c];
-    gameMap[l].loot.push(loots);
+  };
+
+  const addLoot = (locale, name, weight, count) {
+    let loots = [name, weight, count];
+    gameMap[locale].loot.push(loots);
   }
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import InventoryList from './InventoryList';
+import LocaleItemList from './LocaleItemList';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -20,6 +21,7 @@ const ItemView = (props) => {
 
   return (
     <div className={cssClass} style={look}>
+      <LocaleItemList />
       <InventoryList />
     </div>
   );

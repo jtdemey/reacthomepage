@@ -13,7 +13,7 @@ export function* addLineSaga(action) {
 }
 
 export function* changeViewSaga(action) {
-	yield delay(150);
+	yield delay(100);
 	const changed = yield put(changeView(action.nextView));
 	yield put(transitionViewIn(changed.view));
 }

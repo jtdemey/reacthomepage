@@ -1,24 +1,5 @@
 import surviveStore from '../store/surviveStore';
 
-export const elevateLines = () => {
-  const currentState = Object.assign({}, surviveStore.getState().ui);
-  const newLines = Object.assign([], currentState.consoleLines);
-  if(newLines[0].ypos > currentState.consoleYpos + currentState.viewHeight) {
-    newLines.shift();
-  }
-  if(newLines.length > 0) {
-    for(let i = 0; i < newLines.length; i++) {
-      let thisLine = newLines[i];
-      thisLine.ypos += 28;
-      thisLine.opacity -= 0.02;
-    }
-  }
-  return {
-    type: 'ELEVATE_LINES',
-    lines: newLines
-  };
-};
-
 export const appendLine = (line) => {
   const currentState = Object.assign({}, surviveStore.getState().ui);
   const lineInd = currentState.lineIndex + 1;
@@ -45,6 +26,25 @@ export const changeView = (newView) => ({
   currentView: newView
 });
 
+export const elevateLines = () => {
+  const currentState = Object.assign({}, surviveStore.getState().ui);
+  const newLines = Object.assign([], currentState.consoleLines);
+  if(newLines[0].ypos > currentState.consoleYpos + currentState.viewHeight) {
+    newLines.shift();
+  }
+  if(newLines.length > 0) {
+    for(let i = 0; i < newLines.length; i++) {
+      let thisLine = newLines[i];
+      thisLine.ypos += 28;
+      thisLine.opacity -= 0.02;
+    }
+  }
+  return {
+    type: 'ELEVATE_LINES',
+    lines: newLines
+  };
+};
+
 export const focusCommandBar = () => ({
   type: 'FOCUS_COMMAND_BAR'
 });
@@ -65,6 +65,8 @@ export const submitCommand = (txt) => {
   };
 };
 
+//export transitionItemIn
+
 export const transitionViewIn = (viewnum) => {
   return {
     type: 'TRANSITION_VIEW_IN',
@@ -77,4 +79,15 @@ export const transitionViewOut = (nextview) => {
     type: 'TRANSITION_VIEW_OUT',
     nextView: nextview
   };
+};
+
+export const updateListView = () => {
+  const currentState = Object.assign({}, surviveStore.getState());
+  for(let i = 0; i < currentState.player.locale.items.length; i++) {
+    let thisItem = currentState.player.locale.items[i];
+    let newLbi = {
+      display: thisItem.display,
+
+    };
+  }
 };

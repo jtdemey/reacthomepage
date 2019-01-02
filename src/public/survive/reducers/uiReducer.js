@@ -23,6 +23,18 @@ const uiReducer = (state = {}, action) => {
         ...state,
         commandBarFocus: true
       };
+    case 'PICK_UP_ITEM':
+      return {
+        ...state,
+        localeItemButtons: action.localeItemButtons,
+        inventoryItemButtons: action.inventoryItemButtons
+      };
+    case 'REMOVE_ITEM_FROM_LIST':
+      return {
+        ...state,
+        localeItemButtons: action.localeItems,
+        inventoryItemButtons: action.inventoryItems
+      };
     case 'SET_VIEW_HEIGHT':
       return {
         ...state,
@@ -33,10 +45,22 @@ const uiReducer = (state = {}, action) => {
         ...state,
         lastInput: action.input
       };
+    case 'TRANSITION_ITEM_OUT':
+      return {
+        ...state,
+        localeItemButtons: action.localeItemButtons,
+        inventoryItemButtons: action.inventoryItemButtons
+      };
     case 'TRANSITION_VIEW_OUT':
       return {
         ...state,
         viewTransitioningOut: state.currentView
+      };
+    case 'UPDATE_ITEM_VIEW':
+      return {
+        ...state,
+        localeItemButtons: action.localeItems,
+        inventoryItemButtons: action.inventoryItems
       };
     default:
       return state;

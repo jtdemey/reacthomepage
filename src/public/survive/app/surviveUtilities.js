@@ -1,4 +1,4 @@
-export const formatTime = gt => {
+export const formatTime = (gt) => {
   const s = gt.split(' ');
   const d = (s[0] === 'Sat') ? `${s[0]}urday ` : `${s[0]}day `;
   let t = s[4];
@@ -8,8 +8,28 @@ export const formatTime = gt => {
   return d + t;
 };
 
+export const getListButtonItemFromIndex = (localeItems, inventoryItems, ind) => {
+  let itemTarget = null;
+  let listNum = 0;
+  for(let i = 0; i < localeItems.length; i++) {
+    if(localeItems[i].index === ind) {
+      itemTarget = localeItems[i];
+    }
+  }
+  for(let i = 0; i < inventoryItems.length; i++) {
+    if(inventoryItems[i].index === ind) {
+      itemTarget = inventoryItems[i];
+      listNum = 1;
+    }
+  }
+  if(itemTarget === null) {
+    console.log(`Error in getListButtonItemFromIndex: failed to find item at index ${ind}`);
+  }
+  return itemTarget;
+};
+
 //Mode: 0 = forest, 1 = mansion, 2 = graveyard
-export const getParticleConfig = mode => {
+export const getParticleConfig = (mode) => {
   let colors = ["#999999", "#b3b3b3", "#bfbfbf", "#d9d9d9", "#538cc6"];
   let dir = "bottom";
   let size = 4;
@@ -63,7 +83,7 @@ export const getParticleConfig = mode => {
   };
 };
 
-export const getTimeFromTick = tick => {
+export const getTimeFromTick = (tick) => {
   const s = new Date(1987, 11, 12, 9, 44, 0, 0);
   s.setSeconds((1 * s.getSeconds()) + tick);
   return s.toString();

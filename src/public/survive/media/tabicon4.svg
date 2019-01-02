@@ -14,7 +14,7 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg6300"
-   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="tabicon4.svg">
   <defs
      id="defs6294" />
@@ -31,9 +31,9 @@
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1856"
+     inkscape:window-width="1858"
      inkscape:window-height="1057"
-     inkscape:window-x="1496"
+     inkscape:window-x="1494"
      inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
@@ -60,16 +60,16 @@
        x="93.671204"
        y="136.14343" />
     <path
-       style="fill:#999999;fill-opacity:1;fill-rule:evenodd;stroke:#333333;stroke-width:0.39999995;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;paint-order:normal"
+       style="fill:#999999;fill-opacity:1;fill-rule:evenodd;stroke:#333333;stroke-width:0.2865614;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;paint-order:normal"
        id="path6847"
        sodipodi:type="arc"
-       sodipodi:cx="104.99994"
-       sodipodi:cy="106.04295"
-       sodipodi:rx="16.525757"
-       sodipodi:ry="17.685814"
+       sodipodi:cx="104.99995"
+       sodipodi:cy="106.04298"
+       sodipodi:rx="12.424773"
+       sodipodi:ry="12.07295"
        sodipodi:start="3.1222893"
        sodipodi:end="3.0919231"
-       d="M 88.477261,106.38433 A 16.525757,17.685814 0 0 1 104.55553,88.363536 16.525757,17.685814 0 0 1 121.51587,105.43315 16.525757,17.685814 0 0 1 105.6951,123.71311 16.525757,17.685814 0 0 1 88.494563,106.92104"
+       d="M 92.577488,106.27601 A 12.424773,12.07295 0 0 1 104.66582,93.974392 12.424773,12.07295 0 0 1 117.41733,105.62671 12.424773,12.07295 0 0 1 105.5226,118.10524 12.424773,12.07295 0 0 1 92.590497,106.64239"
        sodipodi:open="true" />
   </g>
 </svg>

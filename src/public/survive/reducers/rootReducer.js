@@ -18,9 +18,13 @@ const rootReducer = (state = initialState, action) => {
     case 'ELEVATE_LINES':
     case 'CHANGE_VIEW':
     case 'FOCUS_COMMAND_BAR':
+    case 'PICK_UP_ITEM':
+    case 'REMOVE_ITEM_FROM_LIST':
     case 'SET_VIEW_HEIGHT':
     case 'SUBMIT_COMMAND':
+    case 'TRANSITION_ITEM_OUT':
     case 'TRANSITION_VIEW_OUT':
+    case 'UPDATE_ITEM_VIEW':
       return {
         ...state,
         ui: uiReducer(state.ui, action)

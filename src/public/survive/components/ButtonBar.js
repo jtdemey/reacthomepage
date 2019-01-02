@@ -23,7 +23,7 @@ const ButtonBar = (props) => (
     <ViewButton type="map"
                 viewIndex={2}
                 look={(props.currentView === 2 || props.viewTransitioningIn === 2) ? "view-btn map-btn active-btn" : "view-btn map-btn"}
-                svgdir="../media/tabicon3.svg" />
+                svgdir="../media/tabicon5.svg" />
     <ViewButton type="status"
                 viewIndex={3}
                 look={(props.currentView === 3 || props.viewTransitioningIn === 3) ? "view-btn status-btn active-btn" : "view-btn status-btn"}

@@ -224,6 +224,10 @@ canvas {
   font-family: 'Source Sans Pro', sans-serif;
 }
 
+.item-list {
+  list-style-type: none;
+}
+
 .list-button-item {
   margin: 4px 4px 4px 8px;
   padding: 10px;

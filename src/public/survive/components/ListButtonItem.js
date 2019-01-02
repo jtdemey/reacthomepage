@@ -1,14 +1,7 @@
 import React from 'react';
-import { connect } from 'redux';
+import { connect } from 'react-redux';
 import TweenMax from 'gsap/TweenMax';
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    transitionViewOut: (nextView) => {
-      dispatch(transitionViewOut(nextView));
-    }
-  };
-};
+import { transitionItemOut } from '../actions/uiActions';
 
 class ListButtonItem extends React.Component {
 	constructor(props) {
@@ -17,13 +10,23 @@ class ListButtonItem extends React.Component {
 		this.animationFrames = null;
 	}
 
+	componentDidUpdate() {
+		if(this.props.transitioning === 'out') {
+			this.transitionOut();
+		}
+	}
+
 	transitionOut() {
-		this.animationFrames = TweenMax.to(this.buttonRef, 8, {x: 100, opacity: 0});
+		this.animationFrames = TweenMax.to(this.buttonRef, 0.15, {
+			x: 100,
+			opacity: 0,
+			ease: Power2.easeOut
+		});
 	}
 
 	render() {
 		return (
-	    <li className="list-button-item" ref={el => this.buttonRef = el}>
+	    <li className="list-button-item" ref={el => this.buttonRef = el} onClick={() => this.props.clickFunc(this.props.index)}>
 	      {this.props.text}
 	    </li>
 	  );

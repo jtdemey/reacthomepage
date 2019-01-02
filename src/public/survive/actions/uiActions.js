@@ -1,4 +1,5 @@
 import surviveStore from '../store/surviveStore';
+import { getListButtonItemFromIndex } from '../app/surviveUtilities';
 
 export const appendLine = (line) => {
   const currentState = Object.assign({}, surviveStore.getState().ui);
@@ -49,6 +50,31 @@ export const focusCommandBar = () => ({
   type: 'FOCUS_COMMAND_BAR'
 });
 
+export const pickUpItem = (ind) => {
+  const transitionedItem = transitionItemOut(ind);
+  transitionedItem.type = 'PICK_UP_ITEM';
+  return transitionedItem;
+};
+
+export const removeItemFromList = (ind) => {
+  const currentState = Object.assign({}, surviveStore.getState().ui);
+  let localeItems = Object.assign([], currentState.localeItemButtons);
+  let inventoryItems = Object.assign([], currentState.inventoryItemButtons);
+  const itemTarget = getListButtonItemFromIndex(localeItems, inventoryItems, ind);
+  if(itemTarget.listName === 'locale') {
+    console.log(localeItems);
+    delete localeItems[ind];
+    console.log(localeItems);
+  } else if(itemTarget.listName === 'inventory') {
+    inventoryItems = inventoryItems.splice(ind, 1);
+  }
+  return {
+    type: 'REMOVE_ITEM_FROM_LIST',
+    localeItems: localeItems,
+    inventoryItems: inventoryItems
+  };
+}
+
 export const setViewHeight = (amt) => {
   return {
     type: 'SET_VIEW_HEIGHT',
@@ -67,6 +93,20 @@ export const submitCommand = (txt) => {
 
 //export transitionItemIn
 
+export const transitionItemOut = (ind) => {
+  const currentState = Object.assign({}, surviveStore.getState().ui);
+  const localeItems = Object.assign([], currentState.localeItemButtons);
+  const inventoryItems = Object.assign([], currentState.inventoryItemButtons);
+  const itemTarget = getListButtonItemFromIndex(localeItems, inventoryItems, ind);
+  itemTarget.transitioning = 'out';
+  return {
+    type: 'TRANSITION_ITEM_OUT',
+    localeItemButtons: localeItems,
+    inventoryItemButtons: inventoryItems,
+    indexTransitioned: ind
+  };
+};
+
 export const transitionViewIn = (viewnum) => {
   return {
     type: 'TRANSITION_VIEW_IN',
@@ -81,13 +121,36 @@ export const transitionViewOut = (nextview) => {
   };
 };
 
-export const updateListView = () => {
-  const currentState = Object.assign({}, surviveStore.getState());
-  for(let i = 0; i < currentState.player.locale.items.length; i++) {
-    let thisItem = currentState.player.locale.items[i];
+export const updateItemView = () => {
+  const currentPlayer = Object.assign({}, surviveStore.getState().player);
+  let localeItems = [];
+  let lbiIndex = 0;
+  for(let i = 0; i < currentPlayer.locale.items.length; i++) {
+    let thisItem = currentPlayer.locale.items[i];
     let newLbi = {
+      index: lbiIndex,
       display: thisItem.display,
-
+      transitioning: null,
+      listName: 'locale'
     };
+    lbiIndex += 1;
+    localeItems.push(newLbi);
   }
+  let inventoryItems = [];
+  for(let i = 0; i < currentPlayer.items.length; i++) {
+    let thisItem = currentPlayer.items[i];
+    let newLbi = {
+      index: lbiIndex,
+      display: thisItem.display,
+      transitioning: null,
+      listName: 'inventory'
+    };
+    lbiIndex += 1;
+    inventoryItems.push(newLbi);
+  }
+  return {
+    type: 'UPDATE_ITEM_VIEW',
+    localeItems: localeItems,
+    inventoryItems: inventoryItems
+  };
 };

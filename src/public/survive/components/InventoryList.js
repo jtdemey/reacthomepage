@@ -1,26 +1,17 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import ListButtonItem from './ListButtonItem';
-
-const mapStateToProps = (state, ownProps) => {
-  return {
-    items: state.player.items
-  };
-};
 
 const InventoryList = (props) => {
   return (
     <div className="inventory-list-area">
       <h5 className="item-list-header inventory-header">INVENTORY</h5>
       <ul className="item-list inventory-list">
-        {props.items.map((item) => (
-          <ListButtonItem key={item.itemId} text={item.display} />
+        {props.itemList.map((itemButton) => (
+          <ListButtonItem key={itemButton.index} index={itemButton.index} text={itemButton.display} transitioning={itemButton.transitioning} />
         ))}
       </ul>
     </div>
   );
 };
 
-const InventoryListCon = connect(mapStateToProps)(InventoryList);
-
-export default InventoryListCon;
+export default InventoryList;

@@ -1,5 +1,11 @@
 const uiReducer = (state = {}, action) => {
   switch(action.type) {
+    case 'ADD_ITEM_TO_LIST':
+      return {
+        ...state,
+        localeItemButtons: action.localeItemButtons,
+        inventoryItemButtons: action.inventoryItemButtons
+      };
     case 'APPEND_LINE':
       return {
         ...state,

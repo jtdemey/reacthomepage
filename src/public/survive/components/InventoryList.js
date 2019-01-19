@@ -7,7 +7,12 @@ const InventoryList = (props) => {
       <h5 className="item-list-header inventory-header">INVENTORY</h5>
       <ul className="item-list inventory-list">
         {props.itemList.map((itemButton) => (
-          <ListButtonItem key={itemButton.index} index={itemButton.index} text={itemButton.display} transitioning={itemButton.transitioning} />
+          <ListButtonItem   key={itemButton.index}
+                            index={itemButton.index}
+                            text={itemButton.display}
+                            quantity={itemButton.quantity}
+                            transitioning={itemButton.transitioning}
+                            isPlaceholder={itemButton.isPlaceholder} />
         ))}
       </ul>
     </div>

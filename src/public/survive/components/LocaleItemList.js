@@ -21,6 +21,7 @@ const LocaleItemList = (props) => {
                             index={itemButton.index}
                             text={itemButton.display}
                             transitioning={itemButton.transitioning}
+                            isPlaceholder={itemButton.isPlaceholder}
                             clickFunc={(ind) => props.pickUpItem(ind)}/>
         ))}
       </ul>

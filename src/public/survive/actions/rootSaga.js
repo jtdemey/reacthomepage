@@ -1,8 +1,8 @@
 import { takeEvery, put } from 'redux-saga/effects';
+import { pickUpItemSaga } from './comboSagas';
 import {
 	addLineSaga,
-	changeViewSaga,
-	pickUpItemSaga
+	changeViewSaga
 } from './uiSagas';
 
 function* rootSaga() {

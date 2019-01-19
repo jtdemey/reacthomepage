@@ -1,5 +1,27 @@
 import surviveStore from '../store/surviveStore';
-import { getListButtonItemFromIndex } from '../app/surviveUtilities';
+import {
+  createListButtonItem,
+  getListButtonItemFromIndex
+} from '../app/surviveUtilities';
+
+export const addItemToList = (listBtnItem, destination) => {
+  const currentState = Object.assign({}, surviveStore.getState().ui);
+  const localeItems = Object.assign([], currentState.localeItemButtons);
+  const inventoryItems = Object.assign([], currentState.inventoryItemButtons);
+  let newLbi = Object.assign({}, listBtnItem);
+  newLbi.transitioning = 'in';
+  if(destination === 'locale') {
+    localeItems.push(newLbi);
+  } else if(destination === 'inventory') {
+    inventoryItems.push(newLbi);
+  }
+  console.log(inventoryItems);
+  return {
+    type: 'ADD_ITEM_TO_LIST',
+    localeItemButtons: localeItems,
+    inventoryItemButtons: inventoryItems
+  };
+};
 
 export const appendLine = (line) => {
   const currentState = Object.assign({}, surviveStore.getState().ui);
@@ -61,17 +83,21 @@ export const removeItemFromList = (ind) => {
   let localeItems = Object.assign([], currentState.localeItemButtons);
   let inventoryItems = Object.assign([], currentState.inventoryItemButtons);
   const itemTarget = getListButtonItemFromIndex(localeItems, inventoryItems, ind);
+  const thisItemId = itemTarget.itemId;
   if(itemTarget.listName === 'locale') {
-    console.log(localeItems);
-    delete localeItems[ind];
-    console.log(localeItems);
+    localeItems = localeItems.filter((item) => {
+      return item.index != ind;
+    });
   } else if(itemTarget.listName === 'inventory') {
-    inventoryItems = inventoryItems.splice(ind, 1);
+    inventoryItems = inventoryItems.filter((item) => {
+      return item.index != ind;
+    });
   }
   return {
     type: 'REMOVE_ITEM_FROM_LIST',
     localeItems: localeItems,
-    inventoryItems: inventoryItems
+    inventoryItems: inventoryItems,
+    removedItem: itemTarget
   };
 }
 
@@ -91,7 +117,19 @@ export const submitCommand = (txt) => {
   };
 };
 
-//export transitionItemIn
+export const transitionItemIn = (ind) => {
+  const currentState = Object.assign({}, surviveStore.getState().ui);
+  const localeItems = Object.assign([], currentState.localeItemButtons);
+  const inventoryItems = Object.assign([], currentState.inventoryItemButtons);
+  const itemTarget = getListButtonItemFromIndex(localeItems, inventoryItems, ind);
+  itemTarget.transitioning = 'in';
+  return {
+    type: 'TRANSITION_ITEM_IN',
+    localeItemButtons: localeItems,
+    inventoryItemButtons: inventoryItems,
+    indexTransitioned: ind
+  };
+};
 
 export const transitionItemOut = (ind) => {
   const currentState = Object.assign({}, surviveStore.getState().ui);
@@ -122,31 +160,33 @@ export const transitionViewOut = (nextview) => {
 };
 
 export const updateItemView = () => {
-  const currentPlayer = Object.assign({}, surviveStore.getState().player);
+  const currentState = Object.assign({}, surviveStore.getState());
+  const currentInventory = Object.assign([], currentState.player.items);
+  const currentLocaleItems = Object.assign([], currentState.gameMap[currentState.player.locale].items);
   let localeItems = [];
   let lbiIndex = 0;
-  for(let i = 0; i < currentPlayer.locale.items.length; i++) {
-    let thisItem = currentPlayer.locale.items[i];
-    let newLbi = {
-      index: lbiIndex,
-      display: thisItem.display,
-      transitioning: null,
-      listName: 'locale'
-    };
+  for(let i = 0; i < currentLocaleItems.length; i++) {
+    let thisItem = currentLocaleItems[i];
+    let newLbi = createListButtonItem(lbiIndex, thisItem.itemId, thisItem.display, thisItem.quantity, false, 'locale');
+    lbiIndex += 1;
+    localeItems.push(newLbi);
+  }
+  if(localeItems.length < 1) {
+    let newLbi = createListButtonItem(lbiIndex, 999999, '(nothing visible)', 1, true, 'locale');
     lbiIndex += 1;
     localeItems.push(newLbi);
   }
   let inventoryItems = [];
-  for(let i = 0; i < currentPlayer.items.length; i++) {
-    let thisItem = currentPlayer.items[i];
-    let newLbi = {
-      index: lbiIndex,
-      display: thisItem.display,
-      transitioning: null,
-      listName: 'inventory'
-    };
+  for(let i = 0; i < currentInventory.length; i++) {
+    let thisItem = currentInventory[i];
+    let newLbi = createListButtonItem(lbiIndex, thisItem.itemId, thisItem.display, thisItem.quantity, false, 'inventory');
     lbiIndex += 1;
     inventoryItems.push(newLbi);
+  }
+  if(inventoryItems.length < 1) {
+    let newLbi = createListButtonItem(lbiIndex, 999999, '(no items)', 1, true, 'locale');
+    lbiIndex += 1;
+    localeItems.push(newLbi);
   }
   return {
     type: 'UPDATE_ITEM_VIEW',

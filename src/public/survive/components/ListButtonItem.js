@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import TweenMax from 'gsap/TweenMax';
-import { transitionItemOut } from '../actions/uiActions';
 
 class ListButtonItem extends React.Component {
 	constructor(props) {
@@ -10,10 +9,24 @@ class ListButtonItem extends React.Component {
 		this.animationFrames = null;
 	}
 
+	componentDidMount() {
+		if(this.props.transitioning === 'in') {
+			this.transitionIn();
+		}
+	}
+
 	componentDidUpdate() {
 		if(this.props.transitioning === 'out') {
 			this.transitionOut();
 		}
+	}
+
+	transitionIn() {
+		this.animationFrames = TweenMax.from(this.buttonRef, 0.35, {
+			x: 100,
+			opacity: 0,
+			ease: Power2.easeOut
+		});
 	}
 
 	transitionOut() {
@@ -25,9 +38,12 @@ class ListButtonItem extends React.Component {
 	}
 
 	render() {
+		const text = this.props.quantity > 1 ? `${this.props.text} (${this.props.quantity})` : this.props.text;
+		const cssClass = this.props.isPlaceholder === true ? 'list-button-placeholder' : 'list-button-item';
+		const click = this.props.isPlaceholder === true ? () => { return; } : () => this.props.clickFunc(this.props.index);
 		return (
-	    <li className="list-button-item" ref={el => this.buttonRef = el} onClick={() => this.props.clickFunc(this.props.index)}>
-	      {this.props.text}
+	    <li className={cssClass} ref={el => this.buttonRef = el} onClick={click}>
+	      {text}
 	    </li>
 	  );
 	}

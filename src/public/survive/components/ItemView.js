@@ -6,7 +6,7 @@ import { updateItemView } from '../actions/uiActions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    localeName: state.player.locale.display,
+    localeName: state.player.locale,
     localeItemButtons: state.ui.localeItemButtons,
     inventoryItemButtons: state.ui.inventoryItemButtons
   };

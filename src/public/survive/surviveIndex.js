@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from "react-redux";
 
-import SurviveApp from './app/surviveApp';
+import SurviveApp from './app/SurviveApp';
 import SurviveStore from './store/surviveStore';
 
 render(

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ViewParticles from './ViewParticles';
 import ConsoleView from './ConsoleView';
 import ItemView from './ItemView';
+import InfoView from './InfoView';
 import { setViewHeight } from '../actions/uiActions';
 
 const mapStateToProps = (state, ownProps) => {
@@ -31,7 +32,7 @@ class GameView extends React.Component {
   }
 
   fitDimensions() {
-    let w = window.innerWidth;
+    let w = window.innerWidth > 800 ? 800 : window.innerWidth;
     let h = window.innerHeight - 120;
     this.setState({
       viewWidth: w,
@@ -67,6 +68,10 @@ class GameView extends React.Component {
                   clientWidth={this.state.viewWidth}
                   clientHeight={this.state.viewHeight}
                   isTransitioningOut={this.props.viewTransitioningOut === 1 ? true : false} />
+        <InfoView isCurrentView={this.props.currentView === 3 ? true : false}
+                  clientWidth={this.state.viewWidth}
+                  clientHeight={this.state.viewHeight}
+                  isTransitioningOut={this.props.viewTransitioningOut === 3 ? true : false} />
       </div>
     );
   }

@@ -1,5 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import ListButtonItem from './ListButtonItem';
+import { showItemInfoModal } from '../actions/uiActions';
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showItemInfoModal: () => {
+      dispatch(showItemInfoModal());
+    }
+  };
+};
 
 const InventoryList = (props) => {
   return (
@@ -12,11 +22,14 @@ const InventoryList = (props) => {
                             text={itemButton.display}
                             quantity={itemButton.quantity}
                             transitioning={itemButton.transitioning}
-                            isPlaceholder={itemButton.isPlaceholder} />
+                            isPlaceholder={itemButton.isPlaceholder}
+                            clickFunc={() => props.showItemInfoModal()} />
         ))}
       </ul>
     </div>
   );
 };
 
-export default InventoryList;
+const InventoryListCon = connect(null, mapDispatchToProps)(InventoryList);
+
+export default InventoryListCon;

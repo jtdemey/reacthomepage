@@ -6,7 +6,7 @@ import React from 'react';
 
 const StatInfoSvg = (props) => {
 	const look = {
-		width: `${(props.clientWidth / 5 - 40) < 64 ? 64 : (props.clientWidth / 5 - 40)}px`,
+		width: `${(props.clientWidth / 5 - 40) < 80 ? 80 : (props.clientWidth / 5 - 40)}px`,
 		top: '15%',
 		left: '10px'
 	};

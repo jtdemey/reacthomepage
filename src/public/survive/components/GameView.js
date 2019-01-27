@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ViewParticles from './ViewParticles';
 import ConsoleView from './ConsoleView';
 import ItemView from './ItemView';
+import ModalContainer from './ModalContainer';
 import InfoView from './InfoView';
 import { setViewHeight } from '../actions/uiActions';
 
@@ -59,6 +60,7 @@ class GameView extends React.Component {
   render() {
     return (
       <div className="game-view" style={{ height: this.state.viewHeight + 'px' }}>
+        <ModalContainer clientWidth={this.state.viewWidth} clientHeight={this.state.viewHeight} />
         <ViewParticles mode="0" look="view-particles" clientWidth={this.state.viewWidth} clientHeight={this.state.viewHeight} />
         <ConsoleView  isCurrentView={this.props.currentView === 0 ? true : false}
                       clientWidth={this.state.viewWidth}

@@ -26,11 +26,18 @@ const rootReducer = (state = initialState, action) => {
     case 'APPEND_LINE':
     case 'ELEVATE_LINES':
     case 'CHANGE_VIEW':
+    case 'CLOSE_MODALS':
+    case 'CLOSE_MODALS_DELAYED':
     case 'FOCUS_COMMAND_BAR':
     case 'PICK_UP_ITEM':
+    case 'REMOVE_ENTITY_TRANSITIONING_IN':
+    case 'REMOVE_ENTITY_TRANSITIONING_OUT':
     case 'REMOVE_ITEM_FROM_LIST':
     case 'SET_VIEW_HEIGHT':
+    case 'SHOW_ITEM_INFO_MODAL':
     case 'SUBMIT_COMMAND':
+    case 'TRANSITION_ENTITY_IN':
+    case 'TRANSITION_ENTITY_OUT':
     case 'TRANSITION_ITEM_OUT':
     case 'TRANSITION_VIEW_OUT':
     case 'UPDATE_ITEM_VIEW':

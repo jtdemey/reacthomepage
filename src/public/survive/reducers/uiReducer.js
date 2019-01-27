@@ -24,6 +24,11 @@ const uiReducer = (state = {}, action) => {
         viewTransitioningIn: action.currentView,
         viewTransitioningOut: null
       };
+    case 'CLOSE_MODALS':
+      return {
+        ...state,
+        isModalVisible: false
+      };
     case 'FOCUS_COMMAND_BAR':
       return {
         ...state,
@@ -34,6 +39,16 @@ const uiReducer = (state = {}, action) => {
         ...state,
         localeItemButtons: action.localeItemButtons,
         inventoryItemButtons: action.inventoryItemButtons
+      };
+    case 'REMOVE_ENTITY_TRANSITIONING_IN':
+      return {
+        ...state,
+        entitiesTransitioningIn: action.entitiesTransitioningIn
+      };
+    case 'REMOVE_ENTITY_TRANSITIONING_OUT':
+      return {
+        ...state,
+        entitiesTransitioningOut: action.entitiesTransitioningOut
       };
     case 'REMOVE_ITEM_FROM_LIST':
       return {
@@ -46,10 +61,26 @@ const uiReducer = (state = {}, action) => {
         ...state,
         viewHeight: action.amount
       };
+    case 'SHOW_ITEM_INFO_MODAL':
+      return {
+        ...state,
+        isModalVisible: true,
+        modalMode: 1
+      };
     case 'SUBMIT_COMMAND':
       return {
         ...state,
         lastInput: action.input
+      };
+    case 'TRANSITION_ENTITY_IN':
+      return {
+        ...state,
+        entitiesTransitioningIn: action.entitiesTransitioningIn
+      };
+    case 'TRANSITION_ENTITY_OUT':
+      return {
+        ...state,
+        entitiesTransitioningOut: action.entitiesTransitioningOut
       };
     case 'TRANSITION_ITEM_OUT':
       return {

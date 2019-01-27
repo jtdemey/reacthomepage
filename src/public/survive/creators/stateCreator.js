@@ -38,6 +38,8 @@ let initialState = {
     viewHeight: 0,
     viewTransitioningIn: null,
     viewTransitioningOut: null,
+    entitiesTransitioningIn: [],
+    entitiesTransitioningOut: [],
     //Console View
     lineIndex: 0,
     lastInput: '',
@@ -46,7 +48,10 @@ let initialState = {
     commandBarFocus: true,
     //Item View
     localeItemButtons: [],
-    inventoryItemButtons: []
+    inventoryItemButtons: [],
+    //Modals
+    isModalVisible: false,
+    modalMode: 0 //0: empty, 1: item-info, 2: combat
   },
   gameMap: {
     locale1: {

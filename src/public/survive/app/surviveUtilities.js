@@ -1,10 +1,10 @@
-export const createListButtonItem = (ind, itemId, display, quantity, isPlaceholder, listName) => {
+export const createListButtonItem = (ind, itemId, display, quantity, isPlaceholder, transitioning, listName) => {
   let newLbi = {
     index: ind,
     itemId: itemId,
     display: display,
     quantity: quantity,
-    transitioning: null,
+    transitioning: transitioning,
     isPlaceholder: isPlaceholder,
     listName: listName
   };

@@ -9,7 +9,7 @@ const StatInfoTile = (props) => {
 	return (
 		<div className="stat-info-tile" style={look}>
 			<StatInfoSvg clientWidth={props.clientWidth} clientHeight={props.clientHeight} svgsrc={props.svgsrc} />
-			<StatInfoPhrase playerStat={props.playerStat} statPhrase={props.statPhrase} />
+			<StatInfoPhrase tileId={props.tileId} playerStat={props.playerStat} statPhrase={props.statPhrase} />
 	  </div>
 	);
 };

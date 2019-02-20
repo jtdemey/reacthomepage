@@ -6,7 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
   mode: 'development',
-  entry: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, './src/survive/surviveIndex.js')],
+  entry: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, './src/public/scripts/homeScript.js')],
   target: 'web',
   output: {
     path: path.join(__dirname, 'dist'),
@@ -17,12 +17,17 @@ module.exports = {
     port: 8000,
     host: 'localhost',
     historyApiFallback: {
-      index: 'survive.html'
+      rewrites: [
+        {
+          from: /./,
+          to: '/html/404.html'
+        }
+      ]
     },
     disableHostCheck: true,
     noInfo: false,
     stats: 'minimal',
-    contentBase: path.join(__dirname, './src/survive'),
+    contentBase: path.join(__dirname, './src/public/survive'),
     hot: true,
     inline: true,
     open: true

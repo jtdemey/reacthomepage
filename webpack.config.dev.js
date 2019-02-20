@@ -3,11 +3,10 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const SERVER_ADDR = 'http://localhost:8000/';
-
 module.exports = {
+  context: __dirname,
   devtool: 'cheap-module-eval-source-map',
-  mode: 'production',
+  mode: 'development',
   entry: {
     home: path.join(__dirname, 'src/public/scripts/homeScript.js'),
     survive: path.join(__dirname, 'src/public/survive/surviveIndex.js'),
@@ -16,7 +15,7 @@ module.exports = {
   target: 'web',
   output: {
     path: path.join(__dirname, 'dist'),
-    publicPath: SERVER_ADDR,
+    publicPath: '/',
     filename: '[name]Bundle.js'
   },
   devServer: {
@@ -24,7 +23,10 @@ module.exports = {
     host: 'localhost',
     historyApiFallback: {
       rewrites: [
-        { from: /./, to: '/html/404.html' }
+        {
+          from: /./,
+          to: '/html/404.html'
+        }
       ]
     },
     noInfo: false,
@@ -62,8 +64,7 @@ module.exports = {
             options: {
               modules: true
             }
-          },
-          { loader: 'sass-loader' }
+          }
         ]
       },
       {

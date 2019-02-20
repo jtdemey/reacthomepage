@@ -24,13 +24,14 @@
 -->
 <html lang="en">
   <head>
-    <title>JD</title>
+    <title>JTD</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
+    <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>-->
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/external/bootstrap.min.css" title="Default">
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Macondo" rel="stylesheet">
@@ -38,7 +39,8 @@
     <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Vollkorn" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" media="screen" href="../css/look.css" title="Default">
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/helium.css" title="Default">
+    <script src="../scripts/external/bootstrap-native.min.js"></script>
   </head>
   <noscript>
     <style type="text/css">
@@ -51,7 +53,7 @@
     <header>
       <div class="banner-area">
         <img class="jd-logo" width=90 height=90 src="/media/jdlogo1.svg"></img>
-        <h1 class="jd-title1">John&nbsp</h1><h1 class="jd-title2">De&nbsp</h1><h1 class="jd-title3">Mey</h1>
+        <h1 class="jd-title jd-title1">John&nbsp;</h1><h1 class="jd-title jd-title2">De&nbsp;</h1><h1 class="jd-title jd-title3">Mey</h1>
         <div class="subtitle-area">
           <h4 class="jd-subtitle"></h4>
         </div>
@@ -59,35 +61,35 @@
     </header>
     <div class="container-fluid" id="container">
       <div class="nav-area">
-        <nav class="navbar">
+
           <ul class="navlist">
             <div class="section-tab"></div>
             <a href="#nav0" class="nav-link">
-              <li class="ni-home">
+              <li class="nav-block ni-home">
                 <div class="nav-highlight home-highlight"></div>
                 <h5 class="nav-title home-title">HOME</h5>
               </li>
             </a>
             <a href="#nav1" class="nav-link">
-              <li class="ni-projects">
+              <li class="nav-block ni-projects">
                 <div class="nav-highlight proj-highlight"></div>
                 <h5 class="nav-title proj-title">PROJECTS</h5>
               </li>
             </a>
             <a href="#nav2" class="nav-link">
-              <li class="ni-tunes">
+              <li class="nav-block ni-tunes">
                 <div class="nav-highlight tunes-highlight"></div>
                 <h5 class="nav-title tunes-title">TUNES</h5>
               </li>
             </a>
             <a href="#nav3" class="nav-link">
-              <li class="ni-contact">
+              <li class="nav-block ni-contact">
                 <div class="nav-highlight contact-highlight"></div>
                 <h5 class="nav-title contact-title">CONTACT</h5>
               </li>
             </a>
           </ul>
-        </nav>
+
       </div>
       <div class="content-area">
         <div class="content">
@@ -100,46 +102,6 @@
           <div class="content-view proj-content">
             <h1 class="content-header proj-header">Projects</h1>
             <p class="subheader proj-blurb">Things that do things.</p>
-            <!--OLD TILE VIEW<div class="proj-icons">
-                <a href="https://github.com/jtdemey/TuneWeaver" target="_blank"
-                alt="A neural network that uses LSTMs to produce accompaniments for textually inputted melodies">
-                    <div class="tile tw-tile">
-                        <h2 class="tile-abb tw-abb">TW</h2>
-                        <h5 class="tile-subtitle">TuneWeaver</h5>
-                    </div>
-                </a>
-                <a href="/gamesuite">
-                    <div class="tile gs-tile">
-                        <h2 class="tile-abb gs-abb">GS</h2>
-                        <h5 class="tile-subtitle">GameSuite</h5>
-                    </div>
-                </a>
-                <a href="/survive">
-                    <div class="tile ap-tile">
-                        <h2 class="tile-abb a-abb">S</h2>
-                        <h5 class="tile-subtitle">Survive</h5>
-                    </div>
-                </a>
-            </div>-->
-            <!--COMBINED BROWSER VIEW<div class="proj-browser">
-                <div class="pb-tabs">
-                    <div class="pb-tab pb-tab0" id="pb-tab0"><span class="pb-tabspan pb-tw">TW</span></div>
-                    <div class="pb-tab pb-tab1" id="pb-tab1"><span class="pb-tabspan pb-gs">GS</span></div>
-                    <div class="pb-tab pb-tab2" id="pb-tab2"><span class="pb-tabspan pb-s">S</span></div>
-                </div>
-                <div class="pb-view pb-fade">
-                    <img class="pb-bg" src="/media/pb_tw.png">
-                    <div class="pb-header pb-fade">TuneWeaver</div>
-                    <div class="pb-desc pb-fade">
-                        <p>A recurrent neural network that uses<br>
-                        LSTMs to produce musical accompaniments<br> 
-                        for your melody.</p>
-                    </div>
-                    <a class="pb-btn-link" href="https://github.com/jtdemey/TuneWeaver" target="_blank">
-                        <div class="pb-btn pb-fade"><h5 class="pb-btn-word"><strong>INFO</strong></h5></div>
-                    </a>
-                </div>
-            </div>-->
             <div class="proj-windows">
               <div class="proj-window tw-window">
                 <div class="pw-headerarea">

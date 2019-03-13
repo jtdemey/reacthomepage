@@ -6,6 +6,8 @@ import ConsoleList from './ConsoleList';
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    clientWidth: state.ui.clientWidth,
+    clientHeight: state.ui.clientHeight,
     consoleLines: state.ui.consoleLines,
     consoleYpos: state.ui.consoleYpos,
     lineIndex: state.ui.lineIndex

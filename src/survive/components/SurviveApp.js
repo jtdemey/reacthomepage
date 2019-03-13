@@ -5,6 +5,7 @@ import GameView from './middle/GameView';
 import ButtonBar from './bottom/ButtonBar';
 import '../styles/surviveLook.css';
 import { masterTick } from '../actions/gameActions';
+import { loadGameMap } from '../actions/mapActions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -16,6 +17,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     masterTick: (t) => {
       dispatch(masterTick(t));
+    },
+    loadGameMap: () => {
+      dispatch(loadGameMap());
     }
   };
 };

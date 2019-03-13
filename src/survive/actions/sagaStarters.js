@@ -24,11 +24,12 @@ export const removeActiveSaga = sagaName => {
 };
 
 //Wrappers
-export const beginPickUpItem = () => {
+export const beginPickUpItem = (btnId) => {
 	const activeSagas = addActiveSaga('PICK_UP_ITEM');
 	return {
 		type: 'BEGIN_PICK_UP_ITEM',
-		activeSagas: activeSagas
+		activeSagas: activeSagas,
+		btnIndex: btnId
 	};
 };
 

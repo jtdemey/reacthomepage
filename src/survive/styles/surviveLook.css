@@ -6,6 +6,16 @@
   red gradient: #211212 #451417 #6a1117 #8f0911 #b30000
   pale blue gradient: #404040 #4f5862 #5e7185 #6c8bab #79a6d2
   gray gradient: #404040 #606060 #838383 #a7a7a7 #cccccc
+
+  THEMES
+
+  Lovecraft: 
+Fire Brick #BB3B22
+Tan #CFC485
+Light Slate Gray #95A19C
+Dark Slate Gray #1D2718
+Dim Gray #7B765F;
+
 */
 
 /* BASE */
@@ -330,6 +340,24 @@ canvas {
 
 .inventory-list-area {
   width: 100%;
+}
+
+/* MAP VIEW */
+.map-view {
+  display : flex;
+}
+
+.map-grid {
+  width: 90%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-gap: 4px;
+  margin: auto;
+}
+
+.map-grid-item {
+  background-color: rgba(64, 64, 64, 0.8);
 }
 
 /* INFO VIEW */

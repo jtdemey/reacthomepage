@@ -56,10 +56,11 @@ const uiReducer = (state = {}, action) => {
         localeItemButtons: action.localeItems,
         inventoryItemButtons: action.inventoryItems
       };
-    case 'SET_VIEW_HEIGHT':
+    case 'SET_CLIENT_DIMENSIONS':
       return {
         ...state,
-        viewHeight: action.amount
+        clientWidth: action.clientWidth,
+        clientHeight: action.clientHeight
       };
     case 'SHOW_ITEM_INFO_MODAL':
       return {

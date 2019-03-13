@@ -1,10 +1,22 @@
 import surviveStore from '../store/surviveStore';
+import MapCreator from '../creators/mapCreator';
 
 export const enterLocale = (localeName) => {
   const currentState = Object.assign({}, surviveStore.getState());
   let currentPlayer = Object.assign({}, currentState.player);
   let currentLocale = Object.assign({}, currentState.gameMap[localeName]);
   currentPlayer.lastLocale = currentPlayer.locale;
+};
+
+export const loadGameMap = () => {
+  const currentState = Object.assign({}, surviveStore.getState());
+  const mapLoader = new MapCreator(currentState);
+  mapLoader.createLocales();
+  const gtgMap = mapLoader.gameMap;
+  return {
+    type: 'LOAD_GAME_MAP',
+    gameMap: gtgMap
+  };
 };
 
 export const removeItemFromLocale = (id) => {

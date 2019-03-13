@@ -9,6 +9,7 @@ import {
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    clientHeight: state.ui.clientHeight,
     isModalVisible: state.ui.isModalVisible,
     entitiesTransitioningIn: state.ui.entitiesTransitioningIn,
     entitiesTransitioningOut: state.ui.entitiesTransitioningOut,

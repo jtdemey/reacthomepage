@@ -142,6 +142,19 @@ class mapCreator {
     this.addLocale('car_mailbox',
       'Mailbox',
       [7, 7],
+      [[cardinalConstants.NORTH, 'yard_entrance', 4, "You head towards the house."]
+      [cardinalConstants.INSIDE, 'car', 2, "You open the frosty car door and climb in."]],
+      regionConstants.FOREST,
+      temperatureConstants.FREEZING,
+      1,
+      "You sit in the driver's seat.",
+      "",
+      ["It's warmer here than outside, but the air is still frigid.",
+        "Out of all times and places, why break down tonight?"]
+    );
+    this.addLocale('yard_entrance',
+      'Yard Entrance',
+      [7, 6],
       [[cardinalConstants.INSIDE, 'car', 2, "You open the frosty car door and climb in."]],
       regionConstants.FOREST,
       temperatureConstants.FREEZING,
@@ -163,7 +176,7 @@ class mapCreator {
 3   WOOD18|WOOD19|WOOD20|WOOD21|WOOD22|WOOD23|DINING|STAIRU|STUDYS|STORAG|STEPST|LAWN02|COURTS|TOOLSH|HEDGE3|000000|
 4   WOOD24|WOOD25|WOOD26|WOOD27|WOOD28|WOOD29|LIVNRM|FOYER0|DEN000|LADDER|LCKGT1|HEDGE4|HEDGE5|HEDGE6|HEDGE7|000000|
 5   WOOD30|WOOD31|WOOD32|WOOD33|WOOD34|WOOD35|WOOD36|FRNTYD|FRNTGD|FYDTRE|000000|000000|000000|000000|000000|000000|
-6   WOOD37|WOOD38|WOOD39|WOOD40|WOOD41|WOOD42|WOOD43|PATSHD|SHED00|WELL00|000000|000000|000000|000000|000000|000000|
+6   WOOD37|WOOD38|WOOD39|WOOD40|WOOD41|WOOD42|WOOD43|YRDENT|SHED00|WELL00|000000|000000|000000|000000|000000|000000|
 7   ROAD00|ROAD01|ROAD02|ROAD03|ROAD04|ROAD05|ROAD06|CARMBX|ROAD07|ROAD08|ROAD09|ROAD10|ROAD11|ROAD12|ROAD13|ROAD14|
 8   000000|000000|CEMPT1|000000|000000|000000|000000|000000|000000|CEMPT3|000000|000000|000000|000000|000000|000000|
 9   000000|000000|CEMPT2|000000|000000|000000|000000|000000|000000|CEMPT4|000000|000000|000000|WTCTWR|000000|000000|

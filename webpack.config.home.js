@@ -17,17 +17,12 @@ module.exports = {
     port: 8000,
     host: 'localhost',
     historyApiFallback: {
-      rewrites: [
-        {
-          from: /./,
-          to: '/html/404.html'
-        }
-      ]
+      index: '/html/home.html'
     },
     disableHostCheck: true,
     noInfo: false,
     stats: 'minimal',
-    contentBase: path.join(__dirname, './src/public/survive'),
+    contentBase: path.join(__dirname, './src/public'),
     hot: true,
     inline: true,
     open: true

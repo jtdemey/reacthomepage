@@ -10,6 +10,8 @@ import {
 const rootReducer = (state = initialState, action) => {
   switch(action.type) {
     //state.game
+    case 'BEGIN_PICK_UP_ITEM':
+    case 'STOP_PICK_UP_ITEM':
     case 'MASTER_TICK':
       return {
         ...state,
@@ -33,7 +35,7 @@ const rootReducer = (state = initialState, action) => {
     case 'REMOVE_ENTITY_TRANSITIONING_IN':
     case 'REMOVE_ENTITY_TRANSITIONING_OUT':
     case 'REMOVE_ITEM_FROM_LIST':
-    case 'SET_VIEW_HEIGHT':
+    case 'SET_CLIENT_DIMENSIONS':
     case 'SHOW_ITEM_INFO_MODAL':
     case 'SUBMIT_COMMAND':
     case 'TRANSITION_ENTITY_IN':
@@ -46,6 +48,7 @@ const rootReducer = (state = initialState, action) => {
         ui: uiReducer(state.ui, action)
       };
     //state.gameMap
+    case 'LOAD_GAME_MAP':
     case 'REMOVE_ITEM_FROM_LOCALE':
       return {
         ...state,

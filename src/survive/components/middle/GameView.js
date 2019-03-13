@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ModalContainer from '../auxiliary/ModalContainer';
 import ViewParticles from './ViewParticles';
 import ConsoleView from './ConsoleView';
+import MapView from './MapView';
 import ItemView from './ItemView';
-import ModalContainer from '../auxiliary/ModalContainer';
 import InfoView from './InfoView';
-import { setViewHeight } from '../../actions/uiActions';
+import { setClientDimensions } from '../../actions/uiActions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -17,8 +18,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setViewHeight: (amt) => {
-      dispatch(setViewHeight(amt));
+    setClientDimensions: (x, y) => {
+      dispatch(setClientDimensions(x, y));
     }
   };
 };
@@ -39,7 +40,7 @@ class GameView extends React.Component {
       viewWidth: w,
       viewHeight: h
     });
-    this.props.setViewHeight(this.state.viewHeight);
+    this.props.setClientDimensions(this.state.viewWidth, this.state.viewHeight);
   }
 
   componentWillMount() {
@@ -49,7 +50,7 @@ class GameView extends React.Component {
 
   componentDidMount() {
     setTimeout(() => {
-      this.props.setViewHeight(this.state.viewHeight);
+      this.props.setClientDimensions(this.state.viewWidth, this.state.viewHeight);
     }, 800);
   }
 
@@ -60,19 +61,15 @@ class GameView extends React.Component {
   render() {
     return (
       <div className="game-view" style={{ height: this.state.viewHeight + 'px' }}>
-        <ModalContainer clientWidth={this.state.viewWidth} clientHeight={this.state.viewHeight} />
+        <ModalContainer />
         <ViewParticles mode="0" look="view-particles" clientWidth={this.state.viewWidth} clientHeight={this.state.viewHeight} />
         <ConsoleView  isCurrentView={this.props.currentView === 0 ? true : false}
-                      clientWidth={this.state.viewWidth}
-                      clientHeight={this.state.viewHeight}
                       isTransitioningOut={this.props.viewTransitioningOut === 0 ? true : false} />
         <ItemView isCurrentView={this.props.currentView === 1 ? true : false}
-                  clientWidth={this.state.viewWidth}
-                  clientHeight={this.state.viewHeight}
                   isTransitioningOut={this.props.viewTransitioningOut === 1 ? true : false} />
+        <MapView isCurrentView={this.props.currentView === 2 ? true : false}
+                  isTransitioningOut={this.props.viewTransitioningOut === 2 ? true : false} />
         <InfoView isCurrentView={this.props.currentView === 3 ? true : false}
-                  clientWidth={this.state.viewWidth}
-                  clientHeight={this.state.viewHeight}
                   isTransitioningOut={this.props.viewTransitioningOut === 3 ? true : false} />
       </div>
     );

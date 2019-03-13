@@ -35,10 +35,12 @@ let initialState = {
     equipped: []
   },
   ui: {
+    //Client data
+    clientWidth: 0,
+    clientHeight: 0,
     //Root GameView
     currentView: 0,
     particleMode: 0,
-    viewHeight: 0,
     viewTransitioningIn: null,
     viewTransitioningOut: null,
     entitiesTransitioningIn: [],
@@ -52,6 +54,45 @@ let initialState = {
     //Item View
     localeItemButtons: [],
     inventoryItemButtons: [],
+    //Map View
+    mapGridItems: [
+      {
+        gridItemId: 0,
+        color: 0
+      },
+      {
+        gridItemId: 1,
+        color: 0
+      },
+      {
+        gridItemId: 2,
+        color: 0
+      },
+      {
+        gridItemId: 3,
+        color: 0
+      },
+      {
+        gridItemId: 4,
+        color: 0
+      },
+      {
+        gridItemId: 5,
+        color: 0
+      },
+      {
+        gridItemId: 6,
+        color: 0
+      },
+      {
+        gridItemId: 7,
+        color: 0
+      },
+      {
+        gridItemId: 8,
+        color: 0
+      }
+    ],
     //Modals
     isModalVisible: false,
     modalMode: 0 //0: empty, 1: item-info, 2: combat

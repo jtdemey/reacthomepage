@@ -4,6 +4,8 @@ import StatInfoArea from './StatInfoArea';
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    clientWidth: state.ui.clientWidth,
+    clientHeight: state.ui.clientHeight,
     health: state.player.health,
     sanity: state.player.sanity,
     energy: state.player.energy

@@ -146,10 +146,11 @@ export const removeItemFromList = (ind) => {
   };
 }
 
-export const setViewHeight = (amt) => {
+export const setClientDimensions = (x, y) => {
   return {
-    type: 'SET_VIEW_HEIGHT',
-    amount: amt
+    type: 'SET_CLIENT_DIMENSIONS',
+    clientWidth: x,
+    clientHeight: y
   };
 };
 
@@ -279,4 +280,10 @@ export const updateItemView = () => {
     localeItems: localeItems,
     inventoryItems: inventoryItems
   };
+};
+
+export const updateMapGridItems = () => {
+  const currentState = Object.assign({}, surviveStore.getState());
+  const currentGridItems = Object.assign([], currentState.ui.mapGridItems);
+  const currentMap = Object.assign({}, currentState.gameMap);
 };

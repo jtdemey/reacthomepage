@@ -4,7 +4,10 @@ import StatusBar from './top/StatusBar';
 import GameView from './middle/GameView';
 import ButtonBar from './bottom/ButtonBar';
 import '../styles/surviveLook.css';
-import { masterTick } from '../actions/gameActions';
+import {
+  masterTick,
+  startGame
+} from '../actions/gameActions';
 import { loadGameMap } from '../actions/mapActions';
 
 const mapStateToProps = (state, ownProps) => {
@@ -20,6 +23,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     loadGameMap: () => {
       dispatch(loadGameMap());
+    },
+    startGame: (t) => {
+      dispatch(startGame(t));
     }
   };
 };
@@ -30,9 +36,7 @@ class SurviveApp extends React.Component {
   }
 
   componentDidMount() {
-    this.clock = setInterval(() => {
-      this.props.masterTick(this.props.tick);
-    }, 1000);
+    this.props.startGame(this.props.tick);
   }
 
   render() {

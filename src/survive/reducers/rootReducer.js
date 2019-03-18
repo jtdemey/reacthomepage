@@ -10,7 +10,6 @@ import {
 const rootReducer = (state = initialState, action) => {
   switch(action.type) {
     //state.game
-    case 'BEGIN_PICK_UP_ITEM':
     case 'STOP_PICK_UP_ITEM':
     case 'MASTER_TICK':
       return {
@@ -18,6 +17,7 @@ const rootReducer = (state = initialState, action) => {
         game: gameReducer(state.game, action)
       };
     //state.player
+    case 'BEGIN_PICK_UP_ITEM':
     case 'TAKE_ITEM_FROM_LOCALE':
       return {
         ...state,

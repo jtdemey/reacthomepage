@@ -1,9 +1,10 @@
 const gameReducer = (state = {}, action) => {
   switch(action.type) {
-    case 'BEGIN_PICK_UP_ITEM':
+    case 'MASTER_TICK':
       return {
-        ...state, 
-        activeSagas: action.activeSagas
+        ...state,
+        tick: action.tick,
+        gameTime: action.gameTime
       };
     case 'STOP_PICK_UP_ITEM':
       return {

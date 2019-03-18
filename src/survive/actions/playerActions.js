@@ -1,5 +1,12 @@
 import surviveStore from '../store/surviveStore';
 
+export const beginPickUpItem = (btnIndex) => {
+  return {
+    type: 'BEGIN_PICK_UP_ITEM',
+    btnIndex: btnIndex
+  };
+};
+
 export const takeItemFromLocale = (id) => {
 	const currentState = Object.assign({}, surviveStore.getState());
   const currentInventory = Object.assign([], currentState.player.items);

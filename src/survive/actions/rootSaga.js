@@ -1,8 +1,8 @@
 import { takeEvery, put } from 'redux-saga/effects';
 import {
-    masterTickSaga,
-    pickUpItemSaga
+    masterTickSaga
 } from './gameSagas';
+import { pickUpItemSaga } from './playerSagas';
 import {
 	addLineSaga,
 	changeViewSaga,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ListButtonItem from '../auxiliary/ListButtonItem';
-import { beginPickUpItem } from '../../actions/sagaStarters';
+import { beginPickUpItem } from '../../actions/playerActions';
 
 const mapDispatchToProps = (dispatch) => {
   return {

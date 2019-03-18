@@ -12,18 +12,30 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const MapView = (props) => {
-  const look = {
-    display: props.isCurrentView ? 'flex' : 'none',
-    width: props.clientWidth + 'px',
-    height: props.clientHeight + 'px'
-  };
-  return (
-    <div className="map-view" style={look}>
-      <MapGrid />
-    </div>
-  );
-};
+class MapView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    //this.props.updateMapView();
+  }
+
+  render() {
+    const look = {
+      display: this.props.isCurrentView ? 'flex' : 'none',
+      width: this.props.clientWidth + 'px',
+      height: this.props.clientHeight + 'px'
+    };
+    const cssClass = this.props.isTransitioningOut === true ? 'map-view fadeout-slideout' : 'map-view fadein-slidein';
+
+    return (
+      <div className={cssClass} style={look}>
+        <MapGrid />
+      </div>
+    );
+  }
+}
 
 const MapViewCon = connect(mapStateToProps)(MapView);
 

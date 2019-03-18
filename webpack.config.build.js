@@ -1,9 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin');
+const HtmlPluginRemove = require('html-webpack-plugin-remove');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
@@ -24,8 +25,9 @@ module.exports = {
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       filename: 'html/home.html',
-      template: './src/public/html/home.html'
-    }),
+      template: './src/public/html/home.html',
+      excludeAssets: [/surviveBundle.js/]
+    }), 
     new HtmlWebpackPlugin({
       filename: 'html/lobby.html',
       template: './src/public/html/lobby.html'
@@ -34,6 +36,8 @@ module.exports = {
       filename: 'html/survive.html',
       template: './src/public/html/survive.html'
     }),
+    new HtmlWebpackExcludeAssetsPlugin(),
+    new HtmlPluginRemove(/<script.*?\.js".*?<\/script>/),
     new UglifyJsPlugin()
   ],
   module: {

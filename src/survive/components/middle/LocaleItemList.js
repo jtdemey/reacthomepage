@@ -14,7 +14,7 @@ const mapDispatchToProps = (dispatch) => {
 const LocaleItemList = (props) => {
   return (
     <div className="inventory-list-area">
-      <h5 className="item-list-header inventory-header">{props.localeName}</h5>
+      <h5 className="item-list-header inventory-header">{props.localeName.toUpperCase()}</h5>
       <ul className="item-list inventory-list">
         {props.itemList.map((itemButton) => (
           <ListButtonItem   key={itemButton.index}

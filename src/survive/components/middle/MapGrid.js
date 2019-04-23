@@ -1,12 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import MapGridItem from './MapGridItem';
+import { updateMapGridItems } from '../../actions/uiActions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
   	clientWidth: state.ui.clientWidth,
     mapGridItems: state.ui.mapGridItems,
     playerLocale: state.player.locale
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateMapGridItems: () => {
+      dispatch(updateMapGridItems())
+    }
   };
 };
 
@@ -25,14 +34,14 @@ class MapGrid extends React.Component {
   	};
     return (
 	    <div className="map-grid" style={look}>
-	    	{this.props.mapGridItems.map((gi) => (
-	    		<MapGridItem key={gi.gridItemId} />
+	    	{this.props.mapGridItems.map((mgi) => (
+	    		<MapGridItem key={mgi.id} color={mgi.color} display={mgi.display} />
 	    	))}
 	    </div>
 	  );
   }
 }
 
-const MapGridCon = connect(mapStateToProps)(MapGrid);
+const MapGridCon = connect(mapStateToProps, mapDispatchToProps)(MapGrid);
 
 export default MapGridCon;

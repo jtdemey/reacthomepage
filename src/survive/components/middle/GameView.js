@@ -51,7 +51,7 @@ class GameView extends React.Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.setClientDimensions(this.state.viewWidth, this.state.viewHeight);
-    }, 800);
+    }, 100);
   }
 
   componentWillUnmount() {

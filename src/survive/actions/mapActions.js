@@ -1,5 +1,8 @@
 import surviveStore from '../store/surviveStore';
-import MapCreator from '../creators/mapCreator';
+import {
+  createForest,
+  overwriteForest
+} from '../creators/mapCreator';
 
 export const enterLocale = (localeName) => {
   const currentState = Object.assign({}, surviveStore.getState());
@@ -9,10 +12,8 @@ export const enterLocale = (localeName) => {
 };
 
 export const loadGameMap = () => {
-  const currentState = Object.assign({}, surviveStore.getState());
-  const mapLoader = new MapCreator(currentState);
-  mapLoader.createLocales();
-  const gtgMap = mapLoader.gameMap;
+  let gameMap = {};
+  const gtgMap = createForest(gameMap);
   return {
     type: 'LOAD_GAME_MAP',
     gameMap: gtgMap

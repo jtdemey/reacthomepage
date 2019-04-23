@@ -1,9 +1,13 @@
 import surviveStore from '../store/surviveStore';
 import {
   createListButtonItem,
-  getListButtonItemFromIndex
+  createMapGridItem,
+  getCoordsFromLocale,
+  getListButtonItemFromIndex,
+  getLocaleFromCoords
 } from '../app/surviveUtilities';
 import mapCreator from '../creators/mapCreator';
+import { cardinalConstants } from '../app/surviveConstants';
 
 export const addItemToList = (listBtnItem, destination) => {
   const currentState = Object.assign({}, surviveStore.getState().ui);
@@ -36,7 +40,6 @@ export const appendLine = (line) => {
     ypos: ypos,
     opacity: 1
   };
-  mapCreator.testMe();
   newLines.push(newLine);
   return {
     type: 'APPEND_LINE',
@@ -273,7 +276,7 @@ export const updateItemView = () => {
   if(inventoryItems.length < 1) {
     let newLbi = createListButtonItem(lbiIndex, 999999, '(no items)', 1, true, 'in', 'locale');
     lbiIndex += 1;
-    localeItems.push(newLbi);
+    inventoryItems.push(newLbi);
   }
   return {
     type: 'UPDATE_ITEM_VIEW',
@@ -282,8 +285,64 @@ export const updateItemView = () => {
   };
 };
 
+export const updateLocaleNameGrid = () => {
+  const currentMap = Object.assign({}, surviveStore.getState().gameMap);
+  let locNameGrid = [];
+  for(let i = 0; i < 17; i++) {
+    let row = [];
+    for(let j = 0; j < 16; j++) {
+      row.push(false);
+    }
+    locNameGrid.push(row);
+  }
+  for(let loc in currentMap) {
+    let c = currentMap[loc].coordinates;
+    locNameGrid[c[1]][c[0]] = loc;
+  }
+  return {
+    type: 'UPDATE_LOCALE_NAME_GRID',
+    localeNameGrid: locNameGrid
+  };
+};
+
 export const updateMapGridItems = () => {
   const currentState = Object.assign({}, surviveStore.getState());
-  const currentGridItems = Object.assign([], currentState.ui.mapGridItems);
-  const currentMap = Object.assign({}, currentState.gameMap);
+  const gridItems = currentState.ui.mapGridItems;
+  const currentMap = currentState.gameMap;
+  const currCoords = getCoordsFromLocale(currentMap, currentState.player.locale);
+  let pushFlag = true;;
+  let xpos = currCoords[0] - 2 < 0 ? 0 : currCoords[0] - 2;
+  let ypos = currCoords[1] - 2 < 0 ? 0 : currCoords[1] - 2;
+  let mgiIdIterator = 0;
+  let loc;
+  for(let i = 0; i < 25; i++) {
+    console.log('x is ' + xpos);
+    console.log('y is ' + ypos);
+    pushFlag = true;
+    loc = getLocaleFromCoords(currentMap, xpos, ypos, true);
+    if(loc) {
+      //If locale is inside another, ignore it
+      if(loc.exits.filter(exit => {
+        return exit[0] === cardinalConstants.OUTSIDE;
+      }).length !== 0) {
+        pushFlag = false;
+      }
+    }
+    if(i > 0 && i % 5 === 0) {
+      xpos -= 5;
+      ypos += 1;
+      console.log('iterating boi');
+    }
+    if(pushFlag) {
+      let mgi = createMapGridItem(mgiIdIterator, loc);
+      gridItems.push(mgi);
+    }
+    xpos += 1;
+    mgiIdIterator += 1;
+  }
+  console.log(gridItems);
+  return {
+    type: 'UPDATE_MAP_GRID_ITEMS',
+    mapGridItems: gridItems
+  };
 };

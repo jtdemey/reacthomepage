@@ -14,7 +14,6 @@ const gameReducer = (state = {}, action) => {
     case 'START_GAME':
       return {
         ...state,
-        gameClock: action.gameClock,
         paused: false
       };
     default:

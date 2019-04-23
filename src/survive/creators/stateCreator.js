@@ -18,20 +18,13 @@ let initialState = {
     energy: 100, //100-75: spry, 74-50: calm, 49-25: tired, 24-10: fatigued, 9-1: exhausted, 0: immobile
     isExhausted: false,
     isImmobile: false,
-    locale: 'locale1',
+    locale: 'car',
     lastLocale: undefined,
     visited: [],
     inCombat: false,
     lastCombat: 0,
     currentEnemy: undefined,
-    items: [
-      {
-        itemId: 1,
-        display: 'Test Item',
-        quantity: 1,
-        stackable: true
-      }
-    ],
+    items: [],
     equipped: []
   },
   ui: {
@@ -55,70 +48,27 @@ let initialState = {
     localeItemButtons: [],
     inventoryItemButtons: [],
     //Map View
-    mapGridItems: [
-      {
-        gridItemId: 0,
-        color: 0
-      },
-      {
-        gridItemId: 1,
-        color: 0
-      },
-      {
-        gridItemId: 2,
-        color: 0
-      },
-      {
-        gridItemId: 3,
-        color: 0
-      },
-      {
-        gridItemId: 4,
-        color: 0
-      },
-      {
-        gridItemId: 5,
-        color: 0
-      },
-      {
-        gridItemId: 6,
-        color: 0
-      },
-      {
-        gridItemId: 7,
-        color: 0
-      },
-      {
-        gridItemId: 8,
-        color: 0
-      }
-    ],
+    localeNameGrid: [],
+    mapGridItems: [],
     //Modals
     isModalVisible: false,
     modalMode: 0 //0: empty, 1: item-info, 2: combat
   },
   gameMap: {
-    locale1: {
-      localeName: 'locale1',
-      display: `A BIG OL BOX`,
-      items: [
-        {
-          itemId: 1,
-          display: 'Test Item',
-          quantity: 1,
-          stackable: true
-        },
-        {
-          itemId: 2,
-          display: 'Test Item 2',
-          quantity: 1
-        },
-        {
-          itemId: 3,
-          display: 'Test Item 3',
-          quantity: 1
-        }
-      ]
+    car: {
+      name: 'car',
+      display: 'Car',
+      coordinates: [7, 7],
+      exits: [],
+      enterPhrase: 'You have entered a default locale.',
+      exitPhrase: 'You have exited a default locale.',
+      comments: [],
+      items: [],
+      loot: [],
+      containers: [],
+      features: [],
+      enemies: [[null, 50]],
+      visits: 0
     }
   }
 };

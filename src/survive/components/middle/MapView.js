@@ -28,7 +28,6 @@ class MapView extends React.Component {
       height: this.props.clientHeight + 'px'
     };
     const cssClass = this.props.isTransitioningOut === true ? 'map-view fadeout-slideout' : 'map-view fadein-slidein';
-
     return (
       <div className={cssClass} style={look}>
         <MapGrid />

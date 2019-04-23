@@ -8,7 +8,7 @@ class ViewParticles extends React.Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		return false;
+		return this.props.clientWidth !== nextProps.clientWidth || this.props.clientHeight !== nextProps.clientHeight;
 	}
 
 	render() {

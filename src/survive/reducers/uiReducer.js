@@ -100,6 +100,16 @@ const uiReducer = (state = {}, action) => {
         localeItemButtons: action.localeItems,
         inventoryItemButtons: action.inventoryItems
       };
+    case 'UPDATE_LOCALE_NAME_GRID':
+    return {
+      ...state,
+      localeNameGrid: action.localeNameGrid
+    };
+    case 'UPDATE_MAP_GRID_ITEMS':
+      return {
+        ...state,
+        mapGridItems: action.mapGridItems
+      };
     default:
       return state;
   }

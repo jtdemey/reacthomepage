@@ -5,88 +5,88 @@ import {
   visibilityConstants
 } from '../app/surviveConstants';
 
-class mapCreator {
+//Locale creators
+export const overwriteForest = (gameMap, overrides = {}) => {
+  let locale = {
+    name: 'default_locale',
+    display: 'Default Locale',
+    coordinates: [0, 0],
+    region: regionConstants.FOREST,
+    temperature: temperatureConstants.NORMAL,
+    visibility: visibilityConstants.NORMAL,
+    exits: [],
+    enterPhrase: 'You have entered a default locale.',
+    exitPhrase: 'You have exited a default locale.',
+    comments: [],
+    items: [],
+    loot: [],
+    containers: [],
+    features: [],
+    enemies: [[null, 50]],
+    visits: 0
+  };
+  let newLoc = {
+    ...locale,
+    ...overrides
+  };
+  gameMap[newLoc.name] = newLoc;
+};
 
-  constructor(initialState) {
-    this.gameState = initialState;
-    this.gameMap = initialState.gameMap;
-  }
-
-  //Entity creators
-  static addComment(locale, text) {
-    this.gameMap[locale].comments.push(text);
-  }
-
-  static addContainer(locale, name, locked, contains, loot) {
-    let container = {
-      name: name,
-      locked: locked,
-      contains: contains,
-      loot: loot
-    };
-    this.gameMap[locale].containers.push(container);
-  }
-
-  static addEnemy(locale, enemyId, chance) {
-    this.gameMap[locale].enemies.push([enemyId, chance]);
-  }
-
-  static addFeature(locale, name, visThreshold, examineEvent) {
-    let feature = {
-      name: name,
-      threshold: visThreshold,
-      onExamine: examineEvent
-    };
-    this.gameMap[locale].features.push(feature);
-  }
-
-  static addItem(locale, name, amount) {
-    let item = createItem(name, amount);
-    let p = false;
-    let q = 99;
-    for(let i = 0; i < this.gameMap[locale].items.length; i++) {
-      if(this.gameMap[locale].items[i].name === item.name) {
-        p = true;
-        q = i;
-      }
+//Locale modifiers
+export const addComments = (locale, text) => {
+  if(Array.isArray(text)) {
+    for(let i = 0; i < text.length; i++) {
+      locale.comments.push(text[i]);
     }
-    if(p) {
-      this.gameMap[locale].items[q].count += item.count;
-    } else {
-      this.gameMap[locale].items.push(item);
+  } else {
+    locale.comments.push(text);
+  }
+};
+
+export const addContainer = (locale, name, locked, contains, loot) => {
+  let container = {
+    name: name,
+    locked: locked,
+    contains: contains,
+    loot: loot
+  };
+  locale.containers.push(container);
+};
+
+export const addEnemy = (locale, enemyId, chance) => {
+  locale.enemies.push([enemyId, chance]);
+};
+
+export const addFeature = (locale, name, visThreshold, examineEvent) => {
+  let feature = {
+    name: name,
+    threshold: visThreshold,
+    onExamine: examineEvent
+  };
+  locale.features.push(feature);
+};
+
+export const addItem = (locale, name, amount) => {
+  let item = createItem(name, amount);
+  let p = false;
+  let q = 99;
+  for(let i = 0; i < locale.items.length; i++) {
+    if(locale.items[i].name === item.name) {
+      p = true;
+      q = i;
     }
   }
-
-  static addLocale(name, displayName, coords, exits, region, temperature, visibility, enterPhrase, exitPhrase, comments) {
-    let locale = {
-      name: name,
-      display: displayName,
-      coordinates: coords,
-      region: region,
-      exits: exits,
-      temperature: temperature,
-      visibility: visibility,
-      enterPhrase: enterPhrase,
-      comments: comments,
-      items: [],
-      loot: [],
-      containers: [],
-      features: [],
-      enemies: [[null, 50]],
-      visits: 0
-    }
-    this.gameMap[locale.name] = locale;
+  if(p) {
+    locale.items[q].count += item.count;
+  } else {
+    locale.items.push(item);
   }
+};
 
-  static addLoot(locale, name, weight, count) {
-    let loots = [name, weight, count];
-    this.gameMap[locale].loot.push(loots);
-  }
-
-  //Utilities
-  static clearCreatorGameMap() {
-    this.gameMap = null;
-  }
+export const addLoot = (locale, name, weight, count) => {
+  let loots = [name, weight, count];
+  locale.loot.push(loots);
+};
   
   //Generation
   /**
@@ -102,70 +102,119 @@ class mapCreator {
       -phrase (optional): overrides default exit phrase of locale
 
   **/
-  static createLocales() {
-    //Boundaries
-    this.addLocale('forest_boundary',
-      'Forest Bounds',                //DISPLAY
-      [],                             //COORDINATES
-      [],                             //EXITS
-      regionConstants.FOREST,         //REGION
-      temperatureConstants.VERY_COLD, //TEMPERATURE
-      visibilityConstants.DIM,        //VISIBILITY
-      "There is an observable line where all vegetation stops, resembling a border.",         //ENTER PHRASE
-      "You follow your gut feeling and turn back from the border.",                           //EXIT PHRASE
-      ["The vegetation precisely stops in a straight line.", "The silence is saturating."]    //COMMENTS
-    );
-    this.addLocale('corn_boundary',
-      'Cornfield',
-      [],
-      [],
-      regionConstants.FOREST,
-      temperatureConstants.FREEZING,
-      visibilityConstants.VERY_DARK,
-      "The wind completely stops. It's freezing here.",
-      "",
-      ["The corn stalks heavily obscure your vision."]
-    );
-    //Start zone
-    this.addLocale('car',
-      'Car',
-      [7, 7],
-      [[cardinalConstants.OUTSIDE, 'car_mailbox', 2]],
-      regionConstants.FOREST,
-      temperatureConstants.FREEZING,
-      visibilityConstants.VERY_DARK,
-      "You sit in the driver's seat.",
-      "Crisp winter air greets you as you open the car door.",
-      ["It's warmer here than outside, but the air is still frigid.",
-        "Out of all times and places, why break down tonight?"]
-    );
-    this.addLocale('car_mailbox',
-      'Mailbox',
-      [7, 7],
-      [[cardinalConstants.NORTH, 'yard_entrance', 4, "You head towards the house."]
-      [cardinalConstants.INSIDE, 'car', 2, "You open the frosty car door and climb in."]],
-      regionConstants.FOREST,
-      temperatureConstants.FREEZING,
-      1,
-      "You sit in the driver's seat.",
-      "",
-      ["It's warmer here than outside, but the air is still frigid.",
-        "Out of all times and places, why break down tonight?"]
-    );
-    this.addLocale('yard_entrance',
-      'Yard Entrance',
-      [7, 6],
-      [[cardinalConstants.INSIDE, 'car', 2, "You open the frosty car door and climb in."]],
-      regionConstants.FOREST,
-      temperatureConstants.FREEZING,
-      1,
-      "You sit in the driver's seat.",
-      "",
-      ["It's warmer here than outside, but the air is still frigid.",
-        "Out of all times and places, why break down tonight?"]
-    );
-  }
-}
+export const createForest = (gameMap) => {
+  //Boundaries
+  overwriteForest(gameMap, {
+    name: 'forest_boundary',
+    display: 'Forest Bounds',
+    temperature: temperatureConstants.VERY_COLD,
+    visibility: visibilityConstants.DIM,
+    enterPhrase: "There is an observable line where all vegetation stops, resembling a border.",
+    exitPhrase: "You follow your gut feeling and turn back from the border.",
+    comments: [
+      "The vegetation precisely stops in a straight line.",
+      "The silence is deafening."
+    ]
+  });
+  overwriteForest(gameMap, {
+    name: 'corn_boundary',
+    display: 'Cornfield',
+    temperature: temperatureConstants.FREEZING,
+    visibility: visibilityConstants.VERY_DARK,
+    enterPhrase: "The wind completely stops. It's freezing here.",
+    exitPhrase: "You exit the cornfield.",
+    comments: [
+      "The corn stalks heavily obscure your vision."
+    ]
+  });
+  //Start zone
+  overwriteForest(gameMap, {
+    name: 'car',
+    display: 'Car',
+    temperature: temperatureConstants.NORMAL,
+    visibility: visibilityConstants.NORMAL,
+    enterPhrase: "You sit in the driver's seat.",
+    exitPhrase: "Crisp winter air greets you as you open the car door.",
+    exits: [
+      [cardinalConstants.OUTSIDE, 'car_mailbox', 2]
+    ],
+    comments: [
+      "It's warmer here than outside, but the air is still frigid.",
+      "Out of all times and places, why break down tonight?"
+    ]
+  });
+  overwriteForest(gameMap, {
+    name: 'car_mailbox',
+    display: 'Mailbox',
+    coordinates: [7, 7],
+    temperature: temperatureConstants.VERY_COLD,
+    visibility: visibilityConstants.DIM,
+    enterPhrase: [
+      "You stand in the center of a snow-covered road.",
+      "To the north is a gothic iron archway, leading to a house in the distance."
+    ],
+    exits: [
+      [cardinalConstants.NORTH, 'front_archway', 4, "You head towards the mansion."],
+      [cardinalConstants.INSIDE, 'car', 2, "You open the frosty car door and climb in."]
+    ],
+    comments: [
+      "It's warmer here than outside, but the air is still frigid.",
+      "Out of all times and places, why break down tonight?"
+    ]
+  });
+  overwriteForest(gameMap, {
+    name: 'front_archway',
+    display: 'Archway',
+    coordinates: [7, 6],
+    temperature: temperatureConstants.VERY_COLD,
+    visibility: visibilityConstants.DIM,
+    enterPhrase: "Two sturdy stone pillars support a frosty iron archway.",
+    exits: [
+      [cardinalConstants.NORTH, 'front_yard', 4, "You pass the iron gateway and enter the yard."],
+      [cardinalConstants.SOUTH, 'car_mailbox', 2, "You head towards your car."]
+    ],
+    comments: [
+      "It's warmer here than outside, but the air is still frigid.",
+      "Out of all times and places, why break down tonight?"
+    ]
+  });
+  overwriteForest(gameMap, {
+    name: 'front_yard',
+    display: 'Front Yard',
+    coordinates: [7, 5],
+    temperature: temperatureConstants.COLD,
+    visibility: visibilityConstants.NORMAL,
+    enterPhrase: ["A massive decrepit mansion stands to the north."],
+    exits: [
+      [cardinalConstants.NORTH, 'front_yard', 4, "You pass the iron gateway and enter the yard."],
+      [cardinalConstants.SOUTH, 'car_mailbox', 2, "You head towards your car."],
+      [cardinalConstants.EAST, 'front_yard_garden', 3, "You approach the front garden."],
+    ],
+    comments: [
+      "It's warmer here than outside, but the air is still frigid.",
+      "Out of all times and places, why break down tonight?"
+    ]
+  });
+  overwriteForest(gameMap, {
+    name: 'front_yard_garden',
+    display: 'Front Garden',
+    coordinates: [8, 5],
+    temperature: temperatureConstants.VERY_COLD,
+    visibility: visibilityConstants.DIM,
+    enterPhrase: [
+      "You stand in the center of a snow-covered road.",
+      "To the north is a gothic iron archway, leading to a house in the distance."
+    ],
+    exits: [
+      [cardinalConstants.WEST, 'front_yard', 3, "You walk to the front yard."]
+    ],
+    comments: [
+      "It's warmer here than outside, but the air is still frigid.",
+      "Out of all times and places, why break down tonight?"
+    ]
+  });
+  return gameMap;
+};
 
 /**
     --river border--
@@ -175,10 +224,10 @@ class mapCreator {
 2   WOOD12|WOOD13|WOOD14|WOOD15|WOOD16|WOOD17|KITCHN|HALL00|STUDYN|STAIRD|FLWRBD|COURTW|COURTC|COURTE|HEDGE2|000000|
 3   WOOD18|WOOD19|WOOD20|WOOD21|WOOD22|WOOD23|DINING|STAIRU|STUDYS|STORAG|STEPST|LAWN02|COURTS|TOOLSH|HEDGE3|000000|
 4   WOOD24|WOOD25|WOOD26|WOOD27|WOOD28|WOOD29|LIVNRM|FOYER0|DEN000|LADDER|LCKGT1|HEDGE4|HEDGE5|HEDGE6|HEDGE7|000000|
-5   WOOD30|WOOD31|WOOD32|WOOD33|WOOD34|WOOD35|WOOD36|FRNTYD|FRNTGD|FYDTRE|000000|000000|000000|000000|000000|000000|
-6   WOOD37|WOOD38|WOOD39|WOOD40|WOOD41|WOOD42|WOOD43|YRDENT|SHED00|WELL00|000000|000000|000000|000000|000000|000000|
+5   WOOD30|WOOD31|WOOD32|WOOD33|WOOD34|WOOD35|XXXXXX|FRNTYD|FRNTGD|FYDTRE|XXXXXX|XXXXXX|000000|000000|000000|000000|
+6   WOOD37|WOOD38|WOOD39|WOOD40|WOOD41|XXXXXX|XXXXXX|YRDENT|SHED00|WELL00|XXXXXX|XXXXXX|000000|000000|000000|000000|
 7   ROAD00|ROAD01|ROAD02|ROAD03|ROAD04|ROAD05|ROAD06|CARMBX|ROAD07|ROAD08|ROAD09|ROAD10|ROAD11|ROAD12|ROAD13|ROAD14|
-8   000000|000000|CEMPT1|000000|000000|000000|000000|000000|000000|CEMPT3|000000|000000|000000|000000|000000|000000|
+8   000000|000000|CEMPT1|000000|XXXXXX|XXXXXX|XXXXXX|XXXXXX|XXXXXX|CEMPT3|000000|000000|000000|000000|000000|000000|
 9   000000|000000|CEMPT2|000000|000000|000000|000000|000000|000000|CEMPT4|000000|000000|000000|WTCTWR|000000|000000|
 10  CEMGT1|CEMGT2|CEMGT3|CEMGT4|CEMGT5|CEMGT6|CEMGT7|CEMGT8|CEMGT9|CEMG10|CEMG11|CEMG12|000000|000000|000000|000000|
 11  000000|000000|000000|000000|000000|000000|000000|GRAVE1|GRAVE2|GRAVE3|GRAVE4|CEMG13|000000|POND01|POND02|000000|
@@ -192,6 +241,5 @@ class mapCreator {
 Ideas:
 -carcass chance on roadside
 -sunset aka passive time when starting?
+-different color texts for different "personalities", each remarking on different aspects
 **/
-
-export default mapCreator;

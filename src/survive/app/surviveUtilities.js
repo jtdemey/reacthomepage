@@ -1,3 +1,5 @@
+import { cardinalConstants } from "./surviveConstants";
+
 export const createListButtonItem = (ind, itemId, display, quantity, isPlaceholder, transitioning, listName) => {
   let newLbi = {
     index: ind,
@@ -11,7 +13,22 @@ export const createListButtonItem = (ind, itemId, display, quantity, isPlacehold
   return newLbi;
 };
 
-export const formatTime = (gt) => {
+export const createMapGridItem = (id, loc) => {
+  //Then you'll see that it's not the locale that bends, but yourself
+  let mgi = {
+    id: id,
+    color: 'gray',
+    display: '',
+    features: []
+  };
+  if(loc) {
+    mgi.color = 'blue';
+    mgi.display = loc.display;
+  }
+  return mgi;
+};
+
+export const formatTime = gt => {
   const s = gt.split(' ');
   const d = (s[0] === 'Sat') ? `${s[0]}urday ` : `${s[0]}day `;
   let t = s[4];
@@ -19,6 +36,15 @@ export const formatTime = (gt) => {
     t = t.slice(1, t.length);
   }
   return d + t;
+};
+
+export const getCoordsFromLocale = (gameMap, locale, isSuppressed = false) => {
+  for(let loc in gameMap) {
+    if(gameMap[loc].name === locale) {
+      return gameMap[loc].coordinates;
+    }
+  }
+  return !isSuppressed ? console.log(`Error in getCoordsFromLocale: unable to find locale ${locale}`) : false;
 };
 
 export const getListButtonItemFromIndex = (localeItems, inventoryItems, ind) => {
@@ -41,8 +67,17 @@ export const getListButtonItemFromIndex = (localeItems, inventoryItems, ind) => 
   return itemTarget;
 };
 
+export const getLocaleFromCoords = (gameMap, x, y, isSuppressed = false) => {
+  for(let loc in gameMap) {
+    if(gameMap[loc].coordinates[0] === x && gameMap[loc].coordinates[1] === y) {
+      return gameMap[loc];
+    }
+  }
+  return !isSuppressed ? console.log(`Error in getLocaleFromCoords: unable to find locale at coordinates ${x}, ${y}`) : false;
+};
+
 //Mode: 0 = forest, 1 = mansion, 2 = graveyard
-export const getParticleConfig = (mode) => {
+export const getParticleConfig = mode => {
   let colors = ["#999999", "#b3b3b3", "#bfbfbf", "#d9d9d9", "#538cc6"];
   let dir = "bottom";
   let size = 4;
@@ -96,7 +131,7 @@ export const getParticleConfig = (mode) => {
   };
 };
 
-export const getTimeFromTick = (tick) => {
+export const getTimeFromTick = tick => {
   const s = new Date(1987, 11, 12, 9, 44, 0, 0);
   s.setSeconds((1 * s.getSeconds()) + tick);
   return s.toString();

@@ -12,6 +12,7 @@ const rootReducer = (state = initialState, action) => {
     //state.game
     case 'STOP_PICK_UP_ITEM':
     case 'MASTER_TICK':
+    case 'START_GAME':
       return {
         ...state,
         game: gameReducer(state.game, action)
@@ -43,6 +44,8 @@ const rootReducer = (state = initialState, action) => {
     case 'TRANSITION_ITEM_OUT':
     case 'TRANSITION_VIEW_OUT':
     case 'UPDATE_ITEM_VIEW':
+    case 'UPDATE_LOCALE_NAME_GRID':
+    case 'UPDATE_MAP_GRID_ITEMS':
       return {
         ...state,
         ui: uiReducer(state.ui, action)

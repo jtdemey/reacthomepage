@@ -16,12 +16,8 @@ export const masterTick = (t) => {
   };
 };
 
-export const startGame = (tick) => {
-	const gameClock = setInterval(() => {
-		surviveStore.dispatch(masterTick(tick));
-	}, 1000);
+export const startGame = () => {
 	return {
-		type: 'START_GAME',
-		gameClock: gameClock
+		type: 'START_GAME'
 	};
 };

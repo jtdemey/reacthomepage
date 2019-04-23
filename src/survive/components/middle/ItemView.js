@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     clientWidth: state.ui.clientWidth,
     clientHeight: state.ui.clientHeight,
-    localeName: state.player.locale,
+    localeName: state.gameMap[state.player.locale].display,
     localeItemButtons: state.ui.localeItemButtons,
     inventoryItemButtons: state.ui.inventoryItemButtons
   };
@@ -25,10 +25,6 @@ const mapDispatchToProps = (dispatch) => {
 class ItemView extends React.Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    this.props.updateItemView();
   }
 
   render() {

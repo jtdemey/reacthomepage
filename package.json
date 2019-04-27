@@ -2,14 +2,20 @@
   "name": "jdhomepage",
   "version": "1.0.0",
   "description": "My homepage built with React.",
-  "private": false,
+  "private": true,
   "scripts": {
-    "buildback": "webpack --mode=production --config=buildback.config.js",
-    "buildfront": "webpack --mode=production --config=buildfront.config.js",
+    "start": "node dist/jdserver.js",
+    "startdev": "babel-node src/server/home.js",
+    "starthot": "nodemon --exec babel-node src/server/home.js",
     "starthome": "webpack-dev-server --mode development --config webpack.config.home.js --port 5261 --open --hot",
     "startsurvive": "webpack-dev-server --mode development --config webpack.config.survive.js --port 5261 --open --hot",
-    "startdev": "babel-node src/server/home.js",
-    "start": "node dist/jdserver.js",
+
+    "build": "npm run buildfront && npm run buildback && npm run copyassets && npm run copyexternals",
+    "buildback": "webpack --mode=production --config=buildback.config.js",
+    "buildfront": "webpack --mode=production --config=buildfront.config.js",
+    "copyexternals": "cp -a ./src/public/css/external/. ./dist/css/external && cp -a ./src/public/scripts/external/. ./dist/scripts/external/",
+    "copyassets": "cp -a ./src/public/media/. ./dist/media/",
+    
     "lint": "node_modules/.bin/esw webpack.config.* src",
     "lint:watch": "npm run lint -- --watch",
     "test": "echo \"This be a test script!\" && exit 1"

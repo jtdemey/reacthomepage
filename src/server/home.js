@@ -1,10 +1,7 @@
 //Credit to https://twitter.com/teefouad for a wonderfully comprehensive server creation tutorial and several core functions
 
 //DEPENDENCIES
-import express from 'express';
-import fs from 'fs';
 import http from 'http';
-import path from 'path';
 import socketIO from 'socket.io';
 
 import app from '../app/expressApp';
@@ -13,7 +10,6 @@ import gameSuite from '../app/gamesuite/gameSuite';
 import gsSockets from '../app/gamesuite/gsSockets';
 import logger from '../app/logWriter';
 import {
-  isFunction,
   normalizePort
 } from './utilityscripts.js';
 
@@ -22,27 +18,19 @@ gameSuite.startBase();
 
 //Start Express server
 const expressApp = http.createServer(app);
-const port = normalizePort(process.env.PORT || 5260);
-let availablePort = port;
+let port = normalizePort(process.env.SERVER_PORT || 5260);
 
-startListening(availablePort);
+startListening(port);
 
 expressApp.on('listening', onListening);
 expressApp.on('error', onError);
+process.on('SIGINT', () => {
+  process.exit();
+});
 
 //Connect to db
-let connectBot = undefined;
-let dbauth = '';
-fs.readFile('D:/Misc/auth/wegotdb.txt', 'utf8', function(err, data) {
-  if(err) {
-    logger.info('!!! Error in retrieving database authentication info. !!!');
-  }
-  dbauth = data;
-});
-setTimeout(() => {
-  connectBot = dbConnect.getConnectionPool('connectBot', dbauth);
-  testDBConnection();
-}, 2000);
+let connectBot = dbConnect.getConnectionPool('connectBot', process.env.DB_AUTH);
+testDBConnection();
 
 //Configure websockets
 let io = new socketIO(expressApp);
@@ -98,6 +86,7 @@ function testDBConnection() {
     if(err) {
       logger.error('Unable to establish database connection');
       dbConnect.dbEnabled = false;
+      return;
     } else {
       logger.info('Database connection successfully established');
     }

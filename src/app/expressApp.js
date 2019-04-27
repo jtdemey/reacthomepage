@@ -1,38 +1,29 @@
 //DEPENDENCIES
 import path from 'path';
 import express from 'express';
-import dotenv from 'dotenv';
 import serverLogger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 
 //LOCAL DEPENDENCIES
 import expressRoutes from '../routes/expressRoutes';
-import connectBot from './connectBot';
-import gameSuite from './gamesuite/gameSuite';
-import logger from './logWriter';
-
 
 //CONFIGURATION
-dotenv.config({
-  silent: true
-});
+const filePrefix = process.env.NODE_ENV === 'development' ? 'src/public' : 'dist';
 
 const app = express();
-
 app.use(serverLogger('short'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/../public'))); //DEVELOPMENT
-app.use(express.static(path.join(__dirname, '/../../dist'))); //PRODUCTION
+app.use(express.static(path.join(process.cwd(), filePrefix))); //DEVELOPMENT //PRODUCTION
 app.use('/', expressRoutes);
 
 //404
 app.use((req, res, next) => {
   res.status(404);
   if(req.accepts('html')) {
-    res.sendFile(path.join(__dirname, '/../public/html/404page.html'));
+    res.sendFile(path.join(process.cwd(), filePrefix + '/html/404page.html'));
     return;
   }
   if(req.accepts('json')) {
@@ -46,7 +37,7 @@ app.use((req, res, next) => {
 //Render errors
 app.use((err, req, res, next) => {
   res.status(200);
-  res.sendFile(path.join(__dirname + '/../public/html/errorpage.html'));
+  res.sendFile(path.join(process.cwd(), filePrefix + '/html/errorpage.html'));
   next();
 });
 

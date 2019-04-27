@@ -1,5 +1,9 @@
 const gameReducer = (state = {}, action) => {
   switch(action.type) {
+    case 'ENTER_LOCALE':
+      return {
+        ...state
+      };
     case 'MASTER_TICK':
       return {
         ...state,

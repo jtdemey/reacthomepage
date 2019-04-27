@@ -4,13 +4,6 @@ import {
   overwriteForest
 } from '../creators/mapCreator';
 
-export const enterLocale = (localeName) => {
-  const currentState = Object.assign({}, surviveStore.getState());
-  let currentPlayer = Object.assign({}, currentState.player);
-  let currentLocale = Object.assign({}, currentState.gameMap[localeName]);
-  currentPlayer.lastLocale = currentPlayer.locale;
-};
-
 export const loadGameMap = () => {
   let gameMap = {};
   const gtgMap = createForest(gameMap);

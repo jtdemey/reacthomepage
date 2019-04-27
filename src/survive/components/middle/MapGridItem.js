@@ -6,7 +6,9 @@ const MapGridItem = (props) => {
   };
   return (
     <div className="map-grid-item" style={{css}}>
-      {props.display}
+      <h5 className="mgi-title">
+        {props.display}
+      </h5>
     </div>
   );
 };

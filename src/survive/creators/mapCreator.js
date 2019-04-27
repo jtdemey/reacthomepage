@@ -131,6 +131,7 @@ export const createForest = (gameMap) => {
   overwriteForest(gameMap, {
     name: 'car',
     display: 'Car',
+    coordinates: [7, 7],
     temperature: temperatureConstants.NORMAL,
     visibility: visibilityConstants.NORMAL,
     enterPhrase: "You sit in the driver's seat.",
@@ -242,4 +243,11 @@ Ideas:
 -carcass chance on roadside
 -sunset aka passive time when starting?
 -different color texts for different "personalities", each remarking on different aspects
+-start slightly before midnight. Sun rises on 7:14am on December 13th, 1987.
+  -Before midnight: encounters are rare, mundane creatures, colors light/pale blue and grays
+  -12AM-2:30AM: slightly more terrifying, abnormal creatures, colors blue
+  -2:30AM-5AM: larger creatures, more mythical, colors orange
+  -5AM-7:14AM: gothic, Lovecraftian creatures, legitimate monsters, must be prepared, colors red
+  -7:14AM triggers game completion
+-roaming legendary creatures (1 per "zone"): roams faster/more precisely as phases go on
 **/

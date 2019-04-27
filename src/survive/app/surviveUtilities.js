@@ -67,9 +67,22 @@ export const getListButtonItemFromIndex = (localeItems, inventoryItems, ind) => 
   return itemTarget;
 };
 
+export const getLocalesAtYpos = (gameMap, y) => {
+  let row = [];
+  for(let i = 0; i < 16; i++) {
+    let loc = getLocaleFromCoords(gameMap, i, y);
+    loc ? row.push(loc) : row.push(false);
+  }
+  return row;
+};
+
 export const getLocaleFromCoords = (gameMap, x, y, isSuppressed = false) => {
   for(let loc in gameMap) {
     if(gameMap[loc].coordinates[0] === x && gameMap[loc].coordinates[1] === y) {
+      //Check if this is inside another locale
+      if(gameMap[loc].exits.some(exit => exit[0] === cardinalConstants.OUTSIDE)) {
+        continue;
+      }
       return gameMap[loc];
     }
   }

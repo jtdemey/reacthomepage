@@ -310,37 +310,33 @@ export const updateMapGridItems = () => {
   const gridItems = currentState.ui.mapGridItems;
   const currentMap = currentState.gameMap;
   const currCoords = getCoordsFromLocale(currentMap, currentState.player.locale);
-  let pushFlag = true;;
+  let pushFlag = true;
   let xpos = currCoords[0] - 2 < 0 ? 0 : currCoords[0] - 2;
   let ypos = currCoords[1] - 2 < 0 ? 0 : currCoords[1] - 2;
   let mgiIdIterator = 0;
   let loc;
   for(let i = 0; i < 25; i++) {
-    console.log('x is ' + xpos);
-    console.log('y is ' + ypos);
     pushFlag = true;
     loc = getLocaleFromCoords(currentMap, xpos, ypos, true);
     if(loc) {
       //If locale is inside another, ignore it
-      if(loc.exits.filter(exit => {
-        return exit[0] === cardinalConstants.OUTSIDE;
-      }).length !== 0) {
+      if(loc.exits.some(exit => exit[0] === cardinalConstants.OUTSIDE)) {
         pushFlag = false;
       }
     }
     if(i > 0 && i % 5 === 0) {
       xpos -= 5;
       ypos += 1;
-      console.log('iterating boi');
     }
     if(pushFlag) {
       let mgi = createMapGridItem(mgiIdIterator, loc);
+      mgiIdIterator += 1;
       gridItems.push(mgi);
+    } else {
+      i -= 1;
     }
     xpos += 1;
-    mgiIdIterator += 1;
   }
-  console.log(gridItems);
   return {
     type: 'UPDATE_MAP_GRID_ITEMS',
     mapGridItems: gridItems

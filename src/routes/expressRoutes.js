@@ -1,39 +1,51 @@
 import express from 'express';
 import path from 'path';
+import dotenv from 'dotenv';
 
 import gameSuite from '../app/gamesuite/gameSuite';
-import logger from '../app/logWriter';
 
 const router = express.Router();
+dotenv.config({
+  silent: true
+});
+const isProd = process.env.NODE_ENV === 'production';
+
+const sendHtmlFile = (res, filename, isProd) => {
+  if(isProd) {
+    res.sendFile(path.join(process.cwd(), 'dist/html/' + filename));
+  } else {
+    res.sendFile(path.join(process.cwd(), 'src/public/html/' + filename))
+  }
+};
 
 router.route('/')
   .get((req, res) => {
-    res.sendFile(path.join(__dirname, '/../public/html/home.html'));
+    sendHtmlFile(res, 'home.html', isProd);
   });
 
 router.route('/survive')
   .get((req, res) => {
-    res.sendFile(path.join(__dirname, '/../public/html/survive.html'));
+    sendHtmlFile(res, 'survive.html', isProd);
   });
 
 router.route('/gamesuite')
   .get((req, res) => {
-    res.sendFile(path.join(__dirname, '/../public/html/lobby.html'));
+    sendHtmlFile(res, 'lobby.html', isProd);
   });
 
 router.route('/gamesuite/imposter/:gameCode')
   .get((req, res) => {
-    res.sendFile(path.join(__dirname, '/../public/html/imposter.html'));
+    sendHtmlFile(res, 'imposter.html', isProd);
   });
 
 router.route('/gamesuite/pistolwhip')
   .get((req, res) => {
-    res.sendFile(path.join(__dirname, '/../public/html/pistolwhip.html'));
+    sendHtmlFile(res, 'pistolwhip.html', isProd);
   });
 
 router.route('/roleroller')
   .get((req, res) => {
-    res.sendFile(path.join(__dirname, '/../public/html/roleroller.html'));
+    sendHtmlFile(res, 'roleroller.html', isProd);
   });
 
 router.route('/gamesuite/scripts/makeGame')

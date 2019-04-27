@@ -11,13 +11,13 @@ module.exports = {
   devtool: 'source-map',
   mode: 'production',
   entry: {
-    home: path.join(__dirname, 'src/public/scripts/homeScript.js'),
-    survive: path.join(__dirname, 'src/survive/surviveIndex.js')
-    //gamesuite: path.join(__dirname, 'src/public/scripts/gamesuiteScript.js')
+    home: path.join(process.cwd(), 'src/public/scripts/homeScript.js'),
+    survive: path.join(process.cwd(), 'src/survive/surviveIndex.js')
+    //gamesuite: path.join(process.cwd(), 'src/public/scripts/gamesuiteScript.js')
   },
   target: 'web',
   output: {
-    path: __dirname + '/dist',
+    path: process.cwd() + '/dist',
     publicPath: './dist',
     filename: 'scripts/[name]Bundle.js'
   },
@@ -28,7 +28,9 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['dist'], {
+      root: process.cwd()
+    }),
     new HtmlWebpackPlugin({
       filename: 'html/home.html',
       template: './src/public/html/home.html',

@@ -1,4 +1,6 @@
 //const HTML_FILE = require('file-loader?name=[name].[ext]!../html/home.html');
+//import '../css/home.css';
+
 window.onload = () => {
   //Utility methods
   const hasCssClass = (classList, cssClass) => {

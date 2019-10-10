@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ListButtonItem from '../auxiliary/ListButtonItem';
-import { beginPickUpItem } from '../../actions/playerActions';
+import { pickUpItem } from '../../actions/gameActions';
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    beginPickUpItem: (ind) => {
-      dispatch(beginPickUpItem(ind));
+    pickUpItem: (ind) => {
+      dispatch(pickUpItem(ind));
     }
   };
 };
@@ -20,9 +20,10 @@ const LocaleItemList = (props) => {
           <ListButtonItem   key={itemButton.index}
                             index={itemButton.index}
                             text={itemButton.display}
+                            quantity={itemButton.quantity}
                             transitioning={itemButton.transitioning}
                             isPlaceholder={itemButton.isPlaceholder}
-                            clickFunc={(ind) => props.beginPickUpItem(ind)}/>
+                            clickFunc={(ind) => props.pickUpItem(ind)}/>
         ))}
       </ul>
     </div>

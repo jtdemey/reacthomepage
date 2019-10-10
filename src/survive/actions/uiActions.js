@@ -1,13 +1,18 @@
 import surviveStore from '../store/surviveStore';
 import {
+  cardinalConstants,
+  colorConstants,
+  itemMetadataConstants
+} from '../app/surviveConstants';
+import { parseInput } from '../app/surviveParser';
+import {
   createListButtonItem,
   createMapGridItem,
+  generateIimBtns,
   getCoordsFromLocale,
   getListButtonItemFromIndex,
   getLocaleFromCoords
 } from '../app/surviveUtilities';
-import mapCreator from '../creators/mapCreator';
-import { cardinalConstants } from '../app/surviveConstants';
 
 export const addItemToList = (listBtnItem, destination) => {
   const currentState = Object.assign({}, surviveStore.getState().ui);
@@ -27,7 +32,7 @@ export const addItemToList = (listBtnItem, destination) => {
   };
 };
 
-export const appendLine = (line) => {
+export const appendLine = (line, color) => {
   const currentState = Object.assign({}, surviveStore.getState().ui);
   const lineInd = currentState.lineIndex + 1;
   const newLines = Object.assign([], currentState.consoleLines);
@@ -36,7 +41,7 @@ export const appendLine = (line) => {
   const newLine = {
     id: lineId,
     text: line,
-    color: 'white',
+    color: color ? color : 'white',
     ypos: ypos,
     opacity: 1
   };
@@ -80,13 +85,28 @@ export const focusCommandBar = () => ({
   type: 'FOCUS_COMMAND_BAR'
 });
 
-export const pickUpItem = (ind) => {
+export const pickUpItem = ind => {
   const transitionedItem = transitionItemOut(ind);
   transitionedItem.type = 'PICK_UP_ITEM';
   return transitionedItem;
 };
 
-export const removeEntityTransitioningIn = (ent) => {
+export const populateItemInfoModal = itemId => {
+  const item = itemMetadataConstants.filter(i => i.itemId === itemId);
+  if(item.length !== 1) {
+    console.error(`Error in populateItemInfoModal`);
+  }
+  console.log(item[0]);
+  const itemBtns = generateIimBtns(item[0]);
+  console.log(itemBtns);
+  return {
+    type: 'POPULATE_ITEM_INFO_MODAL',
+    itemInfo: item[0],
+    itemBtns: itemBtns
+  };
+};
+
+export const removeEntityTransitioningIn = ent => {
   let currentEntities = Object.assign([], surviveStore.getState().ui.entitiesTransitioningIn);
   let entityFound = false;
   for(let i = 0; i < currentEntities.length; i++) {
@@ -106,7 +126,7 @@ export const removeEntityTransitioningIn = (ent) => {
   };
 };
 
-export const removeEntityTransitioningOut = (ent) => {
+export const removeEntityTransitioningOut = ent => {
   let currentEntities = Object.assign([], surviveStore.getState().ui.entitiesTransitioningOut);
   let entityFound = false;
   for(let i = 0; i < currentEntities.length; i++) {
@@ -126,20 +146,15 @@ export const removeEntityTransitioningOut = (ent) => {
   };
 };
 
-export const removeItemFromList = (ind) => {
+export const removeItemFromList = ind => {
   const currentState = Object.assign({}, surviveStore.getState().ui);
   let localeItems = Object.assign([], currentState.localeItemButtons);
   let inventoryItems = Object.assign([], currentState.inventoryItemButtons);
   const itemTarget = getListButtonItemFromIndex(localeItems, inventoryItems, ind);
-  const thisItemId = itemTarget.itemId;
   if(itemTarget.listName === 'locale') {
-    localeItems = localeItems.filter((item) => {
-      return item.index != ind;
-    });
+    localeItems = localeItems.filter(i => i.index !== ind);
   } else if(itemTarget.listName === 'inventory') {
-    inventoryItems = inventoryItems.filter((item) => {
-      return item.index != ind;
-    });
+    inventoryItems = inventoryItems.filter(j => j.index !== ind);
   }
   return {
     type: 'REMOVE_ITEM_FROM_LIST',
@@ -166,10 +181,13 @@ export const showItemInfoModal = (itemId) => {
 
 export const submitCommand = (txt) => {
   let res = txt.replace(/&/g, '').replace(/</g, '').replace(/"/g, '');
-  surviveStore.dispatch(appendLine(Math.random() * 1000 + 'ayyyy'));
+  console.log('read ' + res);
+  let comm = parseInput(res);
+  console.log('comm ' + comm);
   return {
     type: 'SUBMIT_COMMAND',
-    input: res
+    input: res,
+    command: comm
   };
 };
 
@@ -207,7 +225,7 @@ export const transitionEntityOut = (ent, delay) => {
   };
 };
 
-export const transitionItemIn = (ind) => {
+export const transitionItemIn = ind => {
   const currentState = Object.assign({}, surviveStore.getState().ui);
   const localeItems = Object.assign([], currentState.localeItemButtons);
   const inventoryItems = Object.assign([], currentState.inventoryItemButtons);
@@ -257,7 +275,7 @@ export const updateItemView = () => {
   let lbiIndex = 0;
   for(let i = 0; i < currentLocaleItems.length; i++) {
     let thisItem = currentLocaleItems[i];
-    let newLbi = createListButtonItem(lbiIndex, thisItem.itemId, thisItem.display, thisItem.quantity, false, thisItem.transitioning, 'locale');
+    let newLbi = createListButtonItem(lbiIndex, thisItem.itemId, thisItem.display, thisItem.quantity, false, 'in', 'locale');
     lbiIndex += 1;
     localeItems.push(newLbi);
   }
@@ -269,7 +287,7 @@ export const updateItemView = () => {
   let inventoryItems = [];
   for(let i = 0; i < currentInventory.length; i++) {
     let thisItem = currentInventory[i];
-    let newLbi = createListButtonItem(lbiIndex, thisItem.itemId, thisItem.display, thisItem.quantity, false, thisItem.transitioning, 'inventory');
+    let newLbi = createListButtonItem(lbiIndex, thisItem.itemId, thisItem.display, thisItem.quantity, false, 'in', 'inventory');
     lbiIndex += 1;
     inventoryItems.push(newLbi);
   }
@@ -329,7 +347,16 @@ export const updateMapGridItems = () => {
       ypos += 1;
     }
     if(pushFlag) {
-      let mgi = createMapGridItem(mgiIdIterator, loc);
+      //Create mapGridItem
+      let color = colorConstants.mgiUnvisited;
+      let display = '';
+      if(loc) {
+        display = loc.display;
+        if(loc.coordinates[0] === currCoords[0] && loc.coordinates[1] === currCoords[1]) {
+          color = colorConstants.mgiCurrent;
+        }
+      }
+      let mgi = createMapGridItem(mgiIdIterator, color, display);
       mgiIdIterator += 1;
       gridItems.push(mgi);
     } else {

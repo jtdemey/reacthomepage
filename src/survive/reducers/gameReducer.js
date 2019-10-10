@@ -10,15 +10,18 @@ const gameReducer = (state = {}, action) => {
         tick: action.tick,
         gameTime: action.gameTime
       };
-    case 'STOP_PICK_UP_ITEM':
+    case 'PICK_UP_ITEM':
       return {
-        ...state,
-        activeSagas: action.activeSagas
+        ...state
       };
     case 'START_GAME':
       return {
         ...state,
         paused: false
+      };
+    case 'TAKE_EXIT':
+      return {
+        ...state
       };
     default:
       return state;

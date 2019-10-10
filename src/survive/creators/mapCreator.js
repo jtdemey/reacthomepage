@@ -1,92 +1,15 @@
 import {
+  addItem,
+  createItem
+} from './itemCreator';
+import {
   cardinalConstants,
   regionConstants,
   temperatureConstants,
   visibilityConstants
 } from '../app/surviveConstants';
 
-//Locale creators
-export const overwriteForest = (gameMap, overrides = {}) => {
-  let locale = {
-    name: 'default_locale',
-    display: 'Default Locale',
-    coordinates: [0, 0],
-    region: regionConstants.FOREST,
-    temperature: temperatureConstants.NORMAL,
-    visibility: visibilityConstants.NORMAL,
-    exits: [],
-    enterPhrase: 'You have entered a default locale.',
-    exitPhrase: 'You have exited a default locale.',
-    comments: [],
-    items: [],
-    loot: [],
-    containers: [],
-    features: [],
-    enemies: [[null, 50]],
-    visits: 0
-  };
-  let newLoc = {
-    ...locale,
-    ...overrides
-  };
-  gameMap[newLoc.name] = newLoc;
-};
 
-//Locale modifiers
-export const addComments = (locale, text) => {
-  if(Array.isArray(text)) {
-    for(let i = 0; i < text.length; i++) {
-      locale.comments.push(text[i]);
-    }
-  } else {
-    locale.comments.push(text);
-  }
-};
-
-export const addContainer = (locale, name, locked, contains, loot) => {
-  let container = {
-    name: name,
-    locked: locked,
-    contains: contains,
-    loot: loot
-  };
-  locale.containers.push(container);
-};
-
-export const addEnemy = (locale, enemyId, chance) => {
-  locale.enemies.push([enemyId, chance]);
-};
-
-export const addFeature = (locale, name, visThreshold, examineEvent) => {
-  let feature = {
-    name: name,
-    threshold: visThreshold,
-    onExamine: examineEvent
-  };
-  locale.features.push(feature);
-};
-
-export const addItem = (locale, name, amount) => {
-  let item = createItem(name, amount);
-  let p = false;
-  let q = 99;
-  for(let i = 0; i < locale.items.length; i++) {
-    if(locale.items[i].name === item.name) {
-      p = true;
-      q = i;
-    }
-  }
-  if(p) {
-    locale.items[q].count += item.count;
-  } else {
-    locale.items.push(item);
-  }
-};
-
-export const addLoot = (locale, name, weight, count) => {
-  let loots = [name, weight, count];
-  locale.loot.push(loots);
-};
   
   //Generation
   /**
@@ -102,9 +25,76 @@ export const addLoot = (locale, name, weight, count) => {
       -phrase (optional): overrides default exit phrase of locale
 
   **/
-export const createForest = (gameMap) => {
+export const createGameMap = () => {
+  let gameMap = {};
+  //Locale creators
+  const overwriteForest = (overrides = {}) => {
+    let locale = {
+      name: 'default_locale',
+      display: 'Default Locale',
+      coordinates: [0, 0],
+      region: regionConstants.FOREST,
+      temperature: temperatureConstants.NORMAL,
+      visibility: visibilityConstants.NORMAL,
+      exits: [],
+      enterPhrase: 'You have entered a default locale.',
+      exitPhrase: 'You have exited a default locale.',
+      comments: [],
+      items: [],
+      loot: [],
+      containers: [],
+      features: [],
+      enemies: [[null, 50]],
+      visits: 0
+    };
+    let newLoc = {
+      ...locale,
+      ...overrides
+    };
+    return newLoc;
+  };
+  //Locale modifiers
+  const addComments = (locale, text) => {
+    if(Array.isArray(text)) {
+      for(let i = 0; i < text.length; i++) {
+        locale.comments.push(text[i]);
+      }
+    } else {
+      locale.comments.push(text);
+    }
+  };
+  const addContainer = (locale, name, locked, contains, loot) => {
+    let container = {
+      name: name,
+      locked: locked,
+      contains: contains,
+      loot: loot
+    };
+    locale.containers.push(container);
+  };
+  const addEnemy = (locale, enemyId, chance) => {
+    locale.enemies.push([enemyId, chance]);
+  };
+  const addFeature = (locale, name, visThreshold, examineEvent) => {
+    let feature = {
+      name: name,
+      threshold: visThreshold,
+      onExamine: examineEvent
+    };
+    locale.features.push(feature);
+  };
+  const addLocale = (gameMap, locale) => {
+    let m = Object.assign({}, gameMap);
+    m[locale.name] = locale;
+    return m;
+  };
+  const addLoot = (locale, name, weight, count) => {
+    let loots = [name, weight, count];
+    locale.loot.push(loots);
+  };
+
   //Boundaries
-  overwriteForest(gameMap, {
+  const forestBoundary = overwriteForest({
     name: 'forest_boundary',
     display: 'Forest Bounds',
     temperature: temperatureConstants.VERY_COLD,
@@ -116,7 +106,8 @@ export const createForest = (gameMap) => {
       "The silence is deafening."
     ]
   });
-  overwriteForest(gameMap, {
+  gameMap = addLocale(gameMap, forestBoundary);
+  const cornBoundary = overwriteForest({
     name: 'corn_boundary',
     display: 'Cornfield',
     temperature: temperatureConstants.FREEZING,
@@ -127,15 +118,16 @@ export const createForest = (gameMap) => {
       "The corn stalks heavily obscure your vision."
     ]
   });
+  gameMap = addLocale(gameMap, cornBoundary);
   //Start zone
-  overwriteForest(gameMap, {
+  let car = overwriteForest({
     name: 'car',
     display: 'Car',
     coordinates: [7, 7],
     temperature: temperatureConstants.NORMAL,
     visibility: visibilityConstants.NORMAL,
     enterPhrase: "You sit in the driver's seat.",
-    exitPhrase: "Crisp winter air greets you as you open the car door.",
+    exitPhrase: "You leave your car and step into the cold.",
     exits: [
       [cardinalConstants.OUTSIDE, 'car_mailbox', 2]
     ],
@@ -144,7 +136,9 @@ export const createForest = (gameMap) => {
       "Out of all times and places, why break down tonight?"
     ]
   });
-  overwriteForest(gameMap, {
+  car = addItem(car, createItem('handwarmers', 1));
+  gameMap = addLocale(gameMap, car);
+  const carMailbox = overwriteForest({
     name: 'car_mailbox',
     display: 'Mailbox',
     coordinates: [7, 7],
@@ -163,7 +157,8 @@ export const createForest = (gameMap) => {
       "Out of all times and places, why break down tonight?"
     ]
   });
-  overwriteForest(gameMap, {
+  gameMap = addLocale(gameMap, carMailbox);
+  const frontArchway = overwriteForest({
     name: 'front_archway',
     display: 'Archway',
     coordinates: [7, 6],
@@ -179,7 +174,8 @@ export const createForest = (gameMap) => {
       "Out of all times and places, why break down tonight?"
     ]
   });
-  overwriteForest(gameMap, {
+  gameMap = addLocale(gameMap, frontArchway);
+  const frontYard = overwriteForest({
     name: 'front_yard',
     display: 'Front Yard',
     coordinates: [7, 5],
@@ -196,7 +192,8 @@ export const createForest = (gameMap) => {
       "Out of all times and places, why break down tonight?"
     ]
   });
-  overwriteForest(gameMap, {
+  gameMap = addLocale(gameMap, frontYard);
+  const frontYardGarden = overwriteForest({
     name: 'front_yard_garden',
     display: 'Front Garden',
     coordinates: [8, 5],
@@ -214,6 +211,7 @@ export const createForest = (gameMap) => {
       "Out of all times and places, why break down tonight?"
     ]
   });
+  gameMap = addLocale(gameMap, frontYardGarden);
   return gameMap;
 };
 

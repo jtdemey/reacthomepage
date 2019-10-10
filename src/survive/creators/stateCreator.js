@@ -18,6 +18,7 @@ let initialState = {
     energy: 100, //100-75: spry, 74-50: calm, 49-25: tired, 24-10: fatigued, 9-1: exhausted, 0: immobile
     isExhausted: false,
     isImmobile: false,
+    isExiting: false,
     locale: 'car',
     lastLocale: undefined,
     visited: [],
@@ -52,7 +53,10 @@ let initialState = {
     mapGridItems: [],
     //Modals
     isModalVisible: false,
-    modalMode: 0 //0: empty, 1: item-info, 2: combat
+    modalMode: 0, //0: empty, 1: item-info, 2: combat
+    iimTitle: '', //iim = item info modal
+    iimDesc: '',
+    iimBtns: []
   },
   gameMap: {
     car: {

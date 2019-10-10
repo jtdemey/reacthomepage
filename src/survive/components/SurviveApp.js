@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import StatusBar from './top/StatusBar';
 import GameView from './middle/GameView';
 import ButtonBar from './bottom/ButtonBar';
-import '../styles/survive.css';
 import {
   masterTick,
   startGame
@@ -35,7 +34,7 @@ class SurviveApp extends React.Component {
     this.props.startGame(this.props.tick);
     this.gameClock = setInterval(() => {
       this.props.masterTick(this.props.tick);
-    }, 1000);
+    }, 500);
   }
 
   render() {

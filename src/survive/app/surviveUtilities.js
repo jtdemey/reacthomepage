@@ -1,5 +1,14 @@
 import { cardinalConstants } from "./surviveConstants";
 
+export const createIimBtn = (ind, display, onClick) => {
+  const iimBtn = {
+    index: ind,
+    display: display,
+    onClick: onClick
+  };
+  return iimBtn;
+};
+
 export const createListButtonItem = (ind, itemId, display, quantity, isPlaceholder, transitioning, listName) => {
   let newLbi = {
     index: ind,
@@ -13,7 +22,7 @@ export const createListButtonItem = (ind, itemId, display, quantity, isPlacehold
   return newLbi;
 };
 
-export const createMapGridItem = (id, loc) => {
+export const createMapGridItem = (id, color, display) => {
   //Then you'll see that it's not the locale that bends, but yourself
   let mgi = {
     id: id,
@@ -21,9 +30,11 @@ export const createMapGridItem = (id, loc) => {
     display: '',
     features: []
   };
-  if(loc) {
-    mgi.color = 'blue';
-    mgi.display = loc.display;
+  if(color) {
+    mgi.color = color;
+  }
+  if(display) {
+    mgi.display = display;
   }
   return mgi;
 };
@@ -36,6 +47,33 @@ export const formatTime = gt => {
     t = t.slice(1, t.length);
   }
   return d + t;
+};
+
+export const generateIimBtns = itemMetadata => {
+  let iimBtns = [];
+  let iimInd = 0;
+  const iterInd = () => {
+    const x = iimInd;
+    iimInd += 1;
+    return x;
+  };
+  if(itemMetadata.consumable === true) {
+    const consumeFunc = () => {
+      console.log('this will do something, right dev?');
+    };
+    iimBtns.push(createIimBtn(iterInd(), 'Use', consumeFunc));
+  }
+  const dropFunc = () => {
+    console.log('this will drop something, right dev?'); 
+  };
+  iimBtns.push(createIimBtn(iterInd(), 'Drop', dropFunc));
+  if(itemMetadata.equipable === true) {
+    const equipFunc = () => {
+      console.log('clap on clap off amirite fellas?');
+    };
+    iimBtns.push(createIimBtn(iterInd(), 'Use', consumeFunc));
+  }
+  return iimBtns;
 };
 
 export const getCoordsFromLocale = (gameMap, locale, isSuppressed = false) => {
@@ -145,8 +183,8 @@ export const getParticleConfig = mode => {
 };
 
 export const getTimeFromTick = tick => {
-  const s = new Date(1987, 11, 12, 9, 44, 0, 0);
-  s.setSeconds((1 * s.getSeconds()) + tick);
+  const s = new Date(1987, 11, 12, 11, 44, 0, 0);
+  s.setSeconds((1 * s.getSeconds()) + Math.floor(tick / 2));
   return s.toString();
 };
 
@@ -192,6 +230,10 @@ export const getStatusPhrases = (hp, sp, ep) => {
     spPhrase: spPhrase,
     epPhrase: epPhrase
   };
+};
+
+export const isStringSimilar = (x, y) => {
+  return x === y || x === y.substring(1, y.length) || x === y.substring(0, y.length - 1);
 };
 
 export const iterateTick = (time, tick) => {

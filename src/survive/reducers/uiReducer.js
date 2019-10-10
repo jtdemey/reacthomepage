@@ -1,3 +1,5 @@
+import { modalModeConstants } from '../app/surviveConstants';
+
 const uiReducer = (state = {}, action) => {
   switch(action.type) {
     case 'ADD_ITEM_TO_LIST':
@@ -40,6 +42,13 @@ const uiReducer = (state = {}, action) => {
         localeItemButtons: action.localeItemButtons,
         inventoryItemButtons: action.inventoryItemButtons
       };
+    case 'POPULATE_ITEM_INFO_MODAL':
+      return {
+        ...state,
+        iimTitle: action.itemInfo.display,
+        iimDesc: action.itemInfo.description,
+        iimBtns: action.itemBtns
+      };
     case 'REMOVE_ENTITY_TRANSITIONING_IN':
       return {
         ...state,
@@ -66,7 +75,7 @@ const uiReducer = (state = {}, action) => {
       return {
         ...state,
         isModalVisible: true,
-        modalMode: 1
+        modalMode: modalModeConstants.ITEM_INFO
       };
     case 'SUBMIT_COMMAND':
       return {

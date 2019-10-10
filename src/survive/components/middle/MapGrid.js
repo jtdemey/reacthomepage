@@ -34,7 +34,7 @@ class MapGrid extends React.Component {
   	};
     return (
 	    <div className="map-grid" style={look}>
-	    	{this.props.mapGridItems.map((mgi) => (
+	    	{this.props.mapGridItems.map(mgi => (
 	    		<MapGridItem key={mgi.id} color={mgi.color} display={mgi.display} />
 	    	))}
 	    </div>

@@ -1,10 +1,13 @@
-import { delay } from 'redux-saga';
-import { put, take } from 'redux-saga/effects';
+import { delay, put, take } from 'redux-saga/effects';
+import {
+	executeGameCommand
+} from './gameActions';
 import { takeItemFromLocale } from './playerActions';
 import {
 	changeView,
 	closeModals,
 	elevateLines,
+	populateItemInfoModal,
 	removeEntityTransitioningIn,
 	removeEntityTransitioningOut,
 	transitionEntityIn,
@@ -24,8 +27,15 @@ export function* changeViewSaga(action) {
 	yield put(transitionViewIn(changed.view));
 }
 
-export function* showModalSaga(action) {
+export function* showItemInfoModalSaga(action) {
+	console.log(action);
+	yield put(populateItemInfoModal(action.itemId));
 	yield put(transitionEntityIn('modal', 100));
+}
+
+export function* submitCommandSaga(action) {
+	console.log(action.command);
+	yield put(executeGameCommand(action.command));
 }
 
 export function* transitionEntityInSaga(action) {

@@ -2,10 +2,10 @@ import React from 'react';
 
 const MapGridItem = (props) => {
   const css = {
-    color: props.color
+    backgroundColor: props.color
   };
   return (
-    <div className="map-grid-item" style={{css}}>
+    <div className="map-grid-item" style={css}>
       <h5 className="mgi-title">
         {props.display}
       </h5>

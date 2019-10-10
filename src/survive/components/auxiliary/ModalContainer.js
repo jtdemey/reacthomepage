@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import TweenMax from 'gsap/TweenMax';
-import ModalGrid from './ModalGrid';
+import ItemInfoModal from './ItemInfoModal';
 import {
   transitionEntityIn,
   transitionEntityOut
 } from '../../actions/uiActions';
+import { modalModeConstants } from '../../app/surviveConstants';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -35,22 +35,33 @@ class ModalContainer extends React.Component {
     this.animationFrames = null;
   }
 
-  render() {
+  getLook() {
     const containerLook = this.props.isModalVisible ? {
       'display': 'block',
       'height': `${this.props.clientHeight + 120}px`
     } : {
       'display': 'none'
     };
+    return containerLook;
+  }
+
+  getTransitionState() {
     let transition = 'no';
     if(this.props.entitiesTransitioningIn.includes('modal')) {
       transition = 'in';
     } else if(this.props.entitiesTransitioningOut.includes('modal')) {
       transition = 'out';
     }
+    return transition;
+  }
+
+  render() {
     return (
-      <div className="modal-container" style={containerLook} onClick={() => this.props.transitionEntityOut('modal', 100)}>
-        <ModalGrid transitioning={transition} isVisible={this.props.isModalVisible} modalMode={this.props.modalMode} />
+      <div className="modal-container" style={this.getLook()} onClick={() => this.props.transitionEntityOut('modal', 100)}>
+        <ItemInfoModal
+          transitioning={this.getTransitionState()}
+          isVisible={this.props.modalMode === modalModeConstants.ITEM_INFO}
+          modalMode={this.props.modalMode} />
       </div>
     );
   }

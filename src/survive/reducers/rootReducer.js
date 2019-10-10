@@ -12,14 +12,18 @@ const rootReducer = (state = initialState, action) => {
     //state.game
     case 'ENTER_LOCALE':
     case 'MASTER_TICK':
+    case 'PICK_UP_ITEM':
     case 'START_GAME':
+    case 'TAKE_EXIT':
       return {
         ...state,
         game: gameReducer(state.game, action)
       };
     //state.player
-    case 'BEGIN_PICK_UP_ITEM':
+    case 'ADD_ITEM_TO_INVENTORY':
+    case 'TAKE_EXIT':
     case 'TAKE_ITEM_FROM_LOCALE':
+    case 'UPDATE_PLAYER_LOCALE':
       return {
         ...state,
         player: playerReducer(state.player, action)
@@ -33,6 +37,7 @@ const rootReducer = (state = initialState, action) => {
     case 'CLOSE_MODALS_DELAYED':
     case 'FOCUS_COMMAND_BAR':
     case 'PICK_UP_ITEM':
+    case 'POPULATE_ITEM_INFO_MODAL':
     case 'REMOVE_ENTITY_TRANSITIONING_IN':
     case 'REMOVE_ENTITY_TRANSITIONING_OUT':
     case 'REMOVE_ITEM_FROM_LIST':
@@ -53,6 +58,7 @@ const rootReducer = (state = initialState, action) => {
     //state.gameMap
     case 'LOAD_GAME_MAP':
     case 'REMOVE_ITEM_FROM_LOCALE':
+    case 'VISIT_LOCALE':
       return {
         ...state,
         gameMap: mapReducer(state.gameMap, action)

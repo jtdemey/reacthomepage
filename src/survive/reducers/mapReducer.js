@@ -8,8 +8,15 @@ const mapReducer = (state = {}, action) => {
       return {
         ...state,
         [action.localeName]: {
-          ...[action.localeName],
+          ...state[action.localeName],
           items: action.localeItems
+        }
+      };
+    case 'VISIT_LOCALE':
+      return {
+        ...state,
+        [action.locale.name]: {
+          ...action.locale
         }
       };
     default:

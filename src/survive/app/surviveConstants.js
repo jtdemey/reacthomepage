@@ -7,8 +7,31 @@ export const cardinalConstants = {
 	SOUTHWEST: 5,
 	WEST: 6,
 	NORTHWEST: 7,
-	INSIDE: 8,
-	OUTSIDE: 9
+	UP: 8,
+	DOWN: 9,
+	INSIDE: 10,
+	OUTSIDE: 11
+};
+
+export const colorConstants = {
+	mgiUnvisited: '#404040',
+	mgiCurrent: '#364d63'
+};
+
+export const itemMetadataConstants = [
+	{ //0: handwarmers
+		name: 'handwarmers',
+		display: 'Handwarmers',
+		description: `Two cloth pouches that provide meager warmth. They don't last for long, but it's preferable to having extremities fall to frostbite.`,
+		stackable: true,
+		consumable: true,
+    equipable: false
+	}
+];
+
+export const modalModeConstants = {
+	ITEM_INFO: 0,
+	COMBAT: 1
 };
 
 export const regionConstants = {

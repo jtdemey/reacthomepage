@@ -1,13 +1,19 @@
 import surviveStore from '../store/surviveStore';
 
-export const beginPickUpItem = (btnIndex) => {
+export const addItemToInventory = item => {
+  const inv = Object.assign([], surviveStore.getState().player.items);
+  inv.push(item);
   return {
-    type: 'BEGIN_PICK_UP_ITEM',
-    btnIndex: btnIndex
+    type: 'ADD_ITEM_TO_INVENTORY',
+    inventory: inv
   };
 };
 
-export const takeItemFromLocale = (id) => {
+export const playerTick = tick => {
+  
+};
+
+export const takeItemFromLocale = id => {
 	const currentState = Object.assign({}, surviveStore.getState());
   const currentInventory = Object.assign([], currentState.player.items);
   const currentLocaleItems = Object.assign([], currentState.gameMap[currentState.player.locale].items);
@@ -37,5 +43,15 @@ export const takeItemFromLocale = (id) => {
   	type: 'TAKE_ITEM_FROM_LOCALE',
   	playerItems: currentInventory,
     hadItem: hadItem
+  };
+};
+
+export const updatePlayerLocale = dest => {
+  const currentPlayer = Object.assign({}, surviveStore.getState().player);
+  currentPlayer.lastLocale = currentPlayer.locale;
+  currentPlayer.locale = dest.name;
+  return {
+    type: 'UPDATE_PLAYER_LOCALE',
+    player: currentPlayer
   };
 };

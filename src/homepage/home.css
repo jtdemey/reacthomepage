@@ -46,9 +46,6 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @-webkit-keyframes fadein-now {
   0% {
   	opacity: 0;
@@ -300,7 +297,7 @@ body {
 }
 
 a {
-	color: #0b3300;
+	color: #fff;
 	text-decoration: none;
 }
 
@@ -356,7 +353,6 @@ p {
 }
 
 .main-container {
-  height: 400%;
 	margin: 0;
 	padding: 0;
 	background: #4B4E6D;
@@ -606,8 +602,7 @@ p {
 
 .content-area {
 	display: grid;
-	grid-template-rows: repeat(4, 1fr);
-	height: 100vh;
+	grid-template-rows: repeat(4, 1fr, 0);
 	padding: 0;
 	scroll-behavior: smooth;
 	color: white;

@@ -30,38 +30,32 @@ const sendHtmlFile = (res, devDir, prodDir) => {
 router.route('/')
   .get((req, res) => {
     console.log(req.headers);
-    sendHtmlFile(res, 'homepage/home.html', isProd);
-  });
-
-router.route('/css')
-  .get((req, res) => {
-    console.log('yesh');
-    sendCssFile(res, 'homepage/home.css', isProd);
+    sendHtmlFile(res, 'homepage/home.html', 'home.html');
   });
 
 router.route('/imposter')
   .get((req, res) => {
-    sendHtmlFile(res, 'imposter/imposter.html', isProd);
+    sendHtmlFile(res, 'imposter/imposter.html', 'imposter.html');
   });
 
 router.route('/imposter/:gameCode')
   .get((req, res) => {
-    sendHtmlFile(res, 'imposter/imposter.html', isProd);
+    sendHtmlFile(res, 'imposter/imposter.html', 'imposter.html');
   });
 
 router.route('/survive')
   .get((req, res) => {
-    sendHtmlFile(res, 'survive/survive.html', isProd);
+    sendHtmlFile(res, 'survive/survive.html', 'survive.html');
   });
 
 router.route('/pistolwhip')
   .get((req, res) => {
-    sendHtmlFile(res, 'pistolwhip/pistolwhip.html', isProd);
+    sendHtmlFile(res, 'pistolwhip/pistolwhip.html', 'pistolwhip.html');
   });
 
 router.route('/roleroller')
   .get((req, res) => {
-    sendHtmlFile(res, 'static/roleroller.html', isProd);
+    sendHtmlFile(res, 'static/roleroller.html', 'roleroller.html');
   });
 
 router.route('/sandbox')

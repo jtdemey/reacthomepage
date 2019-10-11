@@ -14,9 +14,9 @@ module.exports = {
   },
   target: 'web',
   output: {
-    path: path.join(process.cwd(), 'dist'),
+    path: path.join(process.cwd(), 'dist', 'public'),
     publicPath: '/',
-    filename: '[name]Bundle.js'
+    filename: '[name]Bundle.[hash:8].js'
   },
   optimization: {
     minimizer: [

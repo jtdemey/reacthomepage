@@ -7,7 +7,7 @@ module.exports = {
     jdserver: path.join(process.cwd(), 'src/server/home.js')
   },
   output: {
-    path: path.join(process.cwd(), 'dist'),
+    path: path.join(process.cwd(), 'dist', 'server'),
     filename: "jdserver.js"
   },
   externals: [nodeExternals()]

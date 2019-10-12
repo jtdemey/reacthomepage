@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser';
 import expressRoutes from './expressRoutes';
 
 //CONFIGURATION
-const filePrefix = process.env.NODE_ENV === 'development' ? 'src' : 'dist';
+const filePrefix = process.env.NODE_ENV === 'development' ? 'src' : 'dist/public';
 
 const app = express();
 app.use(serverLogger('short'));

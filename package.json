@@ -4,7 +4,7 @@
   "description": "My homepage built with React.",
   "private": true,
   "scripts": {
-    "start": "node dist/jdserver.js",
+    "start": "node dist/server/jdserver.js",
     "startdev": "babel-node src/server/home.js",
     "starthot": "nodemon --exec babel-node src/server/home.js",
     "starthome": "webpack-dev-server --mode development --config ./config/webpack/webpack.config.home.js --port 5261 --open --hot",

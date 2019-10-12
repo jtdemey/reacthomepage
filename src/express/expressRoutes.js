@@ -11,17 +11,9 @@ const isProd = process.env.NODE_ENV === 'production';
 
 router.all('/imposter/*', cors());
 
-const sendCssFile = (res, devDir, prodDir) => {
-  if(isProd) {
-    res.sendFile(path.join(process.cwd(), 'dist', prodDir));
-  } else {
-    res.sendFile(path.join(process.cwd(), 'src' + devDir));
-  }
-};
-
 const sendHtmlFile = (res, devDir, prodDir) => {
   if(isProd) {
-    res.sendFile(path.join(process.cwd(), 'dist', prodDir));
+    res.sendFile(path.join(process.cwd(), 'dist/public', prodDir));
   } else {
     res.sendFile(path.join(process.cwd(), 'src', devDir));
   }

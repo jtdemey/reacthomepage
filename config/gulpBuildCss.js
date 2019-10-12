@@ -54,9 +54,10 @@ const buildCss = () => {
 
 const replaceHrefs = () => {
   return gulp.src(['../dist/public/home.html', '../dist/public/imposter.html', '../dist/public/survive.html'])
-    .pipe(replace('/homepage/home.css', `home.${hash}.css`))
-    .pipe(replace('/imposter/imposter.css', `imposter.${hash}.css`))
-    .pipe(replace('/survive/survive.css', `survive.${hash}.css`))
+    .pipe(replace('href="homepage/home.css', `href="home.${hash}.css`))
+    .pipe(replace('href="home.css', `href="home.${hash}.css`))
+    .pipe(replace('href="imposter.css', `href="imposter.${hash}.css`))
+    .pipe(replace('href="survive.css', `href="survive.${hash}.css`))
     .pipe(gulp.dest(path.join('..', 'dist', 'public')));
 };
 

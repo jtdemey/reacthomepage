@@ -3,17 +3,15 @@ import { useSelector } from 'react-redux';
 import VoteNotification from './VoteNotification';
 import { getThemeColors } from '../../app/imposterUtilities';
 
-const VoteArea = props => {
+const EndgameView = props => {
   const votes = useSelector(state => state.game.votes);
   const theme = useSelector(state => state.ui.theme);
   const look = getThemeColors(theme);
   return (
-    <div className="vote-area">
-      {votes.map(v => (
-        <VoteNotification {...v} key={v.voteId} bgColor={look.secondary} btnColor={look.highlight} />
-      ))}
+    <div className="endgame-view">
+      
     </div>
   );
 };
 
-export default VoteArea;
+export default EndgameView;

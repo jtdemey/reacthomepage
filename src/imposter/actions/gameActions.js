@@ -94,7 +94,6 @@ export const resetLobbyActionCounts = () => {
 };
 
 export const setPlayerSocket = socket => {
-  console.log(`settin player id to ${socket.socketId}`);
   return {
     type: gameActionTypes.SET_PLAYER_SOCKET,
     playerId: socket.socketId,

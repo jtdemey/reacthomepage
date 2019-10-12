@@ -300,7 +300,6 @@
 
 html, body, .site-wrapper, .modal-area {
   width: 100% !important;
-  height: 100% !important;
   margin: 0;
   padding: 0;
   color: white;
@@ -628,6 +627,11 @@ input {
   color: #000;
 }
 
+.vote-area {
+  padding: 1em;
+  border-radius: 4px;
+}
+
 .vote-notification {
   margin: auto;
   text-align: center;
@@ -645,6 +649,7 @@ input {
   max-width: 3rem;
   margin: 0 1rem;
   padding: 0.35rem 0.7rem;
+  box-shadow: 12px 8px 6px #262626;
 }
 
 /* AUX */
@@ -657,7 +662,7 @@ input {
   margin: auto;
 }
 
-.notification-area, .vote-area {
+.notification-area{
   padding: 1rem;
 }
 

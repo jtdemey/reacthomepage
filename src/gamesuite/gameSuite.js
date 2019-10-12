@@ -46,13 +46,14 @@ export const makeGameSuite = () => {
       socketId: sockId
     };
   };
-  gameSuite.makeVote = (type, callerId, accusedId = null) => {
+  gameSuite.makeVote = (type, callerId, thresh, accusedId = null) => {
     return {
       voteType: type,
       callerId: callerId,
       accusedId: accusedId,
       yay: 0,
-      nay: 0
+      nay: 0,
+      threshold: thresh
     };
   };
 
@@ -61,7 +62,7 @@ export const makeGameSuite = () => {
     const gamePlayers = gameSuite.playerList.filter(p => p.gameId === gameId);
     for(let j = 0; j < gamePlayers.length; j++) {
       if(debug) {
-        logger.info(`Sending ${JSON.parse(command).command} to ${gamePlayers[j].socketId}`);
+        logger.info(`[GS] Sending ${JSON.parse(command).command} to ${gamePlayers[j].socketId}`);
       }
       gamePlayers[j].socket.send(command);
     }
@@ -97,7 +98,7 @@ export const makeGameSuite = () => {
   gameSuite.updateGame = (gameId, gameData) => {
     let g = gameSuite.getGame(gameId.toUpperCase());
     if(!g) {
-      logger.error(`Could not update game ${gameId}`);
+      logger.error(`[GS] Could not update game ${gameId}`);
     }
     g = {
       ...g,
@@ -109,7 +110,7 @@ export const makeGameSuite = () => {
   gameSuite.updatePlayer = (socketId, playerData) => {
     let p = gameSuite.getPlayer(socketId);
     if(!p) {
-      logger.error(`Could not update player ${socketId}`);
+      logger.error(`[GS] Could not update player ${socketId}`);
     }
     p = {
       ...p,
@@ -123,13 +124,13 @@ export const makeGameSuite = () => {
   gameSuite.addGame = (game, debug = false) => {
     gameSuite.gameList = gameSuite.gameList.concat([game]);
     if(debug) {
-      logger.info(`Added game ${game.gameId} (Total: ${gameSuite.gameList.length})`);
+      logger.info(`[GS] Added game ${game.gameId} (Total: ${gameSuite.gameList.length})`);
     }
   };
   gameSuite.addPlayer = (player, debug = false) => {
     gameSuite.playerList = gameSuite.playerList.concat([player]);
     if(debug) {
-      logger.info(`Added player ${player.socketId} (Total: ${gameSuite.playerList.length})`);
+      logger.info(`[GS] Added player ${player.socketId} (Total: ${gameSuite.playerList.length})`);
     }
   };
 
@@ -137,13 +138,22 @@ export const makeGameSuite = () => {
   gameSuite.removeGame = (gameId, debug = false) => {
     gameSuite.gameList = gameSuite.gameList.filter(g => g.gameId !== gameId);
     if(debug) {
-      logger.info(`Removed game ${gameId} (Total: ${gameSuite.gameList.length})`);
+      logger.info(`[GS] Removed game ${gameId} (Total: ${gameSuite.gameList.length})`);
     }
   };
   gameSuite.removePlayer = (socketId, debug = false) => {
     gameSuite.playerList = gameSuite.playerList.filter(p => p.socketId !== socketId);
+    gameSuite.gameList.forEach(g => {
+      if(g.players.some(p => p.socketId === socketId)) {
+        if(g.players.length === 1) {
+          gameSuite.removeGame(g.gameId, true);
+        } else {
+          gameSuite.updateGame(g.gameId, { players: g.players.filter(p => p.socketId === socketId)});
+        }
+      }
+    });
     if(debug) {
-      logger.info(`Removed player ${socketId} (Total: ${gameSuite.playerList.length})`);
+      logger.info(`[GS] Removed player ${socketId} (Total: ${gameSuite.playerList.length})`);
     }
   };
 
@@ -180,7 +190,7 @@ export const makeGameSuite = () => {
         remain = '60';
         break;
       default:
-        logger.info(`Unrecognized game phase ${g.phase}`);
+        logger.info(`[GS] Unrecognized game phase ${g.phase}`);
         break;
     }
     return {
@@ -211,7 +221,7 @@ export const makeGameSuite = () => {
   gameSuite.startIdleClock = () => {
     gameSuite.clock = setInterval(() => {
       if(gameSuite.gameList.length > 0) {
-        logger.info(`[GS] Bootin' up!`);
+        logger.info(`[GS] Clock's a tickin`);
         clearInterval(gameSuite.clock);
         gameSuite.startGameClock(gameSuite);
       }
@@ -234,7 +244,7 @@ export const makeGameSuite = () => {
   gameSuite.handleSubmitJoinGame = msg => {
     const prospImposter = gameSuite.getGame(msg.gameId.toUpperCase());
     if(!prospImposter) {
-      logger.error(`Could not find game ${msg.gameId}`);
+      logger.error(`[GS] Could not find game ${msg.gameId}`);
       return;
     }
     const joiner = gameSuite.getPlayer(msg.socketId);
@@ -258,7 +268,8 @@ export const makeGameSuite = () => {
     if(currGame.votes.some(v => v.accuserId === msg.accuserId)) {
       return;
     }
-    const accusation = gameSuite.makeVote('accusation', msg.accuserId, msg.accusedId);
+    //To-do: make threshold here dingus
+    const accusation = gameSuite.makeVote('accusation', msg.accuserId, 'uh', msg.accusedId);
     const newVotes = currGame.votes.concat([accusation]);
     gameSuite.updateGame(msg.gameId, {
       votes: newVotes

@@ -10,7 +10,7 @@ const VoteArea = props => {
   return (
     <div className="vote-area">
       {votes.map(v => (
-        <VoteNotification {...v} key={v.voteId} bgColor={look.secondary} btnColor={look.highlight} />
+        <VoteNotification {...v} key={v.callerId} bgColor={look.secondary} btnColor={look.highlight} />
       ))}
     </div>
   );

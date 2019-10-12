@@ -9,6 +9,7 @@ import JoinGameForm from './mainmenu/JoinGameForm';
 import LoadingView from './auxiliary/LoadingView';
 import LobbyView from './lobby/LobbyView';
 import GameView from './ingame/GameView';
+import EndgameView from './ingame/EndgameView';
 import ModalArea from './auxiliary/ModalArea';
 import { getThemeColors } from '../app/imposterUtilities';
 
@@ -37,9 +38,9 @@ class ImposterApp extends React.Component {
       case viewConstants.IN_GAME:
         return <GameView />;
       case viewConstants.IMPOSTER_VICTORY:
-        return null;
+        return <EndgameView title="The Imposter Wins!" />;
       case viewConstants.BYSTANDER_VICTORY:
-        return null;
+        return <EndgameView title="The Bystanders Win!" />;
       case viewConstants.LOADING:
         return <LoadingView />;
       default:

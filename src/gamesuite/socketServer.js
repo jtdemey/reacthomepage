@@ -7,13 +7,12 @@ const makeServer = webServer => {
     perMessageDeflate: false,
     server: webServer
   });
-  wss.gs = makeGameSuite();
   return wss;
 };
 
-export const createWebSocketServer = server => {
+export const createWebSocketServer = (server, dbConn) => {
   const wss = makeServer(server);
-  wss.gs.startIdleClock();
+  wss.gs = makeGameSuite(dbConn);
   wss.on('connection', ws => {
     ws.on('message', e => {
       let socketImposter;

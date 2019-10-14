@@ -1,12 +1,16 @@
 import logger from '../logs/logWriter';
 
-export const makeGameSuite = () => {
+export const makeGameSuite = dbConnection => {
   const gameSuite = {};
 
   gameSuite.isIdle = false;
   gameSuite.clock = null;
   gameSuite.gameList = [];
   gameSuite.playerList = [];
+
+  gameSuite.db = dbConnection;
+  gameSuite.games = dbConnection.collection('games');
+  gameSuite.players = dbConnection.collection('players');
 
   //Creators
   gameSuite.makeCommand = (commName, params = null) => {
@@ -58,14 +62,24 @@ export const makeGameSuite = () => {
   };
 
   //Utilities
+  gameSuite.countGames = () => {
+    return gameSuite.games.find().count();
+  };
+  gameSuite.countPlayers = () => {
+    return gameSuite.players.find().count();
+  };
   gameSuite.emitToGame = (gameId, command, debug = false) => {
-    const gamePlayers = gameSuite.playerList.filter(p => p.gameId === gameId);
-    for(let j = 0; j < gamePlayers.length; j++) {
-      if(debug) {
-        logger.info(`[GS] Sending ${JSON.parse(command).command} to ${gamePlayers[j].socketId}`);
+    gameSuite.players.find({gameId: gameId}).toArray((err, docs) => {
+      if(err) {
+        logger.error(`[GS] Unable to emitToGame ${gameId}: player query failed`);
       }
-      gamePlayers[j].socket.send(command);
-    }
+      docs.forEach(p => {
+        if(debug) {
+          logger.debug(`[GS] Sending ${JSON.parse(command).command} to ${p.socketId}`);
+        }
+        p.socket.send(command);
+      });
+    });
   };
   gameSuite.genGameId = () => {
     const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -88,84 +102,92 @@ export const makeGameSuite = () => {
 
   //Getters
   gameSuite.getGame = gameId => {
-    return gameSuite.gameList.filter(g => g.gameId === gameId)[0];
+    gameSuite.games.find({gameId: gameId}).toArray((err, docs) => {
+      if(err) {
+        logger.error(`[GS] Unable to find game ${gameId}`);
+        return;
+      }
+      return docs[0];
+    });
   };
   gameSuite.getPlayer = socketId => {
-    return gameSuite.playerList.filter(p => p.socketId === socketId)[0];
+    gameSuite.players.find({socketId: socketId}).toArray((err, docs) => {
+      if(err) {
+        logger.error(`[GS] Unable to find player ${socketId}`);
+        return;
+      }
+      return docs[0];
+    });
   };
 
   //Setters
   gameSuite.updateGame = (gameId, gameData) => {
-    let g = gameSuite.getGame(gameId.toUpperCase());
-    if(!g) {
-      logger.error(`[GS] Could not update game ${gameId}`);
-    }
-    g = {
-      ...g,
-      ...gameData
-    };
-    const f = gameSuite.gameList.filter(g => g.gameId !== gameId);
-    gameSuite.gameList = f.concat([g]);
+    gameSuite.games.updateOne({gameId: gameId}, {$set: {...gameData}}, err => {
+      if(err) {
+        logger.error(`[GS] Could not update game ${gameId}`);
+      }
+    });
   };
   gameSuite.updatePlayer = (socketId, playerData) => {
-    let p = gameSuite.getPlayer(socketId);
-    if(!p) {
-      logger.error(`[GS] Could not update player ${socketId}`);
-    }
-    p = {
-      ...p,
-      ...playerData
-    };
-    const f = gameSuite.playerList.filter(p => p.socketId !== socketId);
-    gameSuite.playerList = f.concat([p]);
+    gameSuite.players.updateOne({socketId: socketId}, {$set: {...playerData}}, err => {
+      if(err) {
+        logger.error(`[GS] Could not update player ${socketId}`);
+      }
+    });
   };
 
   //Adders
   gameSuite.addGame = (game, debug = false) => {
-    gameSuite.gameList = gameSuite.gameList.concat([game]);
+    gameSuite.games.insert(game);
     if(debug) {
-      logger.info(`[GS] Added game ${game.gameId} (Total: ${gameSuite.gameList.length})`);
+      logger.info(`[GS] Added game ${game.gameId} (Total: ${gameSuite.countGames()})`);
     }
   };
   gameSuite.addPlayer = (player, debug = false) => {
-    gameSuite.playerList = gameSuite.playerList.concat([player]);
+    gameSuite.players.insert(player);
     if(debug) {
-      logger.info(`[GS] Added player ${player.socketId} (Total: ${gameSuite.playerList.length})`);
+      logger.info(`[GS] Added player ${player.socketId} (Total: ${gameSuite.countPlayers()})`);
     }
   };
 
   //Deleters
   gameSuite.removeGame = (gameId, debug = false) => {
-    gameSuite.gameList = gameSuite.gameList.filter(g => g.gameId !== gameId);
+    gameSuite.db.games.deleteOne({gameId: gameId});
     if(debug) {
-      logger.info(`[GS] Removed game ${gameId} (Total: ${gameSuite.gameList.length})`);
+      logger.info(`[GS] Removed game ${gameId} (Total: ${gameSuite.countGames()})`);
     }
   };
   gameSuite.removePlayer = (socketId, debug = false) => {
-    gameSuite.playerList = gameSuite.playerList.filter(p => p.socketId !== socketId);
-    gameSuite.gameList.forEach(g => {
-      if(g.players.some(p => p.socketId === socketId)) {
-        if(g.players.length === 1) {
+    gameSuite.players.deleteOne({socketId: socketId});
+    const playerGames = gameSuite.games.find({players: {$elemMatch: {socketId: socketId}}}).toArray((err, docs) => {
+      if(err) {
+        logger.error(`[GS] Unable to query for games containing player ${socketId}`);
+      }
+      docs.forEach(g => {
+        if(g.players.length === 0) {
           gameSuite.removeGame(g.gameId, true);
         } else {
           gameSuite.updateGame(g.gameId, { players: g.players.filter(p => p.socketId === socketId)});
         }
-      }
+      });
     });
+    if(playerGames.length > 0) {
+      gameSuite.updateGame(playerGames[0].gameId, { players: playerGames[0].players.filter(p => p.socketId !== socketId)});
+    }
     if(debug) {
-      logger.info(`[GS] Removed player ${socketId} (Total: ${gameSuite.playerList.length})`);
+      logger.info(`[GS] Removed player ${socketId} (Total: ${gameSuite.countPlayers()})`);
     }
   };
 
   //Lifecycle
   gameSuite.doGameTick = game => {
-    let g = {
+    const g = {
       ...game
     };
     g.tick += 1;
     g.remainingTime -= 1;
     if(g.remainingTime < 0) {
-      g = gameSuite.iteratePhase(g);
+      return gameSuite.iteratePhase(g);
     }
     return g;
   };
@@ -201,13 +223,13 @@ export const makeGameSuite = () => {
   };
   gameSuite.startGameClock = () => {
     gameSuite.clock = setInterval(() => {
-      if(gameSuite.gameList.length < 1) {
+      if(gameSuite.countGames() < 1) {
         logger.info('[GS] Going idle...');
         clearInterval(gameSuite.clock);
-        gameSuite.startIdleClock(gameSuite);
+        gameSuite.startIdleClock();
       }
-      const activeGames = gameSuite.gameList.filter(g => g.isPaused === false && g.players.length > 0);
-      //logger.info(gameSuite.gameList[0].players.length);
+      const activeGames = gameSuite.games.find({isPaused: false, players: {$size: 0}});
+
       for(let i = 0; i < activeGames.length; i++) {
         let g = activeGames[i];
         g = gameSuite.doGameTick(g);
@@ -220,7 +242,7 @@ export const makeGameSuite = () => {
   };
   gameSuite.startIdleClock = () => {
     gameSuite.clock = setInterval(() => {
-      if(gameSuite.gameList.length > 0) {
+      if(gameSuite.countGames() > 0) {
         logger.info(`[GS] Clock's a tickin`);
         clearInterval(gameSuite.clock);
         gameSuite.startGameClock(gameSuite);

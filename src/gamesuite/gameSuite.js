@@ -5,9 +5,6 @@ export const makeGameSuite = dbConnection => {
 
   gameSuite.isIdle = false;
   gameSuite.clock = null;
-  gameSuite.gameList = [];
-  gameSuite.playerList = [];
-
   gameSuite.db = dbConnection;
   gameSuite.games = dbConnection.collection('games');
   gameSuite.players = dbConnection.collection('players');
@@ -63,10 +60,20 @@ export const makeGameSuite = dbConnection => {
 
   //Utilities
   gameSuite.countGames = () => {
-    return gameSuite.games.find().count();
+    return gameSuite.games.find().count((err, ct) => {
+      if(err) {
+        logger.error(`[GS] Unable to get game count`);
+      }
+      return ct;
+    });
   };
   gameSuite.countPlayers = () => {
-    return gameSuite.players.find().count();
+    return gameSuite.players.find().count((err, ct) => {
+      if(err) {
+        logger.error(`[GS] Unable to get player count`);
+      }
+      return ct;
+    });
   };
   gameSuite.emitToGame = (gameId, command, debug = false) => {
     gameSuite.players.find({gameId: gameId}).toArray((err, docs) => {
@@ -152,7 +159,7 @@ export const makeGameSuite = dbConnection => {
 
   //Deleters
   gameSuite.removeGame = (gameId, debug = false) => {
-    gameSuite.db.games.deleteOne({gameId: gameId});
+    gameSuite.games.deleteOne({gameId: gameId});
     if(debug) {
       logger.info(`[GS] Removed game ${gameId} (Total: ${gameSuite.countGames()})`);
     }
@@ -171,9 +178,6 @@ export const makeGameSuite = dbConnection => {
         }
       });
     });
-    if(playerGames.length > 0) {
-      gameSuite.updateGame(playerGames[0].gameId, { players: playerGames[0].players.filter(p => p.socketId !== socketId)});
-    }
     if(debug) {
       logger.info(`[GS] Removed player ${socketId} (Total: ${gameSuite.countPlayers()})`);
     }
@@ -228,16 +232,18 @@ export const makeGameSuite = dbConnection => {
         clearInterval(gameSuite.clock);
         gameSuite.startIdleClock();
       }
-      const activeGames = gameSuite.games.find({isPaused: false, players: {$size: 0}});
-
-      for(let i = 0; i < activeGames.length; i++) {
-        let g = activeGames[i];
-        g = gameSuite.doGameTick(g);
-        gameSuite.updateGame(g.gameId, { ...g });
-        gameSuite.emitToGame(g.gameId, gameSuite.makeCommand('gameTick', {
-          gameState: g
-        }));
-      }
+      const activeGames = gameSuite.games.find({isPaused: false, players: {$size: 0}}).toArray((err, docs) => {
+        if(err) {
+          logger.error('[GS] Could not find active games');
+        }
+        docs.forEach(g => {
+          g = gameSuite.doGameTick(g);
+          gameSuite.updateGame(g.gameId, { ...g });
+          gameSuite.emitToGame(g.gameId, gameSuite.makeCommand('gameTick', {
+            gameState: g
+          }));
+        });
+      });
     }, 1000);
   };
   gameSuite.startIdleClock = () => {
@@ -297,6 +303,64 @@ export const makeGameSuite = dbConnection => {
       votes: newVotes
     });
     return newVotes;
+  };
+
+  //Test routines
+  gameSuite.testGameSuite = () => {
+    //Count entities
+    const countGamesRes = gameSuite.countGames();
+    if(countGamesRes !== 0) {
+      logger.info('Failed countGames');
+      logger.info(countGamesRes);
+    } else {
+      logger.info(`Pass countGames: ${countGamesRes}`);
+    }
+    const countPlayersRes = gameSuite.countPlayers();
+    if(countPlayersRes !== 0) {
+      logger.info('Failed countPlayers');
+      logger.info(countPlayersRes);
+    } else {
+      logger.info(`Pass countPlayers: ${countPlayersRes}`);
+    }
+    //Add entities and retrieve them
+    const newGame = gameSuite.makeGame();
+    const newGameId = newGame.gameId;
+    const newPlayerId = 'thisisasocketid';
+    gameSuite.addGame(newGame);
+    gameSuite.addPlayer(gameSuite.makePlayer({}, newPlayerId));
+    const getGameRes = gameSuite.getGame(newGameId);
+    if(!getGameRes) {
+      logger.info('Failed getGame');
+      logger.info(getGameRes);
+    } else {
+      logger.info('Pass getGame');
+    }
+    const getPlayerRes = gameSuite.getPlayer(newPlayerId);
+    if(!getPlayerRes) {
+      logger.info('Failed getPlayer');
+      logger.info(getPlayerRes);
+    } else {
+      logger.info('Pass getPlayer');
+    }
+    const countGamesRes2 = gameSuite.countGames();
+    if(countGamesRes2 !== 1) {
+      logger.info('Failed countGames');
+      logger.info(countGamesRes2);
+    } else {
+      logger.info(`Pass countGames: ${countGamesRes2}`);
+    }
+    const countPlayersRes2 = gameSuite.countPlayers();
+    if(countPlayersRes2 !== 1) {
+      logger.info('Failed countPlayers');
+      logger.info(countPlayersRes2);
+    } else {
+      logger.info(`Pass countPlayers: ${countPlayersRes2}`);
+    }
+    //Emit command to game
+
+    //Delete entities
+    gameSuite.removeGame(newGameId);
+    gameSuite.removePlayer(newPlayerId);
   };
   return gameSuite;
 };

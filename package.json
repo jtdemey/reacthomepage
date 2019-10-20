@@ -4,7 +4,6 @@
   "description": "My homepage built with React.",
   "private": true,
   "jest": {
-    "preset": "@shelf/jest-mongodb",
     "setupFiles": [
       "./src/tests/setup/jest.init.js"
     ]

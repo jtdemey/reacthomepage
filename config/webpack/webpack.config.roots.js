@@ -1,10 +1,12 @@
 const webpack = require('webpack');
 const path = require('path');
+const postcssPresetEnv = require('postcss-preset-env');
+const tailwindCss = require('tailwindcss');
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
   mode: 'development',
-  entry: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, '..', '..', 'src/survive/surviveIndex.js')],
+  entry: ['webpack-hot-middleware/client?reload=true', path.join(__dirname, '..', '..', 'src/roots/rootsIndex.js')],
   target: 'web',
   output: {
     path: path.join(__dirname, '..', '..', 'dist'),
@@ -15,12 +17,12 @@ module.exports = {
     port: 8000,
     host: 'localhost',
     historyApiFallback: {
-      index: 'survive.html'
+      index: 'roots.html'
     },
     disableHostCheck: true,
     noInfo: false,
     stats: 'minimal',
-    contentBase: path.join(__dirname, '..', '..', 'src/survive'),
+    contentBase: path.join(__dirname, '..', '..', 'src/roots'),
     hot: true,
     inline: true,
     open: true
@@ -52,6 +54,15 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: true
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [
+                postcssPresetEnv,
+                tailwindCss
+              ]
             }
           }
         ]

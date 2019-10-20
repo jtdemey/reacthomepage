@@ -1,3 +1,4 @@
+import { Promise } from 'bluebird';
 import logger from '../logs/logWriter';
 
 export const makeGameSuite = dbConnection => {
@@ -67,13 +68,9 @@ export const makeGameSuite = dbConnection => {
       return ct;
     });
   };
-  gameSuite.countPlayers = () => {
-    return gameSuite.players.find().count((err, ct) => {
-      if(err) {
-        logger.error(`[GS] Unable to get player count`);
-      }
-      return ct;
-    });
+  gameSuite.countPlayers = async () => {
+    const count = await gameSuite.players.find().count();
+    return Promise.resolve(count);
   };
   gameSuite.emitToGame = (gameId, command, debug = false) => {
     gameSuite.players.find({gameId: gameId}).toArray((err, docs) => {
@@ -145,13 +142,13 @@ export const makeGameSuite = dbConnection => {
 
   //Adders
   gameSuite.addGame = (game, debug = false) => {
-    gameSuite.games.insert(game);
+    gameSuite.games.insertOne(game);
     if(debug) {
       logger.info(`[GS] Added game ${game.gameId} (Total: ${gameSuite.countGames()})`);
     }
   };
   gameSuite.addPlayer = (player, debug = false) => {
-    gameSuite.players.insert(player);
+    gameSuite.players.insertOne(player);
     if(debug) {
       logger.info(`[GS] Added player ${player.socketId} (Total: ${gameSuite.countPlayers()})`);
     }
@@ -263,6 +260,7 @@ export const makeGameSuite = dbConnection => {
       gameId: newImposter.gameId,
       name: msg.hostName || 'Dingus'
     });
+    console.log(msg);
     const hostPlayer = gameSuite.getPlayer(msg.socketId);
     newImposter.host = hostPlayer.socketId;
     newImposter.players = newImposter.players.concat([hostPlayer]);

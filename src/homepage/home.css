@@ -634,7 +634,8 @@ p {
 
 .subheader {
 	color: white;
-  margin-bottom: 50px;
+	margin-bottom: 50px;
+	line-height: 1.75rem;
 }
 
 .content-btn {

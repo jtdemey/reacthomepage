@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const playerSchema = new mongoose.Schema({
+const makePlayerSchema = () => new mongoose.Schema({
     extendTimerCt: Number,
     gameId: String,
     hurryUpCt: Number,
@@ -10,6 +10,4 @@ const playerSchema = new mongoose.Schema({
     socketId: String 
 });
 
-const playerModel = mongoose.model('Game', playerSchema);
-
-export default playerModel;
+export default makePlayerSchema;

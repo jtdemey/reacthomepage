@@ -19,17 +19,6 @@ expressApp.listen(port, () => {
   logger.info(`Express server started`);
 });
 
-let gsDb;
-let wss;
 const connectBot = createConnectBot();
 const dbConnection = connectBot.connect();
-console.log(dbConnection);
-dbConnection.connect(err => {
-  if(err) {
-    logger.error('Unable to connect to MongoDB - disabling GameSuite');
-    return;
-  }
-  gsDb = connectBot.db('gamesuite');
-  logger.info('MongoDB connection established');
-  wss = createWebSocketServer(expressApp, gsDb);
-});
+const wss = createWebSocketServer(expressApp, dbConnection);

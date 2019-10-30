@@ -21,7 +21,6 @@ const sendHtmlFile = (res, devDir, prodDir) => {
 
 router.route('/')
   .get((req, res) => {
-    console.log(req.headers);
     sendHtmlFile(res, 'homepage/home.html', 'home.html');
   });
 

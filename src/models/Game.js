@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const gameSchema = new mongoose.Schema({
+const makeGameSchema = () => new mongoose.Schema({
     gameId: String,
     gameTitle: String, 
     host: String,
@@ -14,6 +14,4 @@ const gameSchema = new mongoose.Schema({
     votes: Array 
 });
 
-const gameModel = mongoose.model('Game', gameSchema);
-
-export default gameModel;
+export default makeGameSchema;

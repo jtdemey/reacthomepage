@@ -1,5 +1,16 @@
 import { Promise } from 'bluebird';
 import logger from '../logs/logWriter';
+import makeGameSchema from '../models/Game';
+import makePlayerSchema from '../models/Player';
+
+/*
+    ref
+
+    db.players.find().pretty()
+    db.games.find().pretty()
+    db.players.remove({gameId: null})
+    db.games.remove({paused: false})
+*/
 
 export const makeGameSuite = dbConnection => {
   const gameSuite = {};
@@ -7,8 +18,8 @@ export const makeGameSuite = dbConnection => {
   gameSuite.isIdle = false;
   gameSuite.clock = null;
   gameSuite.db = dbConnection;
-  gameSuite.games = dbConnection.collection('games');
-  gameSuite.players = dbConnection.collection('players');
+  gameSuite.gameModel = gameSuite.db.model('Game', makeGameSchema());
+  gameSuite.playerModel = gameSuite.db.model('Player', makePlayerSchema());
 
   //Creators
   gameSuite.makeCommand = (commName, params = null) => {
@@ -60,30 +71,21 @@ export const makeGameSuite = dbConnection => {
   };
 
   //Utilities
-  gameSuite.countGames = () => {
-    return gameSuite.games.find().count((err, ct) => {
-      if(err) {
-        logger.error(`[GS] Unable to get game count`);
-      }
-      return ct;
-    });
+  gameSuite.countGames = async () => {
+    return gameSuite.gameModel.countDocuments({});
   };
   gameSuite.countPlayers = async () => {
-    const count = await gameSuite.players.find().count();
-    return Promise.resolve(count);
+    return gameSuite.playerModel.countDocuments({});
   };
-  gameSuite.emitToGame = (gameId, command, debug = false) => {
-    gameSuite.players.find({gameId: gameId}).toArray((err, docs) => {
-      if(err) {
-        logger.error(`[GS] Unable to emitToGame ${gameId}: player query failed`);
-      }
-      docs.forEach(p => {
-        if(debug) {
-          logger.debug(`[GS] Sending ${JSON.parse(command).command} to ${p.socketId}`);
-        }
+  gameSuite.emitToGame = async (gameId, command) => {
+    try {
+      const players = await gameSuite.playerModel.find({ gameId: gameId }).exec();
+      players.forEach(p => {
         p.socket.send(command);
       });
-    });
+    } catch {
+      logger.error(`[GS] Unable to emitToGame ${gameId}: player query failed`);
+    }
   };
   gameSuite.genGameId = () => {
     const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -105,79 +107,51 @@ export const makeGameSuite = dbConnection => {
   };
 
   //Getters
-  gameSuite.getGame = gameId => {
-    gameSuite.games.find({gameId: gameId}).toArray((err, docs) => {
-      if(err) {
-        logger.error(`[GS] Unable to find game ${gameId}`);
-        return;
-      }
-      return docs[0];
-    });
+  gameSuite.getGame = async gameId => {
+    return gameSuite.gameModel.findOne({gameId: gameId}).exec();
   };
-  gameSuite.getPlayer = socketId => {
-    gameSuite.players.find({socketId: socketId}).toArray((err, docs) => {
-      if(err) {
-        logger.error(`[GS] Unable to find player ${socketId}`);
-        return;
-      }
-      return docs[0];
-    });
+  gameSuite.getPlayer = async socketId => {
+    return gameSuite.playerModel.findOne({socketId: socketId}).exec();
   };
 
   //Setters
-  gameSuite.updateGame = (gameId, gameData) => {
-    gameSuite.games.updateOne({gameId: gameId}, {$set: {...gameData}}, err => {
-      if(err) {
-        logger.error(`[GS] Could not update game ${gameId}`);
-      }
-    });
+  gameSuite.updateGame = async (gameId, gameData) => {
+    return gameSuite.gameModel.findOneAndUpdate({gameId: gameId}, {...gameData}).exec();
   };
-  gameSuite.updatePlayer = (socketId, playerData) => {
-    gameSuite.players.updateOne({socketId: socketId}, {$set: {...playerData}}, err => {
-      if(err) {
-        logger.error(`[GS] Could not update player ${socketId}`);
-      }
-    });
+  gameSuite.updatePlayer = async (socketId, playerData) => {
+    return gameSuite.playerModel.findOneAndUpdate({socketId: socketId}, {...playerData}).exec();
   };
 
   //Adders
-  gameSuite.addGame = (game, debug = false) => {
-    gameSuite.games.insertOne(game);
-    if(debug) {
-      logger.info(`[GS] Added game ${game.gameId} (Total: ${gameSuite.countGames()})`);
-    }
+  gameSuite.addGame = async game => {
+    return new gameSuite.gameModel({...game}).save();
   };
-  gameSuite.addPlayer = (player, debug = false) => {
-    gameSuite.players.insertOne(player);
-    if(debug) {
-      logger.info(`[GS] Added player ${player.socketId} (Total: ${gameSuite.countPlayers()})`);
-    }
+  gameSuite.addPlayer = async player => {
+    return new gameSuite.playerModel({...player}).save();
   };
 
   //Deleters
-  gameSuite.removeGame = (gameId, debug = false) => {
-    gameSuite.games.deleteOne({gameId: gameId});
-    if(debug) {
-      logger.info(`[GS] Removed game ${gameId} (Total: ${gameSuite.countGames()})`);
-    }
+  gameSuite.removeGame = async gameId => {
+    return gameSuite.gameModel.remove({gameId: gameId}, {single: true}).exec();
   };
-  gameSuite.removePlayer = (socketId, debug = false) => {
-    gameSuite.players.deleteOne({socketId: socketId});
-    const playerGames = gameSuite.games.find({players: {$elemMatch: {socketId: socketId}}}).toArray((err, docs) => {
-      if(err) {
-        logger.error(`[GS] Unable to query for games containing player ${socketId}`);
-      }
-      docs.forEach(g => {
-        if(g.players.length === 0) {
-          gameSuite.removeGame(g.gameId, true);
+  gameSuite.removePlayer = async socketId => {
+    try {
+      const game = await gameSuite.gameModel.findOne({
+        players: {$elemMatch: {socketId: socketId}}
+      }).exec();
+      if(game) {
+        if(game.players.length < 1) {
+          await gameSuite.removeGame(game.gameId);
+          logger.info(`[GS] Game ${game.gameId} removed: no players`);
         } else {
-          gameSuite.updateGame(g.gameId, { players: g.players.filter(p => p.socketId === socketId)});
+          game.players = game.players.filter(p => p.socketId !== socketId);
+          await game.save();
         }
-      });
-    });
-    if(debug) {
-      logger.info(`[GS] Removed player ${socketId} (Total: ${gameSuite.countPlayers()})`);
+      }
+    } catch {
+      logger.error(`[GS] Unable to query for games containing player ${socketId}`);
     }
+    return gameSuite.playerModel.remove({socketId: socketId}, {single: true}).exec();
   };
 
   //Lifecycle
@@ -223,16 +197,14 @@ export const makeGameSuite = dbConnection => {
     };
   };
   gameSuite.startGameClock = () => {
-    gameSuite.clock = setInterval(() => {
+    gameSuite.clock = setInterval(async () => {
       if(gameSuite.countGames() < 1) {
         logger.info('[GS] Going idle...');
         clearInterval(gameSuite.clock);
         gameSuite.startIdleClock();
       }
-      const activeGames = gameSuite.games.find({isPaused: false, players: {$size: 0}}).toArray((err, docs) => {
-        if(err) {
-          logger.error('[GS] Could not find active games');
-        }
+      const activeGames = await gameSuite.games.find({isPaused: false, players: {$size: 0}}).exec();
+      if(activeGames) {
         docs.forEach(g => {
           g = gameSuite.doGameTick(g);
           gameSuite.updateGame(g.gameId, { ...g });
@@ -240,7 +212,7 @@ export const makeGameSuite = dbConnection => {
             gameState: g
           }));
         });
-      });
+      }
     }, 1000);
   };
   gameSuite.startIdleClock = () => {

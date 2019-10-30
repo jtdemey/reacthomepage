@@ -10,9 +10,18 @@ const makeServer = webServer => {
   return wss;
 };
 
+const confirmTransaction = txt => {
+  logger.info(`[GS] ${txt}`);
+};
+
+const handleGsErr = err => {
+  logger.error(`[GS] Error: ${err}`);
+};
+
 export const createWebSocketServer = (server, dbConn) => {
   const wss = makeServer(server);
   wss.gs = makeGameSuite(dbConn);
+  wss.gs.countPlayers().then(r => console.log(r)).catch(err => console.error(err));
   wss.on('connection', ws => {
     ws.on('message', e => {
       let socketImposter;
@@ -24,12 +33,20 @@ export const createWebSocketServer = (server, dbConn) => {
       switch(msg.command) {
         //General
         case 'socketDisconnect':
-          wss.gs.removePlayer(msg.socketId, true);
+          wss.gs.removePlayer(msg.socketId, true)
+            .then(confirmTransaction(`Removed player ${msg.socketId}`))
+            .catch(handleGsErr(`Failed to remove player ${msg.socketId}`));
           break;
         //Imposter
         case 'launchedImposter':
-          wss.gs.addPlayer(wss.gs.makePlayer(ws, msg.socketId), true);
-          ws.send(wss.gs.makeCommand('acceptImposterLaunch'));
+          wss.gs.addPlayer(wss.gs.makePlayer(ws, msg.socketId), true)
+            .then(() => {
+              confirmTransaction(`Added player ${msg.socketId}`);
+              ws.send(wss.gs.makeCommand('acceptImposterLaunch'));
+            })
+            .catch(err => {
+              handleGsErr(`Failed to add player ${msg.socketId} (${err})`);
+            });
           break;
         case 'submitHostGame':
           socketImposter = wss.gs.handleSubmitHostGame(msg);

@@ -9,9 +9,11 @@ const createConnectBot = () => {
   };
   bot.connect = () => {
     try {
-      const conn = new mongoose.createConnection(process.env.DB_URI, {
+      const conn = new mongoose.createConnection(process.env.DB_URI.toString(), {
         promiseLibrary: bluebird,
-        useNewUrlParser: true
+        useFindAndModify: false,
+        useNewUrlParser: true,
+        useUnifiedTopology: true
       });
       logger.info(`[CB] Connected to MongoDB`);
       return conn;
@@ -20,24 +22,6 @@ const createConnectBot = () => {
       return false;
     }
   };
-  // bot.create = model => {
-  //   model.save(err => {
-  //     if(err) {
-  //       bot.handleError(err);
-  //     }
-  //     return true;
-  //   });
-  //   return false;
-  // };
-  // bot.read = (model, params = null, whereClause = null) => {
-  //   model.find(params).(err => {
-  //     if(err) {
-  //       bot.handleError(err);
-  //     }
-  //     return true;
-  //   });
-  //   return false;
-  // };
   return bot;
 };
 

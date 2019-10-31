@@ -11,7 +11,7 @@ module.exports = {
   target: 'web',
   output: {
     path: path.join(process.cwd(), 'devserver'),
-    publicPath: path.join(process.cwd(), 'src', 'homepage'),
+    publicPath: path.join(process.cwd(), 'src', 'homepage'), 
     filename: 'bundle.js'
   },
   devServer: {

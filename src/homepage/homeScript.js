@@ -32,7 +32,7 @@ const startBgShift = v => {
     console.log('settin to ' + v);
     mainContainer.style.background = c;
     clearBgShift();
-  }, 2000);
+  }, 420);
 };
 
 const resizeUpdate = () => {

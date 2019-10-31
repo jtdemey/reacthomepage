@@ -2,32 +2,11 @@ import { makeGameSuite } from '../gamesuite/gameSuite';
 
 const mockDbConnection = () => {
   const mdb = {};
-  mdb.collection = collName => {
-    if(collName === 'games') {
-      return [{
-        gameId: 'GAME',
-        gameTitle: 'imposter',
-        host: null,
-        isPaused: false,
-        players: [],
-        phase: 'lobby',
-        remainingTime: 10,
-        scenario: null,
-        condition: null,
-        tick: 0,
-        votes: []
-      }];
-    } else if(collName === 'players') {
-      return [{
-        extendTimerCt: 0,
-        gameId: null,
-        hurryUpCt: 0,
-        isPlaying: false,
-        name: null,
-        socket: null,
-        socketId: 'heywhaddupheresmyid' 
-      }];
-    }
+  mdb.model = (modelName, schema) => {
+    return {
+      modelName: modelName,
+      schema: schema
+    };
   };
   return mdb;
 };

@@ -205,7 +205,7 @@ export const makeGameSuite = dbConnection => {
       }
       const activeGames = await gameSuite.games.find({isPaused: false, players: {$size: 0}}).exec();
       if(activeGames) {
-        docs.forEach(g => {
+        activeGames.forEach(g => {
           g = gameSuite.doGameTick(g);
           gameSuite.updateGame(g.gameId, { ...g });
           gameSuite.emitToGame(g.gameId, gameSuite.makeCommand('gameTick', {

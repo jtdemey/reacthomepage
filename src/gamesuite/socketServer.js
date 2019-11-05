@@ -21,7 +21,7 @@ const handleGsErr = err => {
 export const createWebSocketServer = (server, dbConn) => {
   const wss = makeServer(server);
   wss.gs = makeGameSuite(dbConn);
-  wss.gs.countPlayers().then(r => console.log(r)).catch(err => console.error(err));
+  //wss.gs.countPlayers().then(r => console.log(r)).catch(err => console.error(err));
   wss.on('connection', ws => {
     ws.on('message', e => {
       let socketImposter;

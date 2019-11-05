@@ -56,7 +56,7 @@ html {
 body {
 	height: 100%;
 }
-.site-wrapper {
+#site-wrapper {
   height: 100%;
   background: #333;
 }

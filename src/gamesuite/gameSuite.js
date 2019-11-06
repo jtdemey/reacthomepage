@@ -35,6 +35,7 @@ export const makeGameSuite = dbConnection => {
   };
   gameSuite.makeGame = () => {
     return {
+      createdOn: new Date().toISOString(),
       gameId: gameSuite.genGameId(),
       gameTitle: 'imposter',
       host: null,
@@ -50,6 +51,7 @@ export const makeGameSuite = dbConnection => {
   };
   gameSuite.makePlayer = (socket, sockId) => {
     return {
+      createdOn: new Date().toISOString(),
       extendTimerCt: 0,
       gameId: null,
       hurryUpCt: 0,
@@ -103,6 +105,15 @@ export const makeGameSuite = dbConnection => {
       return r;
     } catch {
       logger.error(`[GS] Unable to parse client message ${msg}`);
+    }
+  };
+  gameSuite.purgeOldGameData = async () => {
+    try {
+      const gct = await gameSuite.countGames();
+      const pct = await gameSuite.countPlayers();
+      //To Do: purrrge
+    } catch {
+      logger.error(`[GS] Unable to purge old game data`);
     }
   };
 

@@ -357,7 +357,6 @@ p {
 	padding: 0;
 	background: #4B4E6D;
 	scroll-behavior: smooth;
-	transition: background 1.2s;
 }
 /* background: linear-gradient(#545778, #494c69, #3f415a); */
 
@@ -639,10 +638,10 @@ p {
 }
 
 .content-btn {
-  width: 140px;
-  height: 2em;
-  margin: auto;
-  margin-bottom: 12vh;
+	display: inline-block;
+	width: 140px;
+	height: 2em;
+	margin: 0 12px 12vh 12px;
 	background: rgba(132, 220, 198, 0.75);
 	box-shadow: 8px 8px #1a1a1a;
 	cursor: grab;

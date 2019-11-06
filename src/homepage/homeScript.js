@@ -29,7 +29,6 @@ const startBgShift = v => {
   }
   uiState.background = v;
   uiState.bgShiftTimer = setTimeout(() => {
-    console.log('settin to ' + v);
     mainContainer.style.background = c;
     clearBgShift();
   }, 420);
@@ -42,7 +41,6 @@ window.addEventListener('resize', resizeUpdate);
 
 const scrollUpdate = () => {
   const ypos = (siteWrapper.pageYOffset || siteWrapper.scrollTop) - 96; //Banner = 96px
-  //console.log(ypos);
   let viewInd = Math.floor(ypos / contentHeight) < 0 ? 0 : Math.floor((ypos + (contentHeight / 2)) / contentHeight);
   if(viewInd !== uiState.background) {
     startBgShift(viewInd);
@@ -61,6 +59,6 @@ siteWrapper.addEventListener('scroll', scrollUpdate);
 
 //Init
 (() => {
-  mainContainer.style.background = '#4B4E6D';
+  mainContainer.style.transition = 'background 1.2s';
   //loadParticles('../media/particles/homeParticles.json');
 })();

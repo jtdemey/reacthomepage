@@ -51,12 +51,16 @@ export const exitToMainMenu = () => {
 };
 
 export const getFadeState = (fadingIn, fadingOut, entityId) => {
-    if(fadingIn.some(e => e === entityId)) {
-      return ' fade-in';
-    } else if(fadingOut.some(e => e === entityId)) {
-      return ' fade-out';
-    }
-    return false;
+  if(fadingIn.some(e => e === entityId)) {
+    return ' fade-in';
+  } else if(fadingOut.some(e => e === entityId)) {
+    return ' fade-out';
+  }
+  return false;
+};
+
+export const getPlayerNameFromId = id => {
+console.log('uhhhh');
 };
 
 export const getThemeColors = themeId => {
@@ -104,15 +108,6 @@ export const getViewIdFromName = v => {
     console.error(`Could not get view ID of ${v}`);
   }
   return parseInt(k);
-};
-
-export const getVoteText = (vtype, votemaker, accused = null) => {
-  if(vtype === 'accusation') {
-    return `${votemaker} accuses ${accused} as the Imposter!`;
-  } else if(vtype === 'restart') {
-    return `${votemaker} wants to return to the lobby.`;
-  }
-  console.error(`getVoteText: vote type ${vtype} is not recognized`);
 };
 
 export const rollScenario = () => {

@@ -329,10 +329,7 @@ table {
   }
 }
 .infinite-shake {
-  -webkit-animation: shake 0.4s infinite;
-  -moz-animation: shake 0.4s infinite;
-  -o-animation: shake 0.4s infinite;
-  animation: shake 0.4s infinite;
+  animation: shake 0.4s infinite 0.8s;
   animation-fill-mode: forwards;
 }
 
@@ -510,7 +507,7 @@ input {
 .nav-area {
   width: 100%;
   height: 42px;
-  box-shadow: 6px 4px 14px #333;
+  box-shadow: 0px 4px 14px #111;
 }
 
 .nav-list {
@@ -541,7 +538,7 @@ input {
   height: 2em;
   margin: 12px auto;
   border-radius: 4px;
-  box-shadow: 12px 8px 6px #262626;
+  box-shadow: 12px 8px 6px #111;
 }
 .control-lbi:active {
   -webkit-animation: blink-fade 0.2s ease-out;
@@ -593,7 +590,7 @@ input {
   height: 2em;
   margin: 40px auto;
   border-radius: 4px;
-  box-shadow: 12px 8px 6px #262626;
+  box-shadow: 12px 8px 6px #111;
   border: none;
   color: #fff;
   font-size: 1em;
@@ -609,7 +606,7 @@ input {
   margin: 2.8vh;
   font-size: 1.1em;
   border-radius: 4px;
-  box-shadow: 12px 8px 6px #262626;
+  box-shadow: 12px 8px 6px #111;
 }
 
 /* LOADING VIEW */
@@ -701,7 +698,17 @@ input {
   max-width: 3rem;
   margin: 0 1rem;
   padding: 0.35rem 0.7rem;
-  box-shadow: 12px 8px 6px #262626;
+  box-shadow: 12px 8px 6px #111;
+}
+
+/* ENDGAME */
+.endgame-view {
+  text-align: center;
+}
+
+.endgame-view > h1 {
+  margin: auto;
+  font-size: 3em;
 }
 
 /* AUX */

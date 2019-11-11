@@ -2,6 +2,7 @@ import imposterStore from '../store/imposterStore';
 import { gameActionTypes } from './actionConstants';
 
 export const accusePlayer = (accuserId, accusedId, gameId) => {
+  console.log(accuserId, accusedId, gameId);
   return {
     type: gameActionTypes.ACCUSE_PLAYER,
     accuserId: accuserId,

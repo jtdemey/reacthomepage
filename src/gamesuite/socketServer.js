@@ -91,7 +91,7 @@ export const createWebSocketServer = (server, dbConn) => {
   const wss = makeServer(server);
   wss.gs = makeGameSuite(dbConn);
   wss.gs.startIdleClock();
-  wss.gs.purgeOldGameData().catch(err => logger.error(err));
+  wss.gs.purgeOldGameData().catch(err => logger.error(`[GS] Data purge: ${err}`));
   wss.on('connection', ws => {
     ws.on('message', e => {
       handleSocketMsg(wss, ws, e);

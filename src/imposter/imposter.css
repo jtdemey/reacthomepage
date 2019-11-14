@@ -51,46 +51,6 @@ table {
 }
 /* REFERENCE
 
-  THEMES:
-  Crystal theme:
-    Magenta: #A62639 166, 38, 57
-    Pink: #DB324D 219, 50, 77
-    Slate: #56494E 86, 73, 78
-    Gray: #A29C9B 162, 156, 155
-    Plum: #511C29 81, 28, 41
-  Seascape theme:
-    Lavender: #a8c9e1
-    Light tan: #d2dcaf
-    Dark tan: #b4ad72
-    Blue-green: #2d6a68
-    Navy: #1b2c39
-  Slate theme:
-    Jade: #849c8a
-    White: #fcfaf3
-    Off-white: #e4e2df
-    Gray: #6e7b6d
-    Slate: #2a3c3c
-  Synth theme:
-    Dark purple: #2c2936
-    Dark gray: #3b3c3b
-    Blue: #468387
-    Green-blue: #74ba9f
-    White: #fffbf1
-  Remnant theme:
-    Gray: #41413E
-    Green: #88A26F
-    Cactus: #C6CF75
-    Pale green: #DAE3A7
-    Olive: #899264
-
-  GRADIENTS:
-  Purple to gold gradient:
-    Purple: #5c0d30
-    Slightly lighter purple: #912539
-    Apricot: #c14737
-    Orange: #e77329
-    Gold: #ffa600
-    
 */
 
 /* ANIMATIONS */
@@ -348,7 +308,9 @@ html, body {
 
 .site-wrapper, .modal-area {
   width: 100% !important;
+  max-width: 2000px;
   min-height: 100%;
+  max-height: 1000px;
   margin: 0;
   padding: 0;
   color: white;

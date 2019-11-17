@@ -15,7 +15,7 @@ const clearBgShift = () => {
 };
 
 const startBgShift = v => {
-  //Home #4B4E6D, Imposter #334152, Survive #40333b, Pistolwhip #284c4a
+  //Home #4B4E6D, Imposter #334152, Survive #451119, Pistolwhip #284c4a
   let c = '#4B4E6D';
   if(v === 1) {
     c = '#334152';

@@ -226,28 +226,12 @@ table {
   }
 }
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-@-webkit-keyframes btn-hover-fade {
-  0% {
-  	background: rgba(132, 220, 198, 0.5);
-  }
-  100% {
-  	background: rgba(45, 159, 131, 0.5);
-  }
-}
-@-moz-keyframes btn-hover-fade {
-  0% {
-  	background: rgba(132, 220, 198, 0.5);
-  }
-  100% {
-  	background: rgba(45, 159, 131, 0.5);
-  }
-}
 @keyframes btn-hover-fade {
   0% {
-  	background: rgba(132, 220, 198, 0.5);
+  	background: rgba(87, 103, 100, 0.75);
   }
   100% {
-  	background: rgba(45, 159, 131, 0.5);
+  	background: rgba(87, 103, 100, 1.0);
   }
 }
 /* SCHEMES
@@ -302,7 +286,7 @@ a {
 }
 
 a:hover {
-	color: #9bff80;
+	color: #96dbce;
 	text-decoration: none;
 }
 
@@ -642,7 +626,7 @@ p {
 	width: 140px;
 	height: 2em;
 	margin: 0 12px 12vh 12px;
-	background: rgba(132, 220, 198, 0.75);
+	background: rgba(87, 103, 100, 0.75);
 	box-shadow: 8px 8px #1a1a1a;
 	cursor: grab;
 }
@@ -658,7 +642,7 @@ p {
 .content-btn-text {
   height: 100%;
   margin: 0;
-  padding-top: 0.3em;
+  padding-top: 0.4em;
 	font-family: "Vollkorn", serif;
   font-size: 1.1em;
 }
@@ -689,7 +673,7 @@ p {
 /* MOBILE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 @media all and (max-width: 700px) {
 	.jd-title {
-		font-size: 2em;
+		font-size: 2.5em;
 		padding-top: 0.25em;
 	}
 

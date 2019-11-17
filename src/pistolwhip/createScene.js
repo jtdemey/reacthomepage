@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import createPlayer from './createPlayer.js';
 
 // class Pistolwhip extends Phaser.Scene {
 
@@ -56,6 +55,8 @@ import createPlayer from './createPlayer.js';
 // }
 
 export default function() {
-  createPlayer(this);
-  this.add.image(0, 0, 'day');
+  this.add.image(0, 0, 'day').setOrigin(0);
+  this.player = this.physics.add.sprite(50, 300, 'player');
+  this.player.setBounce(0.1);
+  this.player.setCollideWorldBounds(true);
 }

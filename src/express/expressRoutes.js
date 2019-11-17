@@ -24,6 +24,11 @@ router.route('/')
     sendHtmlFile(res, 'homepage/home.html', 'home.html');
   });
 
+router.route('/about')
+  .get((req, res) => {
+    sendHtmlFile(res, 'about/about.html', 'about.html');
+  });
+
 router.route('/imposter')
   .get((req, res) => {
     sendHtmlFile(res, 'imposter/imposter.html', 'imposter.html');

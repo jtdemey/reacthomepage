@@ -3,6 +3,19 @@ const uiState = {
   bgShiftTimer: null
 };
 
+//Home #4B4E6D, Imposter #334152, Survive #451119, Pistolwhip #284c4a
+//About #595F62, Skills #7F9C96, Contact #92BEA6, Doodles #6C474F
+const bgColors = [
+  '#4B4E6D',
+  '#334152',
+  '#451119',
+  '#284c4a',
+  '#595f62',
+  '#7f9c96',
+  '#92bea6',
+  '#6c474f'
+];
+
 const siteWrapper = document.querySelector('.site-wrapper');
 const mainContainer = document.querySelector('.main-container');
 const contentViews = document.querySelectorAll('.content-view');
@@ -16,14 +29,8 @@ const clearBgShift = () => {
 
 const startBgShift = v => {
   //Home #4B4E6D, Imposter #334152, Survive #451119, Pistolwhip #284c4a
-  let c = '#4B4E6D';
-  if(v === 1) {
-    c = '#334152';
-  } else if(v === 2) {
-    c = '#451119';
-  } else if(v === 3) {
-    c = '#284c4a';
-  }
+  //About #595F62, Skills #7F9C96, Contact #92BEA6, Doodles #6C474F
+  const c = bgColors[v];
   if(uiState.bgShiftTimer) {
     clearBgShift();
   }
@@ -42,6 +49,10 @@ window.addEventListener('resize', resizeUpdate);
 const scrollUpdate = () => {
   const ypos = (siteWrapper.pageYOffset || siteWrapper.scrollTop) - 96; //Banner = 96px
   let viewInd = Math.floor(ypos / contentHeight) < 0 ? 0 : Math.floor((ypos + (contentHeight / 2)) / contentHeight);
+  if(window.location.href.indexOf('/about') !== -1) {
+    viewInd += 4;
+  }
+  console.log(viewInd);
   if(viewInd !== uiState.background) {
     startBgShift(viewInd);
   }

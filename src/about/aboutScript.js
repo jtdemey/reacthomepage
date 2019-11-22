@@ -67,6 +67,11 @@ siteWrapper.addEventListener('scroll', scrollUpdate);
   document.head.appendChild(particles);
 };*/
 
+submitContactForm = function () {
+  const name = document.getElementById('contact-name').value;
+  const inquiry = document.getElementById('contact-form').value;
+};
+
 //Init
 (() => {
   mainContainer.style.transition = 'background 1.2s';

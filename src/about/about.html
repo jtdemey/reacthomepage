@@ -108,9 +108,9 @@
           <a name="navbio"></a>
           <div class="content-view home-content">
             <h1 class="content-header">About Me</h1>
-            <p class="subheader">
-              I'm a 23 year old software engineer, musician, and artist living in the US.<br />
-              My favorite band is Queens of the Stone Age and I main Captain Falcon in Melee.
+            <p class="content-text">
+              I'm a 23 year old software engineer, musician, and artist living in the US.
+              My favorite band is Queens of the Stone Age and I main Captain Falcon.
             </p>
             <div class="content-btns">
               <div class="content-btn">
@@ -130,17 +130,10 @@
               <img class="arrow-outline-up" src="/media/arrow-outline-up.svg" />
             </a>
             <h1 class="content-header">Skills</h1>
-            <p class="subheader">
-              I specialize in web development. I have substantial experience<br />
-              with the three major flavors of ASP.NET, Azure DevOps, and<br />
-              the MERN stack (MongoDB, Express, React, Node.JS).<br />
-              <br />
-              I've played piano since I was a kid, mostly focusing on romantic era,<br />
-              jazz, rock, and video game music. I dabble in guitar, bass,<br />
-              and melodica as well.<br />
-              <br />
-              I also studied Hup Kwon Do, a Korean self-defense art, for thirteen years,<br />
-              but you should look elsewhere if you're in the market for a security detail.
+            <p class="content-text">
+              I specialize in web development. I have substantial experience
+              with the three major flavors of ASP.NET, Azure DevOps, and
+              the MERN stack (MongoDB, Express, React, Node.JS) which runs this site.
             </p>
             <a class="nav-arrow-link" href="#navcontact">
               <img class="arrow-outline-down" src="/media/arrow-outline-down.svg" />
@@ -153,18 +146,19 @@
               <img class="arrow-outline-up" src="/media/arrow-outline-up.svg" />
             </a>
             <h1 class="content-header">Contact</h1>
-            <p class="subheader">
-              If you need a web-based solution, I may be able to help.<br />
-              Prices are negotiable.
+            <p class="content-text">
+              If you need a web-based solution, I may be able to help.
             </p>
-
+            <form name="contact-form" class="form-horizontal" id="contact-form" onsubmit="return false;">
+              <input type="text" name="contactName" class="form-elem" id="contact-name" maxlength="72" placeholder="Your name, company, or organization" required><br />
+              <textarea class="form-elem" name="contactText" id="contact-text" form="contact-form" maxlength="1024" placeholder="Nature of request" cols="40" rows="4" required></textarea>
+            </form>
             <div class="content-btns">
               <div class="content-btn">
-                <a href="https://github.com/jtdemey/reacthomepage/tree/master/src/survive">
-                  <h5 class="content-btn-text">Submit</h5>
-                </a>
+                <h5 class="content-btn-text" onclick="submitContactForm();">Submit</h5>
               </div>
             </div>
+            <p class="subheader">Alternatively, feel free to email me at <strong>johntdemey@live.com</strong></p>
             <a class="nav-arrow-link" href="#navdoodles">
               <img class="arrow-outline-down" src="/media/arrow-outline-down.svg" />
             </a>
@@ -176,15 +170,14 @@
               <img class="arrow-outline-up" src="/media/arrow-outline-up.svg" />
             </a>
             <h1 class="content-header">Doodles</h1>
-            <p class="subheader">
-              Art is not a professional endeavor of mine, but I do enjoy drawing.<br />
+            <p class="content-text">
+              Art is not a professional endeavor of mine, but I do enjoy drawing.
               Here are some of my doodles using pencil and pen.
             </p>
-
           </div>
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="/homepage/homeScript.js" async></script>
+    <script type="text/javascript" src="/about/aboutScript.js" async></script>
   </body>
 </html>

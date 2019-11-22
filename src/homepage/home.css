@@ -610,22 +610,28 @@ p {
 }
 
 .content-header {
-	padding-top: 12vh;
+	padding-top: 3rem;
 	padding-bottom: 1em;
 	font-size: 3em;
 }
 
-.subheader {
+.content-text {
 	color: white;
 	margin-bottom: 50px;
-	line-height: 1.75rem;
+	line-height: 1.5em;
+	padding: 0 1em;
+	font-size: 1em;
+}
+
+.content-btns {
+	margin-bottom: 3rem;
 }
 
 .content-btn {
 	display: inline-block;
 	width: 140px;
 	height: 2em;
-	margin: 0 12px 12vh 12px;
+	margin: 0 12px;
 	background: rgba(87, 103, 100, 0.75);
 	box-shadow: 8px 8px #1a1a1a;
 	cursor: grab;
@@ -669,6 +675,19 @@ p {
 	width: 3em;
 	fill: #fff;
 }
+/* CONTACT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.form-elem {
+	display: inline-block;
+}
+
+.contact-name {
+	padding-bottom: 1rem;
+}
+
+.contact-inquiry {
+	padding-bottom: 1rem;
+}
+
 
 /* MOBILE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 @media all and (max-width: 700px) {

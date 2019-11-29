@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config({
   silent: true
 });
+import createConnectBot from '../dal/connectBot';
 
 const router = express.Router();
 const isProd = process.env.NODE_ENV === 'production';
@@ -27,6 +28,14 @@ router.route('/')
 router.route('/about')
   .get((req, res) => {
     sendHtmlFile(res, 'about/about.html', 'about.html');
+  });
+
+router.route('/contact')
+  .post((req, res) => {
+    const contact = JSON.parse(req.body);
+    const cb = createConnectBot();
+    cb.submitContactReq({...contact});
+    res.sendStatus(201);
   });
 
 router.route('/imposter')

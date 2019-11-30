@@ -757,11 +757,19 @@ p {
 	fill: #fff;
 }
 /* CONTACT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.contact-text {
+	max-width: 40em;
+	color: white;
+	margin: 3em auto 1em;
+	line-height: 1.5em;
+	padding: 0 1em;
+	font-size: 1em;
+}
+
 .contact-form {
-	width: 500px;
 	padding: 30px;
 	background: #FFFFFF;
-	margin: 50px auto;
+	margin: 1em auto;
 	box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
 	-moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
 	-webkit-box-shadow:  0px 0px 15px rgba(0, 0, 0, 0.22);
@@ -846,33 +854,14 @@ p {
 	padding-bottom: 1rem;
 }
 
-.email-blurb {
-	margin-bottom: 3em;
-}
-/* NOTIFY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.notify-area {
-	display: none;
-	position: absolute;
-	width: 20rem;
-	height: 5rem;
-	top: 1rem;
-	right: calc(9px + 1rem);
-	background: #71A825;
-	border-radius: 1rem;
-	opacity: 0;
-}
-
-.notify-area > img {
-	width: 3rem;
-	height: 3rem;
-	margin: 1rem;
-	vertical-align: middle;
-}
-
-#notify-text {
+.contact-submit {
 	display: inline-block;
-	padding: 1rem;
-	font-family: "Ubuntu", sans-serif;
+	width: 140px;
+	height: 2em;
+	margin: 0 12px;
+	background: rgba(87, 103, 100, 0.75);
+	box-shadow: 8px 8px #1a1a1a;
+	cursor: grab;
 }
 
 /* MOBILE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

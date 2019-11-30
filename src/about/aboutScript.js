@@ -49,6 +49,7 @@ const startBgShift = v => {
   }, 420);
 };
 
+// F l A i R 
 /*const loadParticles = configSrc => {
   const particles = document.createElement('script');
   particles.onload = () => {
@@ -58,14 +59,21 @@ const startBgShift = v => {
   document.head.appendChild(particles);
 };*/
 
+//Contact
 const ajaxPost = (url, payload) => {
-  let req = new XMLHttpRequest();
-  req.onreadystatechange = data => {
-    console.log(data);
-  }
-  req.open('POST', url);
-  req.setRequestHeader('Content-Type', 'application/json');
-  req.send(JSON.stringify(payload));
+  fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      'content-type': 'application/json'
+    }
+  }).then(res => {
+    if(res.ok) {
+      console.log('ok' + res.statusText);
+    } else {
+      console.log(res.status);
+    }
+  });
 };
 
 const genUserHash = () => {
@@ -76,21 +84,40 @@ const genUserHash = () => {
   for (i = 0; i < str.length; i++) {
     chr = str.charCodeAt(i);
     hash = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
+    hash |= 0;
   }
   return Math.abs(hash).toString(16);
 };
 
+const setBtnStyle = () => {
+  const contactSubmit = document.querySelector('.contact-submit');
+  const contactText = document.querySelector('.contact-submit > h5');
+  contactSubmit.style.background = '#5e8c57';
+  contactSubmit.style.boxShadow = '4px 4px #1a1a1a';
+  contactText.innerText = 'Submitted';
+  contactText.setAttribute('onclick', null);
+};
+
 window.submitContactForm = function() {
-  const ctKey = 'JtdContactFormSubmissionCt';
-  let subCt = parseInt(window.localStorage[ctKey]);
-  if(!subCt) {
-    subCt = 0;
-  } else if(subCt > 10) {
+  const sanitize = str => {
+    const charMap = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#x27;',
+      "/": '&#x2F;',
+    };
+    const reg = /[&<>"'/]/ig;
+    return str.replace(reg, m => charMap[m]);
+  };
+  const subKey = 'JtdUserContactFormSubmitted';
+  let subbed = window.localStorage[subKey];
+  if(subbed === 'true') {
+    setBtnStyle();
     return;
   }
-  subCt += 1;
-  window.localStorage[ctKey] = subCt;
+  window.localStorage[subKey] = 'true';
 
   const hashKey = 'JtdUserHashIdentifier';
   let hash = window.localStorage[hashKey];
@@ -99,20 +126,20 @@ window.submitContactForm = function() {
     window.localStorage[hashKey] = hash;
   }
 
-  const name = document.getElementById('contact-name').value;
-  const inquiry = document.getElementById('contact-text').value;
+  const name = sanitize(document.getElementById('contact-name').value);
+  const inquiry = sanitize(document.getElementById('contact-text').value);
+  if(name === '' || inquiry === '') {
+    return;
+  }
   ajaxPost(window.location.origin + '/contact', {name, inquiry, hash});
-
-  const notifyArea = document.querySelector('.notify-area');
-  notifyArea.style.display = 'block';
-  notifyArea.classList.add('fadein-now');
-  setTimeout(() => {
-    notifyArea.style.display = 'none';
-  }, 3000);
+  setBtnStyle();
 };
 
 //Init
 (() => {
   mainContainer.style.transition = 'background 1.2s';
   //loadParticles('../media/particles/homeParticles.json');
+  if(window.localStorage['JtdUserContactFormSubmitted'] === 'true') {
+    setBtnStyle();
+  }
 })();

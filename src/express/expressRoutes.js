@@ -30,13 +30,15 @@ router.route('/about')
     sendHtmlFile(res, 'about/about.html', 'about.html');
   });
 
-router.route('/contact')
-  .post((req, res) => {
-    const contact = JSON.parse(req.body);
-    const cb = createConnectBot();
-    cb.submitContactReq({...contact});
-    res.sendStatus(201);
+router.post('/contact', (req, res) => {
+  const c = req.body;
+  const cb = createConnectBot();
+  cb.submitContactReq(c.name, c.inquiry, c.hash);
+  res.status(201);
+  res.json({
+    status: 'success'
   });
+});
 
 router.route('/imposter')
   .get((req, res) => {

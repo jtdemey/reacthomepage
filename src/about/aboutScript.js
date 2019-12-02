@@ -1,6 +1,9 @@
+import "regenerator-runtime/runtime";
+
 const uiState = {
   background: 0,
-  bgShiftTimer: null
+  bgShiftTimer: null,
+  doodleCt: 18 
 };
 
 //About #595F62, Skills #7F9C96, Contact #92BEA6, Doodles #6C474F
@@ -69,9 +72,9 @@ const ajaxPost = (url, payload) => {
     }
   }).then(res => {
     if(res.ok) {
-      console.log('ok' + res.statusText);
+      window.localStorage[subKey] = 'true';
     } else {
-      console.log(res.status);
+      console.error(res.status);
     }
   });
 };
@@ -117,7 +120,6 @@ window.submitContactForm = function() {
     setBtnStyle();
     return;
   }
-  window.localStorage[subKey] = 'true';
 
   const hashKey = 'JtdUserHashIdentifier';
   let hash = window.localStorage[hashKey];
@@ -135,6 +137,33 @@ window.submitContactForm = function() {
   setBtnStyle();
 };
 
+//Doodles
+const loadDoodle = async ind => {
+  const uri = `${window.location.origin}/media/doodles/img${ind}.jpg`;
+
+  const dood = new Image();
+  dood.src = uri; 
+
+  const link = document.createElement('a');
+  link.href = uri;
+  link.setAttribute('target', '_blank');
+  link.setAttribute('rel', 'noopener noreferrer');
+  link.appendChild(dood);
+
+  const card = document.createElement('article');
+  card.classList.add('doodle-card');
+  card.appendChild(link);
+
+  const cards = document.querySelector('.doodle-cards');
+  cards.appendChild(card);
+};
+
+const loadDoodles = () => {
+  for(let i = 0; i < uiState.doodleCt; i++) {
+    loadDoodle(i);
+  }
+};
+
 //Init
 (() => {
   mainContainer.style.transition = 'background 1.2s';
@@ -142,4 +171,5 @@ window.submitContactForm = function() {
   if(window.localStorage['JtdUserContactFormSubmitted'] === 'true') {
     setBtnStyle();
   }
+  loadDoodles();
 })();

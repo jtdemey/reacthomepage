@@ -20,7 +20,7 @@ const getHash = cb => {
   const text = fs.readFileSync(path.join(process.cwd(), '..', 'dist', 'public', 'home.html'), 'utf8');
   const i = text.indexOf('src="/homeBundle');
   hash = text.substring(i + 17, i + 25);
-  console.log('setting hash as ' + hash);
+  console.log(`Retrieved hash ${hash}`);
   cb();
 };
 
@@ -35,6 +35,7 @@ const buildCss = () => {
     .pipe(purgecss({
       content: [
         '../src/homepage/home.html',
+        '../src/about/about.html',
         '../src/imposter/imposter.html',
         '../src/survive/survive.html',
         '../src/**/*.jsx',
@@ -53,9 +54,14 @@ const buildCss = () => {
 };
 
 const replaceHrefs = () => {
-  return gulp.src(['../dist/public/home.html', '../dist/public/imposter.html', '../dist/public/survive.html'])
+  return gulp.src([
+      '../dist/public/home.html',
+      '../dist/public/about.html',
+      '../dist/public/imposter.html',
+      '../dist/public/survive.html'
+    ])
     .pipe(replace('href="homepage/home.css', `href="home.${hash}.css`))
-    .pipe(replace('href="home.css', `href="home.${hash}.css`))
+    .pipe(replace('href="/homepage/home.css', `href="/home.${hash}.css`))
     .pipe(replace('href="imposter.css', `href="imposter.${hash}.css`))
     .pipe(replace('href="survive.css', `href="survive.${hash}.css`))
     .pipe(gulp.dest(path.join('..', 'dist', 'public')));

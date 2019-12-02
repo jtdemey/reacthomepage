@@ -403,6 +403,7 @@ p {
 	overflow-x: hidden;
   overflow-y: scroll;
 	scroll-behavior: smooth;
+	background: #222;
 }
 
 .main-container {
@@ -767,6 +768,7 @@ p {
 }
 
 .contact-form {
+	max-width: 40rem;
 	padding: 30px;
 	background: #FFFFFF;
 	margin: 1em auto;
@@ -863,6 +865,26 @@ p {
 	box-shadow: 8px 8px #1a1a1a;
 	cursor: grab;
 }
+/* DOODLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.doodle-cards {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	padding: 1rem;
+	background: #175873;
+}
+
+.doodle-card {
+	height: 172px;
+	flex: 0 1 96px;
+	margin: 2px;
+	background: linear-gradient(#333, rgba(51, 51, 51, 0.7));
+}
+
+.doodle-card > a > img {
+	width: 100%;
+	height: 100%;
+}
 
 /* MOBILE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 @media all and (max-width: 700px) {
@@ -886,6 +908,11 @@ p {
 	.content-view {
 		width: 100vw;
 	}
+
+	.doodle-card {
+		height: 172px;
+		flex: 0 1 128px;
+	}
 }
 
 @media all and (min-width: 701px) {
@@ -896,5 +923,10 @@ p {
   .main-container {
     display: grid;
     grid-template-columns: 86px 1fr;
-  }
+	}
+
+	.doodle-card {
+		height: 256px;
+		flex: 0 1 186px;
+	}
 }

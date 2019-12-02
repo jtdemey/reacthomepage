@@ -9,8 +9,9 @@ module.exports = {
   mode: 'production',
   entry: {
     home: path.join(process.cwd(), 'src/homepage/homeScript.js'),
+    about: path.join(process.cwd(), 'src/about/aboutScript.js'),
     imposter: path.join(process.cwd(), 'src/imposter/imposterIndex.js'),
-    survive: path.join(process.cwd(), 'src/survive/surviveIndex.js'),
+    survive: path.join(process.cwd(), 'src/survive/surviveIndex.js')
   },
   target: 'web',
   output: {
@@ -29,6 +30,11 @@ module.exports = {
       chunks: ['home'],
       filename: 'home.html',
       template: './src/homepage/home.html'
+    }), 
+    new HtmlWebpackPlugin({
+      chunks: ['about'],
+      filename: 'about.html',
+      template: './src/about/about.html'
     }), 
     new HtmlWebpackPlugin({
       chunks: ['imposter'],

@@ -1,4 +1,4 @@
-import "regenerator-runtime/runtime";
+//import "regenerator-runtime/runtime";
 
 const uiState = {
   background: 0,
@@ -139,13 +139,12 @@ window.submitContactForm = function() {
 
 //Doodles
 const loadDoodle = async ind => {
-  const uri = `${window.location.origin}/media/doodles/img${ind}.jpg`;
-
+  const uri = `${window.location.origin}/media/doodles/`;
   const dood = new Image();
-  dood.src = uri; 
+  dood.src = `${uri}thumbs/img${ind}.jpg`; 
 
   const link = document.createElement('a');
-  link.href = uri;
+  link.href = `${uri}img${ind}.jpg`;
   link.setAttribute('target', '_blank');
   link.setAttribute('rel', 'noopener noreferrer');
   link.appendChild(dood);

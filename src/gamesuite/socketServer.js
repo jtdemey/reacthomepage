@@ -58,6 +58,11 @@ const handleSocketMsg = async (wss, ws, raw) => {
     case 'submitJoinGame':
       wss.gs.handleSubmitJoinGame(msg)
         .then(state => {
+          if(state.error) {
+            confirmTransaction(`${msg.socketId} tried to join active game ${msg.gameId}`);
+            ws.send(wss.gs.makeCommand('imposterError', { text: state.msg }));
+            return;
+          }
           confirmTransaction(`Handled join game submission for ${msg.socketId}`);
           ws.send(wss.gs.makeCommand('initGame', { gameState: state }));
         })

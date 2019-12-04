@@ -1,12 +1,13 @@
 import imposterStore from '../store/imposterStore';
 import { gameActionTypes } from './actionConstants';
 
-export const accusePlayer = (accuserId, accusedId, gameId) => {
-  console.log(accuserId, accusedId, gameId);
+export const accusePlayer = (accuserId, accuserName, accusedId, accusedName, gameId) => {
   return {
     type: gameActionTypes.ACCUSE_PLAYER,
     accuserId: accuserId,
+    accuserName,
     accusedId: accusedId,
+    accusedName,
     gameId: gameId
   };
 };
@@ -106,7 +107,7 @@ export const setSocketId = sockId => {
   const storedId = window.localStorage.getItem('JTD_imposterSocketId');
   const lastSeen = window.localStorage.getItem('JTD_imposterHourLastSeen');
   if(storedId !== null && Math.abs(lastSeen - new Date().getHours()) < 2) {
-    console.log(`hey i know this guy it's ${storedId}`);
+    console.log(`Welcome back, ${storedId}`);
   }
   window.localStorage.setItem('JTD_imposterSocketId', sockId);
   window.localStorage.setItem('JTD_imposterHourLastSeen', new Date().getHours());

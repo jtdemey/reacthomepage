@@ -33,7 +33,7 @@ const PlayerList = props => {
                           otherClasses="player-list-lbi"
                           look={{background: look.secondary}}
                           rgba={[86, 73, 78, 0.75]}
-                          clickFunc={props.isAccusing ? () => props.accusePlayer(props.socketId, p.socketId, props.gameId) : null} />
+                          clickFunc={props.isAccusing ? () => props.accusePlayer(props.socketId, p.socketId, props.gameId, p.name) : null} />
         ))}
       </ul>
     </div>

@@ -353,6 +353,12 @@ export const makeGameSuite = dbConnection => {
     } catch {
       logger.error(`[GS] Join game submission: could not find game ${msg.gameId}`);
     }
+    if(prospImposter.phase !== 'lobby') {
+      return {
+        error: true,
+        msg: 'That game is currently in-session.'
+      };
+    }
     let joiner;
     try {
       joiner = gs.getPlayer(msg.socketId);

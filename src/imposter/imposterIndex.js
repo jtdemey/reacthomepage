@@ -64,6 +64,7 @@ window.onload = () => {
         break;
       case 'imposterError':
         console.error(msg.text);
+        alert(msg.text);
         break;
       case 'refreshVotes':
         ImposterStore.dispatch(refreshVotes(msg.votes));

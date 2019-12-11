@@ -57,6 +57,7 @@ export function* hurryUpSaga(action) {
 
 export function* initGameSaga(action) {
   yield put(gameActions.syncGameState(action.gameState));
+  console.log(action.gameState);
   const phaseView = getViewIdFromName(action.gameState.phase);
   yield delay(1000);
   yield put(uiActions.fadeEntityOut(viewConstants.LOADING));

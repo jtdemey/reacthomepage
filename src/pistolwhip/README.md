@@ -1,5 +1,5 @@
 # Pistolwhip
-_Currently a WIP_
+_Currently in development_
 Pistolwhip is a 2D side-scrolling arcade shooter.
 Traverse waves of deadly mechanical monstrosities to escape the city by midnight.
 It is heavily inspired by Gun Run, an old Flash game available on a variety of websites.

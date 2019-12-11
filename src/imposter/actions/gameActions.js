@@ -15,7 +15,7 @@ export const accusePlayer = (accuserId, accuserName, accusedId, accusedName, gam
 export const emitSocketMsg = msg => {
   const currGame = imposterStore.getState().game;
   if(!msg.command) {
-    console.log('Socket message command undefined');
+    console.error('Socket message command undefined');
   }
   if(!msg.socketId) {
     msg.socketId = currGame.socketId;
@@ -24,7 +24,7 @@ export const emitSocketMsg = msg => {
     const r = JSON.stringify(msg);
     currGame.socket.send(r);
   } catch(e) {
-    console.log('Unable to send socket message', msg, e);
+    console.error('Unable to send socket message', msg, e);
   }
   return {
     type: gameActionTypes.EMIT_SOCKET_MSG,
@@ -82,7 +82,6 @@ export const initGame = gameState => {
 };
 
 export const refreshVotes = v => {
-  console.log(v);
   return {
     type: gameActionTypes.REFRESH_VOTES,
     votes: v
@@ -92,6 +91,14 @@ export const refreshVotes = v => {
 export const resetLobbyActionCounts = () => {
   return {
     type: gameActionTypes.RESET_LOBBY_ACTION_COUNTS
+  };
+};
+
+export const returnToLobby = (sockId, playerName) => {
+  return {
+    type: gameActionTypes.RETURN_TO_LOBBY,
+    sockId,
+    playerName
   };
 };
 

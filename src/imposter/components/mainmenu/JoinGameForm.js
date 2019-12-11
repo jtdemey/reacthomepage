@@ -60,7 +60,7 @@ class JoinGameForm extends React.Component {
   render() {
     const fade = getFadeState(this.props.isFadingIn, this.props.isFadingOut, viewConstants.JOIN_GAME_FORM) || '';
     return (
-      <div className={`mm-form-area join-game-form${fade}`}>
+      <div className={`game-view mm-form-area join-game-form${fade}`}>
         <form name="form-join" className="mm-form form-join" onSubmit={e => this.submitJoinGameForm(e)}>
           <h4>Join Game</h4>
           <input  type="text"

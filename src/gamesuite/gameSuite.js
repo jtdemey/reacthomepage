@@ -176,8 +176,7 @@ export const makeGameSuite = dbConnection => {
   //Getters
   gs.getGame = async gameId => {
     try {
-      const game = await gs.gameModel.findOne({gameId: gameId}).exec();
-      return gs.addTimerData(game);
+      return gs.gameModel.findOne({gameId: gameId}).exec();
     } catch {
       logger.error(`[GS] Unable to get game ${gameId}`);
     }
@@ -230,7 +229,9 @@ export const makeGameSuite = dbConnection => {
   gs.doGameTick = game => {
     const t = gs.timers[game.gameId];
     if(!t) {
-      logger.error(`[GS] Master tick: unable to get timer data for ${game.gameId}`);
+      logger.error(`[GS] Master tick: unable to get timer data for ${game.gameId}, removing...`);
+      gs.removeGame(game.gameId).catch(e => console.error(e));
+      return;
     }
     t.tick += 1;
     t.remainingTime -= 1;
@@ -350,6 +351,9 @@ export const makeGameSuite = dbConnection => {
     let prospImposter;
     try {
       prospImposter = await gs.getGame(msg.gameId.toUpperCase());
+      prospImposter = gs.addTimerData(prospImposter);
+      console.log('====== prosp ======');
+      console.log(prospImposter);
     } catch {
       logger.error(`[GS] Join game submission: could not find game ${msg.gameId}`);
     }
@@ -361,32 +365,32 @@ export const makeGameSuite = dbConnection => {
     }
     let joiner;
     try {
-      joiner = gs.getPlayer(msg.socketId);
+      joiner = await gs.getPlayer(msg.socketId);
+      joiner.gameId = msg.gameId;
+      joiner.name = msg.playerName;
+      joiner.isPlaying = true;
     } catch {
       logger.error(`[GS] Join game submission: could not find player ${msg.socketId}`);
     }
-    joiner.gameId = msg.gameId;
-    joiner.name = msg.playerName;
     try {
       await gs.updatePlayer(msg.socketId, {
         gameId: msg.gameId,
-        name: msg.playerName
+        name: msg.playerName,
+        isPlaying: true
       });
     } catch {
       logger.error(`[GS] Join game submission: could not update player ${msg.socketId}`);
     }
     const newPlayers = prospImposter.players.concat([joiner]);
+    prospImposter.players = newPlayers;
     try {
       await gs.updateGame(msg.gameId, {
         players: newPlayers
       });
+      return prospImposter;
     } catch {
       logger.error(`[GS] Join game submission: could not update game ${msg.gameId}`);
     }
-    return {
-      ...prospImposter,
-      players: newPlayers
-    };
   };
   gs.handleAccusePlayer = async msg => {
     let currGame;

@@ -12,7 +12,7 @@ module.exports = {
   target: 'web',
   output: {
     path: path.join(process.cwd(), 'devserver'),
-    publicPath: path.join(process.cwd(), 'src'), 
+    publicPath: '/', 
     filename: 'bundle.js'
   },
   devServer: {
@@ -26,7 +26,7 @@ module.exports = {
     stats: 'minimal',
     contentBase: path.join(process.cwd(), 'src', 'webdevtut'),
     hot: true,
-    //inline: true,
+    inline: true,
     open: true
   },
   plugins: [

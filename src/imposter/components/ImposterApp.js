@@ -44,7 +44,7 @@ class ImposterApp extends React.Component {
       case viewConstants.LOADING:
         return <LoadingView />;
       default:
-        return null; //loading wheel?
+        return <div></div>; //loading wheel?
     }
   }
 

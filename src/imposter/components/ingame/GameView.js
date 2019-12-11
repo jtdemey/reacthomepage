@@ -38,9 +38,7 @@ class GameView extends React.Component {
 
   getFadeState(c) {
     const sc = c;
-    if(this.props.isFadingIn.some(e => e === sc)) {
-      c += ' fade-in';
-    } else if(this.props.isFadingOut.some(e => e === sc)) {
+    if(this.props.isFadingOut.some(e => e === sc)) {
       c += ' fade-out';
     }
     return c;
@@ -48,7 +46,7 @@ class GameView extends React.Component {
 
   render() {
     return (
-      <div className={this.getFadeState('in-game')} onClick={this.getClickFunc()}>
+      <div className={`game-view fade-in ${this.getFadeState('in-game')}`} onClick={this.getClickFunc()}>
         <PlayerList players={this.props.players} />
         <GameCode />
         <GameTimer title="Time left:" />

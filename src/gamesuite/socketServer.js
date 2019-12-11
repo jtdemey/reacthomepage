@@ -64,6 +64,8 @@ const handleSocketMsg = async (wss, ws, raw) => {
             return;
           }
           confirmTransaction(`Handled join game submission for ${msg.socketId}`);
+          console.log('====== after submit =====');
+          console.log(state);
           ws.send(wss.gs.makeCommand('initGame', { gameState: state }));
         })
         .catch(err => {

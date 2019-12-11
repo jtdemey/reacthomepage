@@ -43,10 +43,14 @@ table {
 }
 
 /* Scheme: #C13E2C, #CC6758, #3F3937, #CECECC, #9A5B4E  */
-html, body, #site-wrapper {
+html, body, #site-wrapper, #app-root {
 	width: 100%;
 	height: 100%;
 	color: #CECECC;
+}
+
+*:focus {
+	outline: none;
 }
 
 h1, h2, h3, h4, span {
@@ -65,25 +69,43 @@ p {
   background: #3F3937;
 }
 
-header {
+#content-area {
+	height: 100%;
 	display: grid;
-	grid-template-columns: 1fr 1fr;
-	background: #9A5B4E;
-}
-
-header > div > h4 {
-	font-size: 2.5rem;
-	color: #62271e;
-}
-
-#header-left {
-	margin: 0.3rem 0 0 0.5rem;
-}
-
-#header-right {
-	margin: 0.3rem 0.5rem 0 0;
+	grid-template-columns: 1fr 3fr;
+	overflow: hidden;
 }
 
 nav {
 	background: #C13E2C;
+}
+
+nav > ul {
+	height: 100%;
+	margin: 2rem 3rem;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.5rem;
+	list-style-type: disc;
+	color: #fff;
+}
+
+.roadmap-item {
+	padding-bottom: 0.8rem;
+}
+
+.nested-1 {
+	margin-left: 1rem;
+	font-size: 1.3rem;
+}
+
+.nested-2 {
+	margin-left: 2rem;
+	font-size: 1.1rem;
+}
+
+#title-splash > h1 {
+	margin: 13rem 6.5rem;
+	padding-left: 1rem;
+	border-left: 2px solid #CC6758;
+  font-size: 12rem;
 }

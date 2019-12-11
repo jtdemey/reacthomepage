@@ -1,7 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -301,6 +298,7 @@ table {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+
 html, body {
   width: 100% !important;
   height: 100% !important;
@@ -335,6 +333,10 @@ input {
 
 .light-highlight {
   color: #DB324D;
+}
+
+.ghost-highlight {
+  border: 1px solid ghostwhite;
 }
 
 /* MODAL */
@@ -425,10 +427,12 @@ input {
 }
 
 .setting-selection > li {
+  max-width: 8rem;
   margin: 6px 6px 0 0;
   padding: 6px;
   color: #fff;
   border-radius: 10px;
+  text-align: center;
 }
 
 .crystal-btn {
@@ -474,9 +478,11 @@ input {
 
 .nav-list {
   width: 100%;
+  max-width: 40rem;
   height: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  margin: auto;
   list-style-type: none;
 }
 
@@ -493,6 +499,11 @@ input {
 .imposter-gameview { 
   width: 100%;
   height: 100vh;
+}
+
+.game-view {
+  max-width: 50rem;
+  margin: auto;
 }
 
 .control-lbi {
@@ -601,7 +612,7 @@ input {
 }
 
 .game-code-area {
-  padding: 1rem;
+  padding: 0.5rem;
   text-align: center;
 }
 
@@ -614,7 +625,7 @@ input {
 }
 
 .game-timer-area {
-  padding: 1rem;
+  padding: 0.5rem;
   text-align: center;
 }
 

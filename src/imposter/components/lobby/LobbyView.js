@@ -36,7 +36,7 @@ class LobbyView extends React.Component {
   render() {
     const fade = getFadeState(this.props.isFadingIn, this.props.isFadingOut, viewConstants.LOBBY) || '';
     return (
-      <div className={`lobby${fade}`}>
+      <div className={`game-view lobby${fade}`}>
         <PlayerList players={this.props.players} />
         <GameCode />
         <GameTimer title="Starting in:" />

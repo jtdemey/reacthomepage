@@ -57,7 +57,7 @@ class HostGameForm extends React.Component {
   render() {
     const fade = getFadeState(this.props.isFadingIn, this.props.isFadingOut, viewConstants.HOST_GAME_FORM) || '';
     return (
-      <div className={`mm-form-area host-game-form${fade}`}>
+      <div className={`game-view mm-form-area host-game-form${fade}`}>
         <form name="form-host" className="mm-form form-host" onSubmit={e => this.submitHostGameForm(e)}>
           <h4>Host Game</h4>
           <input  type="text"

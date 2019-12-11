@@ -23,11 +23,11 @@ const gameReducer = (state = {}, action) => {
       return {
         ...state,
         gameInSession: true,
-        gameId: game.gameId,
-        host: game.host,
-        phase: game.phase,
-        players: game.players,
-        tick: game.tick
+        gameId: action.gameId,
+        host: action.host,
+        phase: action.phase,
+        players: action.players,
+        tick: action.tick
       };
     case 'HURRY_UP':
       return {
@@ -56,6 +56,10 @@ const gameReducer = (state = {}, action) => {
           hurryUpCt: 0
         }
       };
+    case gameActionTypes.RETURN_TO_LOBBY:
+      return {
+        ...state
+      };
     case 'SEND_HOST_GAME_REQUEST':
       return {
         ...state
@@ -65,17 +69,25 @@ const gameReducer = (state = {}, action) => {
         ...state,
         socket: action.socket
       };
-      case 'SET_SOCKET_ID':
-        return {
-          ...state,
-          socketId: action.socketId
-        };
+    case 'SET_SOCKET_ID':
+      return {
+        ...state,
+        socketId: action.socketId
+      };
     case 'SUBMIT_HOST_GAME_FORM':
       return {
         ...state,
         player: {
           ...state.player,
           name: action.hostName
+        }
+      };
+    case 'SUBMIT_JOIN_GAME_FORM':
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          name: action.playerName
         }
       };
     case 'SYNC_GAME_STATE':

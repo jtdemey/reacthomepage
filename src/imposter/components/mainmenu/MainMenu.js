@@ -39,7 +39,7 @@ class MainMenu extends React.Component {
   render() {
     const fade = getFadeState(this.props.isFadingIn, this.props.isFadingOut, viewConstants.MAIN_MENU) || '';
     return (
-      <div className={`main-menu${fade}`}>
+      <div className={`game-view main-menu${fade}`}>
         <div className="start-game-list">
           <ListButtonItem text="Host Game"
                           otherClasses="mm-lbi"

@@ -1,10 +1,10 @@
-import surviveStore from '../store/surviveStore';
+import surviveStore from '../store/rootsStore';
 import {
   cardinalConstants,
   colorConstants,
   itemMetadataConstants
-} from '../app/surviveConstants';
-import { parseInput } from '../app/surviveParser';
+} from '../app/rootsConstants';
+import { parseInput } from '../app/rootsParser';
 import {
   createListButtonItem,
   createMapGridItem,
@@ -12,7 +12,7 @@ import {
   getCoordsFromLocale,
   getListButtonItemFromIndex,
   getLocaleFromCoords
-} from '../app/surviveUtilities';
+} from '../app/rootsUtilities';
 
 export const addItemToList = (listBtnItem, destination) => {
   const currentState = Object.assign({}, surviveStore.getState().ui);

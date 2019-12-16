@@ -1,6 +1,6 @@
-let initialState = {
+const initialState = {
   game: {
-    activeSagas: [],
+    gameState: 0, //0: main menu, 1: in-game, 2: combat, 3: dialogue
     tick: 0,
     gameTime: new Date(1987, 11, 12, 9, 44, 0, 0).toString(),
     gameClock: undefined,

@@ -70,6 +70,13 @@ export function* initGameSaga(action) {
   yield put(uiActions.removeFadeInEntity(phaseView));
 }
 
+export function* returnToLobbySaga(action) {
+  yield put(gameActions.emitSocketMsg({
+    command: 'returnToLobby',
+    ...action
+  }));
+}
+
 export function* submitHostGameFormSaga(action) {
   yield put(uiActions.fadeEntityOut(viewConstants.HOST_GAME_FORM));
   yield delay(100);

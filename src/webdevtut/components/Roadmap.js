@@ -1,7 +1,18 @@
 import React from 'react';
 
-const renderRoadmap = roadmap => {
-  const getCss = r => r.level > 0 ? `roadmap-item nested-${r.level}` : 'roadmap-item';
+const renderRoadmap = (currentInd, roadmap) => {
+  const getCss = r => {
+    let c = 'roadmap-item';
+    if(r.level > 0) {
+      c += ` nested-${r.level}`;
+    }
+    if(r.roadmapIndex === currentInd) {
+      c += ' focused';
+    } else if(r.roadmapIndex > currentInd) {
+      c += ' hidden';
+    }
+    return c;
+  };
   return (
     <ul>
       {roadmap.map((e, ind) => (
@@ -14,7 +25,7 @@ const renderRoadmap = roadmap => {
 const Roadmap = props => {
   return (
     <nav>
-      {renderRoadmap(props.roadmap)}
+      {renderRoadmap(props.roadmapIndex, props.roadmap)}
     </nav>
   );
 };

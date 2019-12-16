@@ -657,6 +657,7 @@ input {
 .vote-notification {
   margin: auto;
   text-align: center;
+  border-radius: 4px;
 }
 
 .vote-text {
@@ -666,6 +667,7 @@ input {
 .vote-btns {
   padding: 1rem;
 }
+
 .vote-btns > div {
   display: inline-block;
   max-width: 3rem;
@@ -681,6 +683,7 @@ input {
 
 .endgame-view > h1 {
   margin: auto;
+  padding: 2rem;
   font-size: 3em;
 }
 

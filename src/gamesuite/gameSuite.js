@@ -3,8 +3,6 @@ import makeGameSchema from '../models/Game';
 import makePlayerSchema from '../models/Player';
 
 /*
-    ref
-
     db.players.find().pretty()
     db.games.find().pretty()
     db.players.remove({gameId: null})
@@ -67,15 +65,17 @@ export const makeGameSuite = dbConnection => {
       socketId: sockId
     };
   };
-  gs.makeVote = (type, callerId, thresh, accusedId = null) => {
+  gs.makeVote = (type, thresh, callerId, callerName, accusedId = null, accusedName = null) => {
     return {
       voteId: gs.genGameId(),
       voteType: type,
       callerId: callerId,
-      accusedId: accusedId,
-      yay: 0,
+      callerName,
+      yay: 1,
       nay: 0,
-      threshold: thresh
+      threshold: thresh,
+      accusedId,
+      accusedName
     };
   };
 
@@ -325,6 +325,7 @@ export const makeGameSuite = dbConnection => {
   //Message Handlers
   gs.handleSubmitHostGame = async msg => {
     const newImposter = gs.makeGame();
+    gs.sockets[msg.socketId].gameId = newImposter.gameId;
     try {
       await gs.updatePlayer(msg.socketId, {
         gameId: newImposter.gameId,
@@ -350,10 +351,8 @@ export const makeGameSuite = dbConnection => {
   gs.handleSubmitJoinGame = async msg => {
     let prospImposter;
     try {
-      prospImposter = await gs.getGame(msg.gameId.toUpperCase());
+      prospImposter = await gs.getGame(msg.gameId.toUpperCase()).then();
       prospImposter = gs.addTimerData(prospImposter);
-      console.log('====== prosp ======');
-      console.log(prospImposter);
     } catch {
       logger.error(`[GS] Join game submission: could not find game ${msg.gameId}`);
     }
@@ -394,16 +393,17 @@ export const makeGameSuite = dbConnection => {
   };
   gs.handleAccusePlayer = async msg => {
     let currGame;
+    let threshold;
     try {
       currGame = await gs.getGame(msg.gameId);
-      if(currGame.votes.some(v => v.accuserId === msg.accuserId)) {
+      if(currGame.votes.length > 2 || currGame.votes.some(v => v.accuserId === msg.accuserId)) {
         return;
       }
+      threshold = currGame.players.length - 1;
     } catch {
       logger.error(`[GS] Accusation: could not get game ${msg.gameId}`);
     }
-    //To-do: make threshold here dingus
-    const accusation = gs.makeVote('accusation', msg.accuserId, 'uh', msg.accusedId);
+    const accusation = gs.makeVote('accusation', threshold, msg.accuserId, msg.accuserName, msg.accusedId, msg.accusedName);
     const newVotes = currGame.votes.concat([accusation]);
     try {
       await gs.updateGame(msg.gameId, {
@@ -412,66 +412,44 @@ export const makeGameSuite = dbConnection => {
     } catch {
       logger.error(`[GS] Accusation: could not update game ${msg.gameId}`);
     }
-    return newVotes;
+    try {
+      await gs.emitToGame(msg.gameId, gs.makeCommand('refreshVotes', {
+        votes: newVotes
+      }));
+      return true;
+    } catch {
+      logger.error(`[GS] Accusation: could not emit to game ${msg.gameId}`);
+    }
   };
-
-  //Test routines
-  gs.testgs = async () => {
-    //To-do: re-write asynchronously
-    //Count entities
-    const countGamesRes = gs.countGames();
-    if(countGamesRes !== 0) {
-      logger.info('Failed countGames');
-      logger.info(countGamesRes);
-    } else {
-      logger.info(`Pass countGames: ${countGamesRes}`);
+  gs.handleReturnToLobby = async msg => {
+    let currGame;
+    let threshold;
+    try {
+      currGame = await gs.getGame(msg.gameId);
+      if(currGame.votes.length > 2 || currGame.votes.some(v => v.socketId === msg.socketId)) {
+        return;
+      }
+      threshold = currGame.players.length - 1;
+    } catch {
+      logger.error(`[GS] Return to Lobby: could not get game ${msg.gameId}`);
     }
-    const countPlayersRes = gs.countPlayers();
-    if(countPlayersRes !== 0) {
-      logger.info('Failed countPlayers');
-      logger.info(countPlayersRes);
-    } else {
-      logger.info(`Pass countPlayers: ${countPlayersRes}`);
+    const vote = gs.makeVote('lobby', threshold, msg.socketId, msg.playerName);
+    const newVotes = currGame.votes.concat([vote]);
+    try {
+      await gs.updateGame(msg.gameId, {
+        votes: newVotes
+      });
+    } catch {
+      logger.error(`[GS] Return to Lobby: could not update game ${msg.gameId}`);
     }
-    //Add entities and retrieve them
-    const newGame = gs.makeGame();
-    const newGameId = newGame.gameId;
-    const newPlayerId = 'thisisasocketid';
-    gs.addGame(newGame);
-    gs.addPlayer(gs.makePlayer({}, newPlayerId));
-    const getGameRes = gs.getGame(newGameId);
-    if(!getGameRes) {
-      logger.info('Failed getGame');
-      logger.info(getGameRes);
-    } else {
-      logger.info('Pass getGame');
+    try {
+      await gs.emitToGame(msg.gameId, gs.makeCommand('refreshVotes', {
+        votes: newVotes
+      }));
+      return true;
+    } catch {
+      logger.error(`[GS] Accusation: could not emit to game ${msg.gameId}`);
     }
-    const getPlayerRes = gs.getPlayer(newPlayerId);
-    if(!getPlayerRes) {
-      logger.info('Failed getPlayer');
-      logger.info(getPlayerRes);
-    } else {
-      logger.info('Pass getPlayer');
-    }
-    const countGamesRes2 = gs.countGames();
-    if(countGamesRes2 !== 1) {
-      logger.info('Failed countGames');
-      logger.info(countGamesRes2);
-    } else {
-      logger.info(`Pass countGames: ${countGamesRes2}`);
-    }
-    const countPlayersRes2 = gs.countPlayers();
-    if(countPlayersRes2 !== 1) {
-      logger.info('Failed countPlayers');
-      logger.info(countPlayersRes2);
-    } else {
-      logger.info(`Pass countPlayers: ${countPlayersRes2}`);
-    }
-    //Emit command to game
-
-    //Delete entities
-    gs.removeGame(newGameId);
-    gs.removePlayer(newPlayerId);
   };
   return gs;
 };

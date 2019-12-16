@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSpring, animated } from 'react-spring';
 
-const TitleSplash = props => {
+const TitleSplash = () => {
   const anim = useSpring({
     from: {
       height: 0,

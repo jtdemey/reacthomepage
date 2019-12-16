@@ -3,11 +3,11 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from "react-redux";
 
-import SurviveApp from './components/SurviveApp';
-import SurviveStore from './store/surviveStore';
+import RootsApp from './components/RootsApp';
+import RootsStore from './store/rootsStore';
 
 render(
-  <Provider store={SurviveStore}>
-    <SurviveApp />
+  <Provider store={RootsStore}>
+    <RootsApp />
   </Provider>,
-  document.getElementById('survive-root'));
+  document.getElementById('app-root'));

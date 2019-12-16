@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const postcssPresetEnv = require('postcss-preset-env');
 const tailwindCss = require('tailwindcss');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
@@ -28,6 +29,10 @@ module.exports = {
     open: true
   },
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: "roots.css",
+      chunkFilename: "roots.css"
+    }),
     new webpack.HotModuleReplacementPlugin()
   ],
   module: {
@@ -49,7 +54,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          { loader: 'style-loader' },
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {

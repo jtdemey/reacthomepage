@@ -94,10 +94,11 @@ export const resetLobbyActionCounts = () => {
   };
 };
 
-export const returnToLobby = (sockId, playerName) => {
+export const returnToLobby = (gameId, sockId, playerName) => {
   return {
     type: gameActionTypes.RETURN_TO_LOBBY,
-    sockId,
+    gameId,
+    socketId: sockId,
     playerName
   };
 };

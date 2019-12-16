@@ -7,7 +7,7 @@ import { getThemeColors } from '../../app/imposterUtilities';
 
 const mapStateToProps = state => {
   return {
-    socketId: state.game.socketId,
+    gameId: state.game.gameId,
     playerName: state.game.player.name,
     isAccusing: state.ui.isAccusing,
     theme: state.ui.theme
@@ -33,7 +33,7 @@ const InGameBtns = props => {
                       look={{background: props.isAccusing ? '#fff' : look.secondary}}
                       otherClasses={props.isAccusing ? 'control-lbi is-accusing-btn infinite-shake' : 'control-lbi'}
                       text={props.isAccusing ? 'Select imposter' : 'Accuse'} />
-      <ListButtonItem clickFunc={() => props.returnToLobby(props.socketId, props.playerName, props.extendTimerCt)}
+      <ListButtonItem clickFunc={() => props.returnToLobby(props.gameId, props.socketId, props.playerName)}
                       look={{background: look.secondary}}
                       otherClasses="control-lbi"
                       text="Return to Lobby" />

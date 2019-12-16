@@ -1,16 +1,33 @@
 import { makeRoad, makeView } from './viewHelpers';
 
+const r = makeRoad;
+const v = makeView;
+
 const scene = {
   roadmap: [
-    makeRoad(0, 'Intro'),
-    makeRoad(1, 'Audience'),
-    makeRoad(1, 'Accessibility'),
-    makeRoad(1, 'Options')
+    r(0, 0, 'Intro'),
+    r(1, 1, 'Audience'),
+    r(2, 1, 'Accessibility'),
+    r(3, 1, 'Options')
   ],
   views: [
-    makeView(0, 'Blank'),
-    makeView(0, 'TitleSplash'),
-    makeView(1, 'Blank')
+    v(0, 'Blank'),
+    v(0, 'TitleSplash'),
+    v(1, 'TitleSplash'),
+    v(2, 'TitleSplash'),
+    v(2, 'ImageView', {
+      images: [{
+        src: 'media/chrome-logo.svg'
+      }, {
+        src: 'media/notepad-icon-7.png'
+      }]
+    }),
+    v(3, 'ImageView', {
+      images: [{
+        src: 'media/matrix-guns.gif',
+        height: '24rem'
+      }]
+    }),
   ]
 };
 

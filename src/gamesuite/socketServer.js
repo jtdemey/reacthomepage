@@ -64,8 +64,6 @@ const handleSocketMsg = async (wss, ws, raw) => {
             return;
           }
           confirmTransaction(`Handled join game submission for ${msg.socketId}`);
-          console.log('====== after submit =====');
-          console.log(state);
           ws.send(wss.gs.makeCommand('initGame', { gameState: state }));
         })
         .catch(err => {
@@ -80,12 +78,20 @@ const handleSocketMsg = async (wss, ws, raw) => {
       break;
     case 'accusePlayer':
       wss.gs.handleAccusePlayer(msg)
-        .then(votes => {
-          confirmTransaction(`Handled accuse player for ${msg.socketId}`);
-          ws.send(wss.gs.makeCommand('refreshVotes', { votes: votes }));
+        .then(() => {
+          confirmTransaction(`Handled accuse player by ${msg.socketId}`);
         })
         .catch(err => {
           handleGsErr(`Failed to handle accuse player for ${msg.socketId} (${err})`);
+        });
+      break;
+    case 'returnToLobby':
+      wss.gs.handleReturnToLobby(msg)
+        .then(() => {
+          confirmTransaction(`Handled return to lobby vote by ${msg.socketId}`);
+        })
+        .catch(err => {
+          handleGsErr(`Failed to handle lobby vote for ${msg.socketId} (${err})`);
         });
       break;
     default:

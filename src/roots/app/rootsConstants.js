@@ -1,4 +1,4 @@
-export const cardinalConstants = {
+export const CARDINALDIRS = {
 	NORTH: 0,
 	NORTHEAST: 1,
 	EAST: 2,
@@ -13,12 +13,12 @@ export const cardinalConstants = {
 	OUTSIDE: 11
 };
 
-export const colorConstants = {
+export const COLORS = {
 	mgiUnvisited: '#404040',
 	mgiCurrent: '#364d63'
 };
 
-export const itemMetadataConstants = [
+export const ITEMMETADATA = [
 	{ //0: handwarmers
 		name: 'handwarmers',
 		display: 'Handwarmers',
@@ -29,18 +29,18 @@ export const itemMetadataConstants = [
 	}
 ];
 
-export const modalModeConstants = {
+export const MODALMODES = {
 	ITEM_INFO: 0,
 	COMBAT: 1
 };
 
-export const regionConstants = {
+export const REGIONS = {
 	FOREST: 0,
 	MANSION: 1,
 	GRAVEYARD: 2
 };
 
-export const temperatureConstants = {
+export const TEMPERATURES = {
 	GLACIAL: 0,
 	FREEZING: 1,
 	VERY_COLD: 2,
@@ -50,7 +50,7 @@ export const temperatureConstants = {
 	HOT: 6
 };
 
-export const visibilityConstants = {
+export const VISIBILITY = {
 	PITCH_BLACK: 0,
 	VERY_DARK: 1,
 	DARK: 2,

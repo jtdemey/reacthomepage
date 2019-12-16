@@ -9,6 +9,6 @@ const loadRoadmap = async id => {
   return import(`./pages/content/${id}.js`);
 };
 loadRoadmap(chapter).then(r => {
-    //Render app
-    render(<TutApp scene={r.default} />, document.getElementById('app-root'));
-  }).catch(e => console.error(e));
+  //Render app
+  render(<TutApp scene={r.default} />, document.getElementById('app-root'));
+}).catch(e => console.error(e));

@@ -2,7 +2,6 @@ import "regenerator-runtime/runtime";
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from "react-redux";
-
 import ImposterApp from './components/ImposterApp';
 import ImposterStore from './store/imposterStore';
 import {
@@ -12,6 +11,7 @@ import {
   setPlayerSocket,
   setSocketId
 } from './actions/gameActions';
+import { alertMessage } from "./actions/uiActions";
 
 window.onload = () => {
 
@@ -29,7 +29,7 @@ window.onload = () => {
     }
     return id;
   };
-  
+
   socket.onopen = () => {
     socketId = genSocketId();
     ImposterStore.dispatch(setSocketId(socketId));
@@ -40,7 +40,7 @@ window.onload = () => {
     }));
   };
   socket.onerror = error => {
-    alert('Error 69: your browser fucking sucks :(\n\nOR\n\nError 420: the dev just messed up');
+    ImposterStore.dispatch(alertMessage('Error 69: your browser fucking sucks :(\n\nOR\n\nError 420: the dev just messed up', 5000));
     console.log('Error 69: no socket for you :(');
     console.log(error);
   };
@@ -64,7 +64,7 @@ window.onload = () => {
         break;
       case 'imposterError':
         console.error(msg.text);
-        alert(msg.text);
+        ImposterStore.dispatch(alertMessage(msg.text, 5000));
         break;
       case 'refreshVotes':
         ImposterStore.dispatch(refreshVotes(msg.votes));
@@ -75,7 +75,7 @@ window.onload = () => {
     }
   };
   socket.onclose = () => {
-    alert('Server died - blame the dev');
+    ImposterStore.dispatch(alertMessage('Server died - blame the dev', 5000));
   };
   window.onbeforeunload = () => {
     socket.send(JSON.stringify({

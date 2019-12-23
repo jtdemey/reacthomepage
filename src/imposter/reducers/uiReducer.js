@@ -2,6 +2,12 @@ import { uiActionTypes } from '../actions/actionConstants';
 
 const uiReducer = (state = {}, action) => {
   switch(action.type) {
+    case uiActionTypes.ALERT_MESSAGE:
+    case uiActionTypes.CLEAR_ALERT_MESSAGE:
+      return {
+        ...state,
+        alertText: action.alertText
+      };
     case 'APPEND_NOTIFICATION':
       return {
         ...state,

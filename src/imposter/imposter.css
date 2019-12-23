@@ -455,6 +455,19 @@ input {
   background: #88A26F;
 }
 
+/* ALERT */
+.popup-msg {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  box-shadow: 4px 4px 3px #111;
+  border-radius: 4px;
+}
+
+.popup-msg > p {
+  padding: 1rem;
+}
+
 /* BANNER */
 .banner-area {
   width: 100%;

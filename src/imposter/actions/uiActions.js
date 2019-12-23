@@ -2,6 +2,14 @@ import imposterStore from '../store/imposterStore';
 import { viewNames } from '../app/imposterConstants';
 import { uiActionTypes } from './actionConstants';
 
+export const alertMessage = (text, duration) => {
+  return {
+    type: uiActionTypes.ALERT_MESSAGE,
+    alertText: text,
+    delay: duration
+  };
+};
+
 export const appendNotification = text => {
   const notify = {
     text: text
@@ -36,6 +44,13 @@ export const changeViewValue = viewInd => {
   return {
     type: uiActionTypes.CHANGE_VIEW_VALUE,
     view: viewInd
+  };
+};
+
+export const clearAlertMessage = () => {
+  return {
+    type: uiActionTypes.CLEAR_ALERT_MESSAGE,
+    alertText: null
   };
 };
 

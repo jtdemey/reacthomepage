@@ -69,6 +69,7 @@ export const makeGameSuite = dbConnection => {
     return {
       voteId: gs.genGameId(),
       voteType: type,
+      tick: 15,
       callerId: callerId,
       callerName,
       yay: 1,
@@ -227,6 +228,7 @@ export const makeGameSuite = dbConnection => {
 
   //Lifecycle
   gs.doGameTick = game => {
+    //Game timer
     const t = gs.timers[game.gameId];
     if(!t) {
       logger.error(`[GS] Master tick: unable to get timer data for ${game.gameId}, removing...`);
@@ -238,10 +240,21 @@ export const makeGameSuite = dbConnection => {
     if(t.remainingTime < 0) {
       return gs.iteratePhase(t.tick, game);
     }
+    //Votes
+    const votes = [];
+    if(game.votes.length > 0) {
+      game.votes.forEach((v, i) => {
+        if(v.tick < 0) {
+          v.tick -= 1;
+          votes[i] = v;
+        }
+      });
+    }
     return {
       tick: t.tick,
-      remainingTime: t.remainingTime
-    }
+      remainingTime: t.remainingTime,
+      votes
+    };
   };
   gs.iteratePhase = (currTick, game) => {
     let phase;
@@ -294,8 +307,8 @@ export const makeGameSuite = dbConnection => {
               logger.error(`[GS] Master clock: unable to delete empty game ${g.gameId}`);
             }
           }
-          const timeData = gs.doGameTick(g);
-          const newState = Object.assign(g, timeData);
+          const meta = gs.doGameTick(g);
+          const newState = Object.assign(g, meta);
           try {
             await gs.emitToGame(g.gameId, gs.makeCommand('gameTick', {
               gameState: newState 
@@ -348,6 +361,7 @@ export const makeGameSuite = dbConnection => {
       logger.error(`[GS] Error in host game form submission: could not add new game`);
     }
   };
+
   gs.handleSubmitJoinGame = async msg => {
     let prospImposter;
     try {
@@ -391,7 +405,9 @@ export const makeGameSuite = dbConnection => {
       logger.error(`[GS] Join game submission: could not update game ${msg.gameId}`);
     }
   };
+
   gs.handleAccusePlayer = async msg => {
+    //Validate vote validity
     let currGame;
     let threshold;
     try {
@@ -403,6 +419,7 @@ export const makeGameSuite = dbConnection => {
     } catch {
       logger.error(`[GS] Accusation: could not get game ${msg.gameId}`);
     }
+    //Make vote
     const accusation = gs.makeVote('accusation', threshold, msg.accuserId, msg.accuserName, msg.accusedId, msg.accusedName);
     const newVotes = currGame.votes.concat([accusation]);
     try {
@@ -412,6 +429,7 @@ export const makeGameSuite = dbConnection => {
     } catch {
       logger.error(`[GS] Accusation: could not update game ${msg.gameId}`);
     }
+    //Emit to players 
     try {
       await gs.emitToGame(msg.gameId, gs.makeCommand('refreshVotes', {
         votes: newVotes
@@ -421,6 +439,7 @@ export const makeGameSuite = dbConnection => {
       logger.error(`[GS] Accusation: could not emit to game ${msg.gameId}`);
     }
   };
+
   gs.handleReturnToLobby = async msg => {
     let currGame;
     let threshold;

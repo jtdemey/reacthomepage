@@ -9,6 +9,7 @@ import { takeEvery, takeLatest } from 'redux-saga/effects'; import {
   submitJoinGameFormSaga
 } from './gameSagas';
 import {
+  alertMessageSaga,
   changeGameViewSaga,
   changeViewValueSaga
 } from './uiSagas';
@@ -26,6 +27,7 @@ function* rootSaga() {
   yield takeLatest(gameActionTypes.RETURN_TO_LOBBY, returnToLobbySaga);
   yield takeLatest(gameActionTypes.SUBMIT_HOST_GAME_FORM, submitHostGameFormSaga);
   yield takeLatest(gameActionTypes.SUBMIT_JOIN_GAME_FORM, submitJoinGameFormSaga);
+  yield takeEvery(uiActionTypes.ALERT_MESSAGE, alertMessageSaga);
   yield takeEvery(uiActionTypes.CHANGE_VIEW_VALUE, changeViewValueSaga);
   yield takeEvery(uiActionTypes.CHANGE_GAME_VIEW, changeGameViewSaga);
 } export default rootSaga;

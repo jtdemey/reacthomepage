@@ -1,6 +1,11 @@
 import { delay, put, take } from 'redux-saga/effects';
 import * as uiActions from './uiActions';
 
+export function* alertMessageSaga(action) {
+  yield delay(action.delay);
+  yield put(uiActions.clearAlertMessage());
+}
+
 export function* changeGameViewSaga(action) {
   yield put(uiActions.fadeEntityOut(action.currView));
   yield delay(100);

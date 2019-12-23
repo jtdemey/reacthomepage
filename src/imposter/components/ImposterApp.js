@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { viewConstants } from '../app/imposterConstants';
+import PopupMessage from './auxiliary/PopupMessage';
 import BannerArea from './navbar/BannerArea';
 import NavBar from './navbar/NavBar';
 import MainMenu from './mainmenu/MainMenu';
@@ -58,6 +59,7 @@ class ImposterApp extends React.Component {
   render() {
     return (
       <div className="imposter-gameview" style={this.getLook()}>
+        <PopupMessage />
         <BannerArea />
         <ModalArea />
         <NavBar></NavBar>

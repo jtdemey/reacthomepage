@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 @import url('surviveAnimations.css');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 /* REFERENCE
   red gradient: #211212 #451417 #6a1117 #8f0911 #b30000
@@ -51,19 +48,17 @@ html, body, #survive-root {
 }
 
 body {
-  background-color: #4d4d4d;
-  background: linear-gradient(to right, #0d0d0d, #333333, #0d0d0d);
+  background-color: #222;
 }
 
 canvas {
   position: fixed;
-  background-color: #595959;
   z-index: -1;
 }
 
 ::placeholder {
   color: #cccccc;
-  opacity: 1;
+  opacity: 1262626;
 }
 
 :-ms-input-placeholder {
@@ -136,6 +131,7 @@ canvas {
 .modal-btn-label {
   width: 100%;
   text-align: center;
+  font-size: 1rem;
 }
 
 /* Item Info Modal */
@@ -193,7 +189,7 @@ canvas {
   height: 40px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background-color: #404040;
+  background-color: #222;
   border-bottom: 1px solid #333333;
   font-family: 'Ubuntu', sans-serif;
 }
@@ -214,8 +210,7 @@ canvas {
 .stat-gauge-bar {
   width: 100%;
   height: 40px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: flex;
 }
 
 .stat-gauge {
@@ -341,20 +336,19 @@ canvas {
   z-index: 2;
 }
 
-.user-input:focus {
-  outline: none !important;
-  border-top: 1px solid #a7a7a7;
-  border-bottom: 1px solid #a7a7a7;
-}
-
 .user-input {
   width: 100%;
   height: 100%;
   padding-left: 4px;
   padding-right: 4px;
-  background-color: #737373;
+  background-color: #404040;
   border: 1px solid #808080;
   color: white;
+}
+.user-input:focus {
+  outline: none !important;
+  border-top: 1px solid #a7a7a7;
+  border-bottom: 1px solid #a7a7a7;
 }
 
 /* ITEM VIEW */
@@ -468,7 +462,7 @@ canvas {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   position: fixed;
   bottom: 0px;
-  background-color: #404040;
+  background-color: #222;
 }
 
 .view-btn {

@@ -1,52 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import TweenMax from 'gsap/TweenMax';
+import { useSpring, animated } from 'react-spring';
 
-class ListButtonItem extends React.Component {
-	constructor(props) {
-		super(props);
-		this.buttonRef = null;
-		this.animationFrames = null;
-	}
-
-	componentDidMount() {
-		if(this.props.transitioning === 'in') {
-			this.transitionIn();
-		}
-	}
-
-	componentDidUpdate() {
-		if(this.props.transitioning === 'out') {
-			this.transitionOut();
-		}
-	}
-
-	transitionIn() {
-		this.animationFrames = TweenMax.from(this.buttonRef, 0.35, {
-			x: 100,
-			opacity: 0,
-			ease: Power2.easeOut
-		});
-	}
-
-	transitionOut() {
-		this.animationFrames = TweenMax.to(this.buttonRef, 0.15, {
-			x: 100,
-			opacity: 0,
-			ease: Power2.easeOut
-		});
-	}
-
-	render() {
-		const text = this.props.quantity > 1 ? `${this.props.text} (${this.props.quantity})` : this.props.text;
-		const cssClass = this.props.isPlaceholder === true ? 'list-button-placeholder' : 'list-button-item';
-		const click = this.props.isPlaceholder === true ? () => { return; } : () => this.props.clickFunc(this.props.index);
-		return (
-	    <li className={cssClass} ref={el => this.buttonRef = el} onClick={click}>
-	      {text}
-	    </li>
-	  );
-	}
-}
+const ListButtonItem = props => {
+	const text = props.quantity > 1 ? `${props.text} (${props.quantity})` : props.text;
+	const cssClass = props.isPlaceholder === true ? 'list-button-placeholder' : 'list-button-item';
+	const click = props.isPlaceholder === true ? () => { return; } : () => props.clickFunc(props.index);
+	return (
+		<animated.li className={cssClass} onClick={click}>
+			{text}
+		</animated.li>
+	);
+};
 
 export default ListButtonItem;

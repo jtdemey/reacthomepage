@@ -4,8 +4,7 @@ import {
 } from '../creators/mapCreator';
 
 export const loadGameMap = () => {
-  let gameMap = {};
-  const gtgMap = createGameMap(gameMap);
+  const gtgMap = createGameMap();
   return {
     type: 'LOAD_GAME_MAP',
     gameMap: gtgMap

@@ -19,10 +19,6 @@ class ItemInfoModal extends React.Component {
     this.animationFrames = null;
   }
 
-  componentDidMount() {
-    console.log('oi');
-  }
-
   getCss() {
     let css = 'modal-grid item-info-modal';
     if(this.props.transitioning === 'in') {

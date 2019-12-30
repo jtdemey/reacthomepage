@@ -32,6 +32,7 @@ export const makeGameSuite = dbConnection => {
       command: commName
     });
   };
+
   gs.makeGame = () => {
     const id = gs.genGameId();
     gs.timers[id] = {
@@ -53,6 +54,7 @@ export const makeGameSuite = dbConnection => {
       votes: []
     };
   };
+
   gs.makePlayer = (socket, sockId) => {
     gs.sockets[sockId] = socket;
     return {
@@ -65,6 +67,7 @@ export const makeGameSuite = dbConnection => {
       socketId: sockId
     };
   };
+
   gs.makeVote = (type, thresh, callerId, callerName, accusedId = null, accusedName = null) => {
     return {
       voteId: gs.genGameId(),
@@ -88,15 +91,19 @@ export const makeGameSuite = dbConnection => {
     }
     return Object.assign(game, t);
   };
+
   gs.countGames = async () => {
     return gs.gameModel.countDocuments({});
   };
+
   gs.countPlayers = async () => {
     return gs.playerModel.countDocuments({});
   };
+
   gs.depleteTimer = (gameId, amt) => {
     gs.timers[gameId].remainingTime -= amt;
   };
+
   gs.emitToGame = async (gameId, command) => {
     try {
       const players = await gs.playerModel.find({ gameId: gameId }).exec();
@@ -112,9 +119,11 @@ export const makeGameSuite = dbConnection => {
       logger.error(`[GS] Unable to emitToGame ${gameId}: player query failed`);
     }
   };
+
   gs.extendTimer = (gameId, amt) => {
     gs.timers[gameId].remainingTime += amt;
   };
+
   gs.genGameId = () => {
     const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let id = '';
@@ -125,6 +134,7 @@ export const makeGameSuite = dbConnection => {
     }
     return id;
   };
+
   gs.parseRes = msg => {
     try {
       const r = JSON.parse(msg);
@@ -133,6 +143,7 @@ export const makeGameSuite = dbConnection => {
       logger.error(`[GS] Unable to parse client message ${msg}`);
     }
   };
+
   gs.purgeOldGameData = async (hours = 1) => {
     const now = new Date((new Date().getTime() - (1 * hours * 60 * 60 * 1000)));
     try {
@@ -182,6 +193,7 @@ export const makeGameSuite = dbConnection => {
       logger.error(`[GS] Unable to get game ${gameId}`);
     }
   };
+
   gs.getPlayer = async socketId => {
     return gs.playerModel.findOne({socketId: socketId}).exec();
   };
@@ -190,6 +202,7 @@ export const makeGameSuite = dbConnection => {
   gs.updateGame = async (gameId, gameData) => {
     return gs.gameModel.findOneAndUpdate({gameId: gameId}, {...gameData}).exec();
   };
+
   gs.updatePlayer = async (socketId, playerData) => {
     return gs.playerModel.findOneAndUpdate({socketId: socketId}, {...playerData}).exec();
   };
@@ -198,6 +211,7 @@ export const makeGameSuite = dbConnection => {
   gs.addGame = async game => {
     return new gs.gameModel({...game}).save();
   };
+
   gs.addPlayer = async player => {
     return new gs.playerModel({...player}).save();
   };
@@ -206,6 +220,7 @@ export const makeGameSuite = dbConnection => {
   gs.removeGame = async gameId => {
     return gs.gameModel.deleteOne({gameId: gameId}).exec();
   };
+
   gs.removePlayer = async socketId => {
     try {
       const game = await gs.gameModel.findOne({
@@ -256,6 +271,7 @@ export const makeGameSuite = dbConnection => {
       votes
     };
   };
+
   gs.iteratePhase = (currTick, game) => {
     let phase;
     let remain;
@@ -289,6 +305,7 @@ export const makeGameSuite = dbConnection => {
       remainingTime: remain
     };
   };
+   
   gs.startGameClock = () => {
     gs.clock = setInterval(async () => {
       let activeGames;
@@ -324,6 +341,7 @@ export const makeGameSuite = dbConnection => {
       }
     }, 1000);
   };
+
   gs.startIdleClock = () => {
     gs.clock = setInterval(async () => {
       const gct = await gs.countGames();

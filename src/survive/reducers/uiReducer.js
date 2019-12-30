@@ -36,12 +36,6 @@ const uiReducer = (state = {}, action) => {
         ...state,
         commandBarFocus: true
       };
-    case 'PICK_UP_ITEM':
-      return {
-        ...state,
-        localeItemButtons: action.localeItemButtons,
-        inventoryItemButtons: action.inventoryItemButtons
-      };
     case 'POPULATE_ITEM_INFO_MODAL':
       return {
         ...state,
@@ -70,6 +64,11 @@ const uiReducer = (state = {}, action) => {
         ...state,
         clientWidth: action.clientWidth,
         clientHeight: action.clientHeight
+      };
+    case 'SET_PARTICLE_MODE':
+      return {
+        ...state,
+        particleMode: action.mode
       };
     case 'SHOW_ITEM_INFO_MODAL':
       return {

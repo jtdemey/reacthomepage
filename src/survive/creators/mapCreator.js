@@ -10,21 +10,20 @@ import {
 } from '../app/surviveConstants';
 
 
-  
-  //Generation
-  /**
-        LOCALE REFERENCE
 
-    Coordinates: [x, y, z, isInside]
-      -x, y, z: grid coords
-      -isInside: boolean, some locales are inside others
-    Exits: [direction, locale, delay, phrase]
-      -direction: cardinal constant
-      -locale: unique name of locale
-      -delay: amount of time in ticks it takes to get to the next locale
-      -phrase (optional): overrides default exit phrase of locale
+//Generation
+/*
+      LOCALE REFERENCE
 
-  **/
+  Coordinates: [x, y, z, isInside]
+    -x, y, z: grid coords
+    -isInside: boolean, some locales are inside others
+  Exits: [direction, locale, delay, phrase]
+    -direction: cardinal constant
+    -locale: unique name of locale
+    -delay: amount of time in ticks it takes to get to the next locale
+    -phrase (optional): overrides default exit phrase of locale
+*/
 export const createGameMap = () => {
   let gameMap = {};
   //Locale creators

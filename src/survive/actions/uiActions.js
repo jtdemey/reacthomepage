@@ -85,12 +85,6 @@ export const focusCommandBar = () => ({
   type: 'FOCUS_COMMAND_BAR'
 });
 
-export const pickUpItem = ind => {
-  const transitionedItem = transitionItemOut(ind);
-  transitionedItem.type = 'PICK_UP_ITEM';
-  return transitionedItem;
-};
-
 export const populateItemInfoModal = itemId => {
   const item = itemMetadataConstants.filter(i => i.itemId === itemId);
   if(item.length !== 1) {
@@ -169,6 +163,13 @@ export const setClientDimensions = (x, y) => {
     type: 'SET_CLIENT_DIMENSIONS',
     clientWidth: x,
     clientHeight: y
+  };
+};
+
+export const setParticleMode = mode => {
+  return {
+    type: 'SET_PARTICLE_MODE',
+    mode
   };
 };
 
@@ -269,6 +270,7 @@ export const transitionViewOut = (nextview) => {
 
 export const updateItemView = () => {
   const currentState = Object.assign({}, surviveStore.getState());
+  console.log(currentState.player);
   const currentInventory = Object.assign([], currentState.player.items);
   const currentLocaleItems = Object.assign([], currentState.gameMap[currentState.player.locale].items);
   let localeItems = [];

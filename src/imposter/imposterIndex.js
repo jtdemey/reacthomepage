@@ -75,7 +75,7 @@ window.onload = () => {
     }
   };
   socket.onclose = () => {
-    ImposterStore.dispatch(alertMessage('Server died - blame the dev', 5000));
+    ImposterStore.dispatch(alertMessage('Server died - blame the dev', 999999));
   };
   window.onbeforeunload = () => {
     socket.send(JSON.stringify({

@@ -156,7 +156,7 @@ export const rollScenario = () => {
         'Hostage Taker',
         'Money Bagger'
       ]
-    }/*,
+    },
     {
       title: 'Diamond Miners',
       roles: {
@@ -261,6 +261,21 @@ export const rollScenario = () => {
         8: 'Art Enthusiast',
         9: 'Artist'
       }
-    }*/
+    }
   ];
+  const conditions = [
+    `Everyone's injured`,
+    `Everyone's old`,
+    `Everyone has an indiscernable accent`,
+    `Everyone's sick`,
+    `It's way too hot`,
+    `It's way too cold`
+  ];
+  const scenarioRes = scenarios[Math.floor(Math.random() * scenarios.length)];
+  const conditionRes = conditions[Math.floor(Math.random() * conditions.length)];
+  return {
+    scenario: scenarioRes.title,
+    condition: conditionRes,
+    roles: scenarioRes.roles
+  };
 };

@@ -1,6 +1,8 @@
 import logger from '../logs/logWriter';
 import makeGameSchema from '../models/Game';
 import makePlayerSchema from '../models/Player';
+import Promise from 'bluebird';
+import { rollScenario } from '../imposter/app/imposterUtilities';
 
 /*
     db.players.find().pretty()
@@ -34,7 +36,7 @@ export const makeGameSuite = dbConnection => {
   };
 
   gs.makeGame = () => {
-    const id = gs.genGameId();
+    const id = gs.genGameId(4);
     gs.timers[id] = {
       tick: 0, 
       remainingTime: 10
@@ -50,6 +52,7 @@ export const makeGameSuite = dbConnection => {
       remainingTime: 10,
       scenario: null,
       condition: null,
+      roles: [],
       tick: 0,
       votes: []
     };
@@ -69,8 +72,10 @@ export const makeGameSuite = dbConnection => {
   };
 
   gs.makeVote = (type, thresh, callerId, callerName, accusedId = null, accusedName = null) => {
+    const vId = gs.genGameId(8);
+    gs.timers[vId] = 15;
     return {
-      voteId: gs.genGameId(),
+      voteId: vId,
       voteType: type,
       tick: 15,
       callerId: callerId,
@@ -124,10 +129,10 @@ export const makeGameSuite = dbConnection => {
     gs.timers[gameId].remainingTime += amt;
   };
 
-  gs.genGameId = () => {
+  gs.genGameId = len => {
     const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let id = '';
-    for(let i = 0; i < 4; i++) {
+    for(let i = 0; i < len; i++) {
       const cInd = Math.floor(Math.random() * abc.length);
       const c = abc.charAt(cInd);
       id += c;
@@ -275,6 +280,11 @@ export const makeGameSuite = dbConnection => {
   gs.iteratePhase = (currTick, game) => {
     let phase;
     let remain;
+    let scene = {
+      scenario: undefined,
+      condition: undefined,
+      roles: []
+    };
     switch(game.phase) {
       case 'lobby':
         phase = 'in-game';
@@ -283,6 +293,7 @@ export const makeGameSuite = dbConnection => {
       case 'in-game':
         phase = 'imposter-victory';
         remain = '10';
+        scene = rollScenario();
         break;
       case 'bystander-victory':
       case 'imposter-victory':
@@ -302,7 +313,10 @@ export const makeGameSuite = dbConnection => {
     return {
       tick: currTick,
       phase: phase,
-      remainingTime: remain
+      remainingTime: remain,
+      scenario: scene.scenario,
+      condition: scene.condition,
+      roles: scene.roles
     };
   };
    
@@ -381,28 +395,38 @@ export const makeGameSuite = dbConnection => {
   };
 
   gs.handleSubmitJoinGame = async msg => {
-    let prospImposter;
-    try {
-      prospImposter = await gs.getGame(msg.gameId.toUpperCase()).then();
-      prospImposter = gs.addTimerData(prospImposter);
-    } catch {
-      logger.error(`[GS] Join game submission: could not find game ${msg.gameId}`);
-    }
-    if(prospImposter.phase !== 'lobby') {
+    const getImposter = async gameId => {
+      return new Promise((resolve, reject) => {
+        gs.getGame(gameId).then(g => {
+          const r = gs.addTimerData(g);
+          resolve(r);
+        }).catch(err => {
+          logger.error(`[GS] Join game submission: could not find game ${msg.gameId}`);
+          reject(err);
+        });
+      });
+    };
+    const currGame = await getImposter(msg.gameId.toUpperCase());
+    if(currGame.phase !== 'lobby') {
       return {
         error: true,
         msg: 'That game is currently in-session.'
       };
     }
-    let joiner;
-    try {
-      joiner = await gs.getPlayer(msg.socketId);
-      joiner.gameId = msg.gameId;
-      joiner.name = msg.playerName;
-      joiner.isPlaying = true;
-    } catch {
-      logger.error(`[GS] Join game submission: could not find player ${msg.socketId}`);
-    }
+    const playerJoin = async sockId => {
+      return new Promise((resolve, reject) => {
+        gs.getPlayer(sockId).then(p => {
+          p.gameId = msg.gameId;
+          p.name = msg.playerName;
+          p.isPlaying = true;
+          resolve(p);
+        }).catch(err => {
+          logger.error(`[GS] Join game submission: could not find player ${msg.socketId}`);
+          reject(err);
+        });
+      });
+    };
+    const joiner = await playerJoin(msg.socketId);
     try {
       await gs.updatePlayer(msg.socketId, {
         gameId: msg.gameId,
@@ -412,13 +436,13 @@ export const makeGameSuite = dbConnection => {
     } catch {
       logger.error(`[GS] Join game submission: could not update player ${msg.socketId}`);
     }
-    const newPlayers = prospImposter.players.concat([joiner]);
-    prospImposter.players = newPlayers;
+    const newPlayers = currGame.players.concat([joiner]);
+    currGame.players = newPlayers;
     try {
       await gs.updateGame(msg.gameId, {
         players: newPlayers
       });
-      return prospImposter;
+      return currGame;
     } catch {
       logger.error(`[GS] Join game submission: could not update game ${msg.gameId}`);
     }

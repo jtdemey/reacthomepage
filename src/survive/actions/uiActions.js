@@ -140,6 +140,20 @@ export const removeEntityTransitioningOut = ent => {
   };
 };
 
+export const removeTransitionInEntity = ent => {
+  return {
+    type: 'REMOVE_TRANSITION_IN_ENTITY',
+    entityName: ent
+  };
+};
+
+export const removeTransitionOutEntity = ent => {
+  return {
+    type: 'REMOVE_TRANSITION_OUT_ENTITY',
+    entityName: ent
+  };
+};
+
 export const removeItemFromList = ind => {
   const currentState = Object.assign({}, surviveStore.getState().ui);
   let localeItems = Object.assign([], currentState.localeItemButtons);
@@ -193,35 +207,17 @@ export const submitCommand = (txt) => {
 };
 
 export const transitionEntityIn = (ent, delay) => {
-  let currentEntities = Object.assign([], surviveStore.getState().ui.entitiesTransitioningIn);
-  for(let i = 0; i < currentEntities.length; i++) {
-    if(currentEntities[i] === ent) {
-      console.log(`Error in action transitionEntityIn: '${ent}' is already transitioning in`);
-      return;
-    }
-  }
-  currentEntities.push(ent);
   return {
     type: 'TRANSITION_ENTITY_IN',
     entityName: ent,
-    entitiesTransitioningIn: currentEntities,
     transitionDelay: delay
   };
 };
 
 export const transitionEntityOut = (ent, delay) => {
-  let currentEntities = Object.assign([], surviveStore.getState().ui.entitiesTransitioningOut);
-  for(let i = 0; i < currentEntities.length; i++) {
-    if(currentEntities[i] === ent) {
-      console.log(`Error in action transitionEntityOut: '${ent}' is already transitioning out`);
-      return;
-    }
-  }
-  currentEntities.push(ent);
   return {
     type: 'TRANSITION_ENTITY_OUT',
     entityName: ent,
-    entitiesTransitioningOut: currentEntities,
     transitionDelay: delay
   };
 };

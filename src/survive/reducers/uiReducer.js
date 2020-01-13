@@ -53,6 +53,16 @@ const uiReducer = (state = {}, action) => {
         ...state,
         entitiesTransitioningOut: action.entitiesTransitioningOut
       };
+    case 'REMOVE_TRANSITION_IN_ENTITY':
+      return {
+        ...state,
+        entitiesTransitioningIn: [...state.entitiesTransitioningIn, action.entityName]
+      };
+    case 'REMOVE_TRANSITION_OUT_ENTITY':
+      return {
+        ...state,
+        entitiesTransitioningOut: [...state.entitiesTransitioningOut, action.entityName]
+      };
     case 'REMOVE_ITEM_FROM_LIST':
       return {
         ...state,
@@ -84,12 +94,12 @@ const uiReducer = (state = {}, action) => {
     case 'TRANSITION_ENTITY_IN':
       return {
         ...state,
-        entitiesTransitioningIn: action.entitiesTransitioningIn
+        entitiesTransitioningIn: [...state.entitiesTransitioningIn, action.entityName]
       };
     case 'TRANSITION_ENTITY_OUT':
       return {
         ...state,
-        entitiesTransitioningOut: action.entitiesTransitioningOut
+        entitiesTransitioningOut: [...state.entitiesTransitioningOut, action.entityName]
       };
     case 'TRANSITION_ITEM_OUT':
       return {

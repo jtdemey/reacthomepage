@@ -17,7 +17,8 @@ export function* extendTimerSaga(action) {
   if(action.extendTimerCt < 3) {
     yield put(gameActions.emitSocketMsg({ 
       command: 'extendTimer',
-      gameId: action.gameId
+      gameId: action.gameId,
+      socketId: action.socketId
     }));
   }
   if(action.extendTimerCt === 3) {
@@ -47,7 +48,8 @@ export function* hurryUpSaga(action) {
   if(action.hurryUpCt < 6) {
     yield put(gameActions.emitSocketMsg({
       command: 'hurryUp',
-      gameId: action.gameId
+      gameId: action.gameId,
+      socketId: action.socketId
     }));
   }
   if(action.hurryUpCt === 6) {

@@ -20,5 +20,5 @@ expressApp.listen(port, () => {
 });
 
 const connectBot = createConnectBot();
-const gsDbConnection = connectBot.connect('gamesuite');
-const wss = createWebSocketServer(expressApp, gsDbConnection);
+const gsDbConnection = connectBot.connect('jdhomepage');
+const wss = createWebSocketServer(expressApp);

@@ -1,29 +1,17 @@
 import logger from '../logs/logWriter';
-import makeGameSchema from '../models/Game';
-import makePlayerSchema from '../models/Player';
 import Promise from 'bluebird';
 import { rollScenario } from '../imposter/app/imposterUtilities';
 
-/*
-    db.players.find().pretty()
-    db.games.find().pretty()
-    db.players.remove({gameId: null})
-    db.games.remove({paused: false})
-*/
+export const makeGameSuite = () => {
+  const gameSuite = {};
 
-export const makeGameSuite = dbConnection => {
-  const gs = {};
-
-  gs.isIdle = false;
-  gs.clock = null;
-  gs.db = dbConnection;
-  gs.gameModel = gs.db.model('Game', makeGameSchema());
-  gs.playerModel = gs.db.model('Player', makePlayerSchema());
-  gs.sockets = {};
-  gs.timers = {};
+  gameSuite.isIdle = false;
+  gameSuite.clock = null;
+  gameSuite.gameList = [];
+  gameSuite.playerList = [];
 
   //Creators
-  gs.makeCommand = (commName, params = null) => {
+  gameSuite.makeCommand = (commName, params = null) => {
     if(params) {
       return JSON.stringify({
         command: commName,
@@ -35,104 +23,59 @@ export const makeGameSuite = dbConnection => {
     });
   };
 
-  gs.makeGame = () => {
-    const id = gs.genGameId(4);
-    gs.timers[id] = {
-      tick: 0, 
-      remainingTime: 10
-    };
+  gameSuite.makeGame = () => {
     return {
-      createdOn: new Date().toISOString(),
-      gameId: id,
+      gameId: gameSuite.genGameId(),
       gameTitle: 'imposter',
       host: null,
       isPaused: false,
       players: [],
       phase: 'lobby',
-      remainingTime: 10,
+      remainingTime: 10, //To-do: change this
       scenario: null,
       condition: null,
-      roles: [],
       tick: 0,
       votes: []
     };
   };
 
-  gs.makePlayer = (socket, sockId) => {
-    gs.sockets[sockId] = socket;
+  gameSuite.makePlayer = (socket, sockId) => {
     return {
-      createdOn: new Date().toISOString(),
       extendTimerCt: 0,
       gameId: null,
       hurryUpCt: 0,
       isPlaying: false,
       name: null,
+      socket: socket,
       socketId: sockId
     };
   };
 
-  gs.makeVote = (type, thresh, callerId, callerName, accusedId = null, accusedName = null) => {
-    const vId = gs.genGameId(8);
-    gs.timers[vId] = 15;
+  gameSuite.makeVote = (type, callerId, accusedId = null) => {
     return {
-      voteId: vId,
       voteType: type,
-      tick: 15,
       callerId: callerId,
-      callerName,
-      yay: 1,
-      nay: 0,
-      threshold: thresh,
-      accusedId,
-      accusedName
+      accusedId: accusedId,
+      yay: 0,
+      nay: 0
     };
   };
 
   //Utilities
-  gs.addTimerData = game => {
-    const t = gs.timers[game.gameId];
-    if(!t) {
-      logger.error(`[GS] Unable to get timer data for ${game.gameId}`);
-    }
-    return Object.assign(game, t);
-  };
-
-  gs.countGames = async () => {
-    return gs.gameModel.countDocuments({});
-  };
-
-  gs.countPlayers = async () => {
-    return gs.playerModel.countDocuments({});
-  };
-
-  gs.depleteTimer = (gameId, amt) => {
-    gs.timers[gameId].remainingTime -= amt;
-  };
-
-  gs.emitToGame = async (gameId, command) => {
-    try {
-      const players = await gs.playerModel.find({ gameId: gameId }).exec();
-      players.forEach(p => {
-        const sockId = p.socketId;
-        const sock = gs.sockets[sockId];
-        if(!sock) {
-          logger.error(`[GS] Unable to emit to player ${sockId}: socket data not found`);
-        }
-        sock.send(command);
-      });
-    } catch {
-      logger.error(`[GS] Unable to emitToGame ${gameId}: player query failed`);
+  gameSuite.emitToGame = (gameId, command, debug = false) => {
+    const gamePlayers = gameSuite.playerList.filter(p => p.gameId === gameId);
+    for(let j = 0; j < gamePlayers.length; j++) {
+      if(debug) {
+        logger.info(`Sending ${JSON.parse(command).command} to ${gamePlayers[j].socketId}`);
+      }
+      gamePlayers[j].socket.send(command);
     }
   };
 
-  gs.extendTimer = (gameId, amt) => {
-    gs.timers[gameId].remainingTime += amt;
-  };
-
-  gs.genGameId = len => {
+  gameSuite.genGameId = () => {
     const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let id = '';
-    for(let i = 0; i < len; i++) {
+    for(let i = 0; i < 4; i++) {
       const cInd = Math.floor(Math.random() * abc.length);
       const c = abc.charAt(cInd);
       id += c;
@@ -140,7 +83,7 @@ export const makeGameSuite = dbConnection => {
     return id;
   };
 
-  gs.parseRes = msg => {
+  gameSuite.parseRes = msg => {
     try {
       const r = JSON.parse(msg);
       return r;
@@ -149,143 +92,102 @@ export const makeGameSuite = dbConnection => {
     }
   };
 
-  gs.purgeOldGameData = async (hours = 1) => {
-    const now = new Date((new Date().getTime() - (1 * hours * 60 * 60 * 1000)));
-    try {
-      const res = {
-        deletedGames: 0,
-        deletedPlayers: 0
-      };
-      const gct = await gs.countGames();
-      if(gct > 0) {
-        const oldGames = await gs.gameModel.deleteMany({
-          createdOn: { $gte: now }
-        }).exec();
-        if(oldGames.ok !== 1) {
-          logger.error(`[GS] Failed to purge old game data`);
-        } else {
-          res.deletedGames = oldGames.deletedCount;
-          if(res.deletedGames > 0) {
-            logger.info(`[GS] Purged ${oldGames.deletedCount} old games`);
-          }
-        }
-      }
-      const pct = await gs.countPlayers();
-      if(pct > 0) {
-        const oldPlayers = await gs.playerModel.deleteMany({
-          createdOn: { $gte: now }
-        }).exec();
-        if(oldPlayers.ok !== 1) {
-          logger.error(`[GS] Failed to purge old player data`);
-        } else {
-          res.deletedPlayers = oldPlayers.deletedCount;
-          if(res.deletedPlayers > 0) {
-            logger.info(`[GS] Purged ${oldPlayers.deletedCount} old players`);
-          }
-        }
-      }
-      return res;
-    } catch {
-      logger.error(`[GS] Unable to purge old game data`);
-    }
-  };
-
   //Getters
-  gs.getGame = async gameId => {
-    try {
-      return gs.gameModel.findOne({gameId: gameId}).exec();
-    } catch {
-      logger.error(`[GS] Unable to get game ${gameId}`);
+  gameSuite.getGame = gameId => {
+    const r = gameSuite.gameList.filter(g => g.gameId === gameId)[0];
+    if(r.length === 0) {
+      logger.error(`Could not get game ${gameId}`);
     }
+    return r;
   };
 
-  gs.getPlayer = async socketId => {
-    return gs.playerModel.findOne({socketId: socketId}).exec();
+  gameSuite.getPlayer = socketId => {
+    const r = gameSuite.playerList.filter(p => p.socketId === socketId)[0];
+    if(r.length === 0) {
+      logger.error(`Could not get player ${socketId}`);
+    }
+    return r;
   };
 
   //Setters
-  gs.updateGame = async (gameId, gameData) => {
-    return gs.gameModel.findOneAndUpdate({gameId: gameId}, {...gameData}).exec();
+  gameSuite.updateGame = (gameId, gameData) => {
+    let g = gameSuite.getGame(gameId.toUpperCase());
+    if(!g) {
+      logger.error(`Could not update game ${gameId}`);
+    }
+    g = {
+      ...g,
+      ...gameData
+    };
+    const f = gameSuite.gameList.filter(g => g.gameId !== gameId);
+    gameSuite.gameList = f.concat([g]);
   };
 
-  gs.updatePlayer = async (socketId, playerData) => {
-    return gs.playerModel.findOneAndUpdate({socketId: socketId}, {...playerData}).exec();
+  gameSuite.updatePlayer = (socketId, playerData) => {
+    let p = gameSuite.getPlayer(socketId);
+    if(!p) {
+      logger.error(`Could not update player ${socketId}`);
+    }
+    p = {
+      ...p,
+      ...playerData
+    };
+    const f = gameSuite.playerList.filter(p => p.socketId !== socketId);
+    gameSuite.playerList = f.concat([p]);
   };
 
   //Adders
-  gs.addGame = async game => {
-    return new gs.gameModel({...game}).save();
+  gameSuite.addGame = (game, debug = false) => {
+    gameSuite.gameList = gameSuite.gameList.concat([game]);
+    if(debug) {
+      logger.info(`Added game ${game.gameId} (Total: ${gameSuite.gameList.length})`);
+    }
   };
 
-  gs.addPlayer = async player => {
-    return new gs.playerModel({...player}).save();
+  gameSuite.addPlayer = (player, debug = false) => {
+    gameSuite.playerList = gameSuite.playerList.concat([player]);
+    if(debug) {
+      logger.info(`Added player ${player.socketId} (Total: ${gameSuite.playerList.length})`);
+    }
   };
 
   //Deleters
-  gs.removeGame = async gameId => {
-    return gs.gameModel.deleteOne({gameId: gameId}).exec();
+  gameSuite.removeGame = (gameId, debug = false) => {
+    const r = gameSuite.gameList.filter(g => g.gameId !== gameId);
+    gameSuite.gameList = r;
+    if(debug) {
+      logger.info(`Removed game ${gameId} (Total: ${gameSuite.gameList.length})`);
+    }
   };
 
-  gs.removePlayer = async socketId => {
-    try {
-      const game = await gs.gameModel.findOne({
-        players: {$elemMatch: {socketId: socketId}}
-      }).exec();
-      if(game) {
-        if(game.players.length < 1) {
-          await gs.removeGame(game.gameId);
-          logger.info(`[GS] Game ${game.gameId} removed: no players`);
-        } else {
-          game.players = game.players.filter(p => p.socketId !== socketId);
-          await game.save();
-        }
-      }
-    } catch {
-      logger.error(`[GS] Unable to query for games containing player ${socketId}`);
+  gameSuite.removePlayer = (socketId, debug = false) => {
+    const r = gameSuite.playerList.filter(p => p.socketId !== socketId);
+    gameSuite.playerList = r;
+    if(debug) {
+      logger.info(`Removed player ${socketId} (Total: ${gameSuite.playerList.length})`);
     }
-    return gs.playerModel.deleteOne({socketId: socketId}).exec();
   };
 
   //Lifecycle
-  gs.doGameTick = game => {
-    //Game timer
-    const t = gs.timers[game.gameId];
-    if(!t) {
-      logger.error(`[GS] Master tick: unable to get timer data for ${game.gameId}, removing...`);
-      gs.removeGame(game.gameId).catch(e => console.error(e));
-      return;
-    }
-    t.tick += 1;
-    t.remainingTime -= 1;
-    if(t.remainingTime < 0) {
-      return gs.iteratePhase(t.tick, game);
-    }
-    //Votes
-    const votes = [];
-    if(game.votes.length > 0) {
-      game.votes.forEach((v, i) => {
-        if(v.tick < 0) {
-          v.tick -= 1;
-          votes[i] = v;
-        }
-      });
-    }
-    return {
-      tick: t.tick,
-      remainingTime: t.remainingTime,
-      votes
+  gameSuite.doGameTick = game => {
+    let g = {
+      ...game
     };
+    g.tick += 1;
+    g.remainingTime -= 1;
+    if(g.remainingTime < 0) {
+      g = gameSuite.iteratePhase(g);
+    }
+    return g;
   };
 
-  gs.iteratePhase = (currTick, game) => {
+  gameSuite.iteratePhase = game => {
+    let g = {
+      ...game
+    };
     let phase;
     let remain;
-    let scene = {
-      scenario: undefined,
-      condition: undefined,
-      roles: []
-    };
-    switch(game.phase) {
+    switch(g.phase) {
       case 'lobby':
         phase = 'in-game';
         remain = '240';
@@ -293,7 +195,6 @@ export const makeGameSuite = dbConnection => {
       case 'in-game':
         phase = 'imposter-victory';
         remain = '10';
-        scene = rollScenario();
         break;
       case 'bystander-victory':
       case 'imposter-victory':
@@ -301,216 +202,104 @@ export const makeGameSuite = dbConnection => {
         remain = '60';
         break;
       default:
-        logger.info(`[GS] Unrecognized game phase ${game.phase}`);
+        logger.info(`Unrecognized game phase ${g.phase}`);
         break;
     }
-    gs.timers[game.gameId].remainingTime = remain;
-    gs.updateGame(game.gameId, {phase: phase}).then(() => {
-      logger.info(`[GS] Iterated phase to ${phase} for ${game.gameId}`);
-    }).catch(e => {
-      logger.error(`[GS] Iterate phase: unable to update active game ${game.gameId}: ${e}`);
-    });
     return {
-      tick: currTick,
+      ...g,
       phase: phase,
-      remainingTime: remain,
-      scenario: scene.scenario,
-      condition: scene.condition,
-      roles: scene.roles
+      remainingTime: remain
     };
   };
-   
-  gs.startGameClock = () => {
-    gs.clock = setInterval(async () => {
-      let activeGames;
-      try {
-        activeGames = await gs.gameModel.find({isPaused: false}).exec();
-      } catch {
-        logger.error(`[GS] Master clock: unable to find active games`);
-      }
-      if(activeGames) {
-        activeGames.forEach(async g => {
-          if(g.players.length < 1) {
-            try {
-              await gs.removeGame(g.gameId);
-              logger.info(`[GS] Removed empty game ${g.gameId}`);
-            } catch {
-              logger.error(`[GS] Master clock: unable to delete empty game ${g.gameId}`);
-            }
-          }
-          const meta = gs.doGameTick(g);
-          const newState = Object.assign(g, meta);
-          try {
-            await gs.emitToGame(g.gameId, gs.makeCommand('gameTick', {
-              gameState: newState 
-            }));
-          } catch {
-            logger.error(`[GS] Master clock: unable to emit to game ${g.gameId}`);
-          }
-        });
-      } else {
+
+  gameSuite.startGameClock = () => {
+    gameSuite.clock = setInterval(() => {
+      if(gameSuite.gameList.length < 1) {
         logger.info('[GS] Going idle...');
-        clearInterval(gs.clock);
-        gs.startIdleClock();
+        clearInterval(gameSuite.clock);
+        gameSuite.startIdleClock(gameSuite);
+      }
+      const activeGames = gameSuite.gameList.filter(g => g.isPaused === false && g.players.length > 0);
+      //logger.info(gameSuite.gameList[0].players.length);
+      for(let i = 0; i < activeGames.length; i++) {
+        let g = activeGames[i];
+        g = gameSuite.doGameTick(g);
+        gameSuite.updateGame(g.gameId, { ...g });
+        gameSuite.emitToGame(g.gameId, gameSuite.makeCommand('gameTick', {
+          gameState: g
+        }));
       }
     }, 1000);
   };
 
-  gs.startIdleClock = () => {
-    gs.clock = setInterval(async () => {
-      const gct = await gs.countGames();
-      if(gct > 0) {
-        logger.info(`[GS] Clock's a tickin`);
-        clearInterval(gs.clock);
-        gs.startGameClock(gs);
+  gameSuite.startIdleClock = () => {
+    gameSuite.clock = setInterval(() => {
+      if(gameSuite.gameList.length > 0) {
+        logger.info(`[GS] Bootin' up!`);
+        clearInterval(gameSuite.clock);
+        gameSuite.startGameClock(gameSuite);
       }
     }, 3000);
   };
 
-  //Message Handlers
-  gs.handleSubmitHostGame = async msg => {
-    const newImposter = gs.makeGame();
-    gs.sockets[msg.socketId].gameId = newImposter.gameId;
-    try {
-      await gs.updatePlayer(msg.socketId, {
-        gameId: newImposter.gameId,
-        name: msg.hostName || 'Dingus'
-      });
-    } catch {
-      logger.error(`[GS] Error in host game form submission: could not update host ${msg.socketId}`);
-    }
-    try {
-      const hostPlayer = await gs.getPlayer(msg.socketId);
-      newImposter.host = hostPlayer.socketId;
-      newImposter.players = newImposter.players.concat([hostPlayer]);
-    } catch {
-      logger.error(`[GS] Error in host game form submission: could not retrieve host ${msg.socketId}`);
-    }
-    try {
-      await gs.addGame(newImposter, true);
-      return newImposter;
-    } catch {
-      logger.error(`[GS] Error in host game form submission: could not add new game`);
-    }
+  //Form Handlers
+  gameSuite.handleSubmitHostGame = msg => {
+    const newImposter = gameSuite.makeGame();
+    gameSuite.updatePlayer(msg.socketId, {
+      gameId: newImposter.gameId,
+      name: msg.hostName || 'Dingus'
+    });
+    const hostPlayer = gameSuite.getPlayer(msg.socketId);
+    newImposter.host = hostPlayer.socketId;
+    newImposter.players = newImposter.players.concat([hostPlayer]);
+    gameSuite.addGame(newImposter, true);
+    logger.info(`[GS] Host game submitted by ${msg.socketId}`);
+    return newImposter;
   };
 
-  gs.handleSubmitJoinGame = async msg => {
-    const getImposter = async gameId => {
-      return new Promise((resolve, reject) => {
-        gs.getGame(gameId).then(g => {
-          const r = gs.addTimerData(g);
-          resolve(r);
-        }).catch(err => {
-          logger.error(`[GS] Join game submission: could not find game ${msg.gameId}`);
-          reject(err);
-        });
-      });
+  gameSuite.handleSubmitJoinGame = msg => {
+    const prospImposter = gameSuite.getGame(msg.gameId.toUpperCase());
+    gameSuite.updatePlayer(msg.socketId, {
+      gameId: msg.gameId,
+      name: msg.playerName
+    });
+    const joiner = gameSuite.getPlayer(msg.socketId);
+    const newPlayers = prospImposter.players.concat([joiner]);
+    gameSuite.updateGame(msg.gameId, {
+      players: newPlayers
+    });
+    logger.info(`[GS] Join game submitted by ${msg.socketId}`);
+    return {
+      ...prospImposter,
+      players: newPlayers
     };
-    const currGame = await getImposter(msg.gameId.toUpperCase());
-    if(currGame.phase !== 'lobby') {
-      return {
-        error: true,
-        msg: 'That game is currently in-session.'
-      };
-    }
-    const playerJoin = async sockId => {
-      return new Promise((resolve, reject) => {
-        gs.getPlayer(sockId).then(p => {
-          p.gameId = msg.gameId;
-          p.name = msg.playerName;
-          p.isPlaying = true;
-          resolve(p);
-        }).catch(err => {
-          logger.error(`[GS] Join game submission: could not find player ${msg.socketId}`);
-          reject(err);
-        });
-      });
-    };
-    const joiner = await playerJoin(msg.socketId);
-    try {
-      await gs.updatePlayer(msg.socketId, {
-        gameId: msg.gameId,
-        name: msg.playerName,
-        isPlaying: true
-      });
-    } catch {
-      logger.error(`[GS] Join game submission: could not update player ${msg.socketId}`);
-    }
-    const newPlayers = currGame.players.concat([joiner]);
-    currGame.players = newPlayers;
-    try {
-      await gs.updateGame(msg.gameId, {
-        players: newPlayers
-      });
-      return currGame;
-    } catch {
-      logger.error(`[GS] Join game submission: could not update game ${msg.gameId}`);
-    }
   };
 
-  gs.handleAccusePlayer = async msg => {
-    //Validate vote validity
-    let currGame;
-    let threshold;
-    try {
-      currGame = await gs.getGame(msg.gameId);
-      if(currGame.votes.length > 2 || currGame.votes.some(v => v.accuserId === msg.accuserId)) {
-        return;
-      }
-      threshold = currGame.players.length - 1;
-    } catch {
-      logger.error(`[GS] Accusation: could not get game ${msg.gameId}`);
+  //Events
+  gameSuite.handleAccusePlayer = msg => {
+    const currGame = gameSuite.getGame(msg.gameId);
+    if(currGame.votes.some(v => v.accuserId === msg.accuserId)) {
+      return;
     }
-    //Make vote
-    const accusation = gs.makeVote('accusation', threshold, msg.accuserId, msg.accuserName, msg.accusedId, msg.accusedName);
+    const accusation = gameSuite.makeVote('accusation', msg.accuserId, msg.accusedId);
     const newVotes = currGame.votes.concat([accusation]);
-    try {
-      await gs.updateGame(msg.gameId, {
-        votes: newVotes
-      });
-    } catch {
-      logger.error(`[GS] Accusation: could not update game ${msg.gameId}`);
-    }
-    //Emit to players 
-    try {
-      await gs.emitToGame(msg.gameId, gs.makeCommand('refreshVotes', {
-        votes: newVotes
-      }));
-      return true;
-    } catch {
-      logger.error(`[GS] Accusation: could not emit to game ${msg.gameId}`);
-    }
+    gameSuite.updateGame(msg.gameId, {
+      votes: newVotes
+    });
+    return newVotes;
   };
 
-  gs.handleReturnToLobby = async msg => {
-    let currGame;
-    let threshold;
-    try {
-      currGame = await gs.getGame(msg.gameId);
-      if(currGame.votes.length > 2 || currGame.votes.some(v => v.socketId === msg.socketId)) {
-        return;
-      }
-      threshold = currGame.players.length - 1;
-    } catch {
-      logger.error(`[GS] Return to Lobby: could not get game ${msg.gameId}`);
-    }
-    const vote = gs.makeVote('lobby', threshold, msg.socketId, msg.playerName);
-    const newVotes = currGame.votes.concat([vote]);
-    try {
-      await gs.updateGame(msg.gameId, {
-        votes: newVotes
-      });
-    } catch {
-      logger.error(`[GS] Return to Lobby: could not update game ${msg.gameId}`);
-    }
-    try {
-      await gs.emitToGame(msg.gameId, gs.makeCommand('refreshVotes', {
-        votes: newVotes
-      }));
-      return true;
-    } catch {
-      logger.error(`[GS] Accusation: could not emit to game ${msg.gameId}`);
-    }
+  gameSuite.extendTimer = (sockId, gameId) => {
+    const game = gameSuite.getGame(gameId);
+    game.remainingTime += 10;
+    logger.info(`[GS] Extended timer for ${gameId}`);
   };
-  return gs;
+
+  gameSuite.hurryUp = (sockId, gameId) => {
+    const game = gameSuite.getGame(gameId);
+    game.remainingTime -= 1;
+    logger.info(`[GS] Depleted timer for ${gameId}`);
+  };
+
+  return gameSuite;
 };

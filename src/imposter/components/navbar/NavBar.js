@@ -10,7 +10,7 @@ import {
   getThemeColors
 } from '../../app/imposterUtilities';
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
   return {
     gameInSession: state.game.gameInSession,
     socketId: state.game.socketId,
@@ -43,7 +43,7 @@ class NavBar extends React.Component {
                                                 : () => this.props.changeGameView(viewConstants.MAIN_MENU)}>Home</li>
           <li id="rules-link" onClick={() => this.props.toggleModal(1)}>Rules</li>
           <li id="settings-link" onClick={() => this.props.toggleModal(2)}>Settings</li>
-          <li><a href="#">Exit</a></li>
+          <li onClick={() => exitToMainMenu()}>Exit</li>
         </ul>
       </div>
     );

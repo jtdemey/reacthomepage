@@ -23,76 +23,36 @@ const handleSocketMsg = async (wss, ws, raw) => {
   if(msg.command !== 'ping') {
     logger.debug(`[GS] Socket ${msg.socketId} says "${msg.command}"`);
   }
+  let result;
   switch(msg.command) {
     //General
     case 'socketDisconnect':
-      wss.gs.removePlayer(msg.socketId, true)
-        .then(() => {
-          confirmTransaction(`Removed player ${msg.socketId}`)
-        })
-        .catch(() => {
-          handleGsErr(`Failed to remove player ${msg.socketId}`);
-        });
+      wss.gs.removePlayer(msg.socketId, true);
       break;
     //Imposter
     case 'launchedImposter':
-      wss.gs.addPlayer(wss.gs.makePlayer(ws, msg.socketId), true)
-        .then(() => {
-          confirmTransaction(`Added player ${msg.socketId}`);
-          ws.send(wss.gs.makeCommand('acceptImposterLaunch'));
-        })
-        .catch(err => {
-          handleGsErr(`Failed to add player ${msg.socketId} (${err})`);
-        });
+      wss.gs.addPlayer(wss.gs.makePlayer(ws, msg.socketId), true);
+      ws.send(wss.gs.makeCommand('acceptImposterLaunch'));
       break;
     case 'submitHostGame':
-      wss.gs.handleSubmitHostGame(msg)
-        .then(state => {
-          confirmTransaction(`Handled host game submission for ${msg.socketId}`);
-          ws.send(wss.gs.makeCommand('initGame', { gameState: state }));
-        })
-        .catch(err => {
-          handleGsErr(`Failed to handle host game submission for ${msg.socketId} (${err})`);
-        });
+      result = wss.gs.handleSubmitHostGame(msg);
+      ws.send(wss.gs.makeCommand('initGame', { gameState: result }));
       break;
     case 'submitJoinGame':
-      wss.gs.handleSubmitJoinGame(msg)
-        .then(state => {
-          if(state.error) {
-            confirmTransaction(`${msg.socketId} tried to join active game ${msg.gameId}`);
-            ws.send(wss.gs.makeCommand('imposterError', { text: state.msg }));
-            return;
-          }
-          confirmTransaction(`Handled join game submission for ${msg.socketId}`);
-          ws.send(wss.gs.makeCommand('initGame', { gameState: state }));
-        })
-        .catch(err => {
-          handleGsErr(`Failed to handle join game submission for ${msg.socketId} (${err})`);
-        });
+      result = wss.gs.handleSubmitJoinGame(msg);
+      ws.send(wss.gs.makeCommand('initGame', { gameState: result }));
       break;
     case 'extendTimer':
-      wss.gs.extendTimer(msg.gameId, 10);
+      wss.gs.extendTimer(msg.socketId, msg.gameId);
       break;
     case 'hurryUp':
-      wss.gs.depleteTimer(msg.gameId, 1);
+      wss.gs.depleteTimer(msg.socketId, msg.gameId);
       break;
     case 'accusePlayer':
-      wss.gs.handleAccusePlayer(msg)
-        .then(() => {
-          confirmTransaction(`Handled accuse player by ${msg.socketId}`);
-        })
-        .catch(err => {
-          handleGsErr(`Failed to handle accuse player for ${msg.socketId} (${err})`);
-        });
+      wss.gs.handleAccusePlayer(msg);
       break;
     case 'returnToLobby':
-      wss.gs.handleReturnToLobby(msg)
-        .then(() => {
-          confirmTransaction(`Handled return to lobby vote by ${msg.socketId}`);
-        })
-        .catch(err => {
-          handleGsErr(`Failed to handle lobby vote for ${msg.socketId} (${err})`);
-        });
+      wss.gs.handleReturnToLobby(msg);
       break;
     default:
       logger.error(`[WS] Socket command '${msg.command}' not recognized`);
@@ -100,11 +60,10 @@ const handleSocketMsg = async (wss, ws, raw) => {
   }
 };
 
-export const createWebSocketServer = (server, dbConn) => {
+export const createWebSocketServer = server => {
   const wss = makeServer(server);
-  wss.gs = makeGameSuite(dbConn);
+  wss.gs = makeGameSuite();
   wss.gs.startIdleClock();
-  wss.gs.purgeOldGameData().catch(err => logger.error(`[GS] Data purge: ${err}`));
   wss.on('connection', ws => {
     ws.on('message', e => {
       handleSocketMsg(wss, ws, e);

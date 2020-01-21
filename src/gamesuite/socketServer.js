@@ -46,7 +46,7 @@ const handleSocketMsg = async (wss, ws, raw) => {
       wss.gs.extendTimer(msg.socketId, msg.gameId);
       break;
     case 'hurryUp':
-      wss.gs.depleteTimer(msg.socketId, msg.gameId);
+      wss.gs.hurryUp(msg.socketId, msg.gameId);
       break;
     case 'accusePlayer':
       wss.gs.handleAccusePlayer(msg);

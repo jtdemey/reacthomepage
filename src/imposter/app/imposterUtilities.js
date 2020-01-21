@@ -1,5 +1,13 @@
 import { viewNames } from './imposterConstants';
 
+export const addAOrAn = str => {
+  const vowels = [ ...'aeiou' ];
+  if(vowels.some(v => v === str.charAt(0))) {
+    return 'an ' + str;
+  }
+  return 'a ' + str;
+};
+
 export const ajaxPost = (uri, msg) => {
   let req = new XMLHttpRequest();
   req.open('POST', uri, true);
@@ -108,174 +116,4 @@ export const getViewIdFromName = v => {
     console.error(`Could not get view ID of ${v}`);
   }
   return parseInt(k);
-};
-
-export const rollScenario = () => {
-  const scenarios = [
-    {
-      title: 'Animal Hospital',
-      roles: [
-        'Veterinarian',
-        'Anesthesiologist',
-        'Janitor',
-        'Surgeon',
-        'Front Desk Secretary',
-        'Biologist',
-        'Medical Intern',
-        'Medical Engineer',
-        'Pharmacologist',
-        'Nurse'
-      ]
-    },
-    {
-      title: 'Bank Robbers',
-      roles: [
-        'Mastermind',
-        'Demolitionist',
-        'Getaway Driver',
-        'Weapon Specialist',
-        'Technology Specialist',
-        'Vault-driller',
-        'The Distraction',
-        'Recon Specialist',
-        'Hostage Taker',
-        'Money Bagger'
-      ]
-    },
-    {
-      title: 'CIA Headquarters',
-      roles: [
-        'Mastermind',
-        'Demolitionist',
-        'Getaway Driver',
-        'Weapon Specialist',
-        'Technology Specialist',
-        'Vault-driller',
-        'The Distraction',
-        'Recon Specialist',
-        'Hostage Taker',
-        'Money Bagger'
-      ]
-    },
-    {
-      title: 'Diamond Miners',
-      roles: {
-        0: 'Mine Administrator',
-        1: 'Geologist',
-        2: 'Elevator Specialist',
-        3: 'Surveyor',
-        4: 'Miner',
-        5: 'Miner',
-        6: 'Miner',
-        7: 'Geologist',
-        8: 'Geologist',
-        9: 'Miner'
-      }
-    },
-    {
-      title: 'Jungle Safari',
-      roles: {
-        0: 'Expeditionist',
-        1: 'Biologist',
-        2: 'Survivalist',
-        3: 'Botanist',
-        4: 'Hunter',
-        5: 'Journalist',
-        6: 'Explorer',
-        7: 'Translator',
-        8: 'Biologist',
-        9: 'Photographer'
-      }
-    },
-    {
-      title: 'Polar Expeditionists',
-      roles: {
-        0: 'Head Researcher',
-        1: 'Assistant Researcher',
-        2: 'Meteorologist',
-        3: 'Surveyor',
-        4: 'Biologist',
-        5: 'Journalist',
-        6: 'Explorer',
-        7: 'Researcher',
-        8: 'Survivalist',
-        9: 'Photographer'
-      }
-    },
-    {
-      title: 'Aristocratic House Party',
-      roles: {
-        0: 'Governor',
-        1: 'Aristocrat',
-        2: 'Snob',
-        3: 'Entrepreneur',
-        4: 'Duke',
-        5: 'Duchess',
-        6: 'The Monopoly Guy',
-        7: 'Overseer',
-        8: 'Senator',
-        9: 'Baron'
-      }
-    },
-    {
-      title: 'Forest Hobo Camp',
-      roles: {
-        0: 'Hobo King',
-        1: 'Drifter',
-        2: 'Beggar',
-        3: 'Hippie',
-        4: 'Hobo',
-        5: 'Drifter',
-        6: 'Beggar',
-        7: 'Hobo',
-        8: 'Hobo',
-        9: 'Hobo'
-      }
-    },
-    {
-      title: 'ISIS Camp',
-      roles: {
-        0: 'Interrogator',
-        1: 'Executioner',
-        2: 'Captain',
-        3: 'Demolitionist',
-        4: 'Mercenary',
-        5: 'Terrorist',
-        6: 'Jihadist',
-        7: 'Prisoner of War',
-        8: 'Captured Journalist',
-        9: 'Soldier'
-      }
-    },
-    {
-      title: 'Art Museum',
-      roles: {
-        0: 'Art Snob',
-        1: 'Artist',
-        2: 'Art Admirer',
-        3: 'Security Guard',
-        4: 'Curator',
-        5: 'Art Critic',
-        6: 'Art Collector',
-        7: 'Tourist',
-        8: 'Art Enthusiast',
-        9: 'Artist'
-      }
-    }
-  ];
-  const conditions = [
-    `Everyone's injured`,
-    `Everyone's old`,
-    `Everyone has an indiscernable accent`,
-    `Everyone's sick`,
-    `It's way too hot`,
-    `It's way too cold`
-  ];
-  const scenarioRes = scenarios[Math.floor(Math.random() * scenarios.length)];
-  const conditionRes = conditions[Math.floor(Math.random() * conditions.length)];
-  return {
-    scenario: scenarioRes.title,
-    condition: conditionRes,
-    roles: scenarioRes.roles
-  };
 };

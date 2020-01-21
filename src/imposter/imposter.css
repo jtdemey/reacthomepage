@@ -339,6 +339,10 @@ input {
   border: 1px solid ghostwhite;
 }
 
+.text-center {
+  text-align: center;
+}
+
 /* MODAL */
 .modal-hidden {
   display: none !important;
@@ -520,6 +524,10 @@ input {
   margin: auto;
 }
 
+.game-view > h3 {
+  padding: 0.1rem;
+}
+
 .control-lbi {
   width: 40vw;
   height: 2em;
@@ -664,7 +672,7 @@ input {
 }
 
 .vote-area {
-  padding: 1em;
+  padding: 0.5rem;
   border-radius: 4px;
 }
 
@@ -712,7 +720,7 @@ input {
 }
 
 .notification-area{
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .notification-box {

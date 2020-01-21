@@ -6,6 +6,14 @@ const gameReducer = (state = {}, action) => {
       return {
         ...state
       };
+    case 'ASSIGN_SCENARIO':
+      return {
+        ...state,
+        imposterId: action.imposterId,
+        scenario: action.scenario,
+        condition: action.condition,
+        roles: action.roles
+      };
     case 'EMIT_SOCKET_MSG':
       return {
         ...state,
@@ -18,6 +26,10 @@ const gameReducer = (state = {}, action) => {
           ...state.player,
           extendTimerCt: action.extendTimerCt
         }
+      };
+    case gameActionTypes.GAME_TICK:
+      return {
+        ...state
       };
     case 'GET_NEW_GAME':
       return {

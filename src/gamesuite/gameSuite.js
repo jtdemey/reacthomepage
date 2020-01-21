@@ -1,6 +1,5 @@
 import logger from '../logs/logWriter';
-import Promise from 'bluebird';
-import { rollScenario } from '../imposter/app/imposterUtilities';
+import { rollScenario } from './imposter';
 
 export const makeGameSuite = () => {
   const gameSuite = {};
@@ -28,12 +27,14 @@ export const makeGameSuite = () => {
       gameId: gameSuite.genGameId(),
       gameTitle: 'imposter',
       host: null,
+      imposterId: null,
       isPaused: false,
       players: [],
       phase: 'lobby',
       remainingTime: 10, //To-do: change this
       scenario: null,
       condition: null,
+      roles: {}, 
       tick: 0,
       votes: []
     };
@@ -63,7 +64,7 @@ export const makeGameSuite = () => {
 
   //Utilities
   gameSuite.emitToGame = (gameId, command, debug = false) => {
-    const gamePlayers = gameSuite.playerList.filter(p => p.gameId === gameId);
+    const gamePlayers = gameSuite.playerList.filter(p => p.gameId && p.gameId === gameId);
     for(let j = 0; j < gamePlayers.length; j++) {
       if(debug) {
         logger.info(`Sending ${JSON.parse(command).command} to ${gamePlayers[j].socketId}`);
@@ -182,19 +183,18 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.iteratePhase = game => {
-    let g = {
-      ...game
-    };
+    let g = { ...game };
     let phase;
     let remain;
     switch(g.phase) {
       case 'lobby':
         phase = 'in-game';
         remain = '240';
+        g = gameSuite.applyScenario(g, rollScenario());
         break;
       case 'in-game':
         phase = 'imposter-victory';
-        remain = '10';
+        remain = '20';
         break;
       case 'bystander-victory':
       case 'imposter-victory':
@@ -220,7 +220,7 @@ export const makeGameSuite = () => {
         gameSuite.startIdleClock(gameSuite);
       }
       const activeGames = gameSuite.gameList.filter(g => g.isPaused === false && g.players.length > 0);
-      //logger.info(gameSuite.gameList[0].players.length);
+      //logger.debug(gameSuite.gameList[0].players.length);
       for(let i = 0; i < activeGames.length; i++) {
         let g = activeGames[i];
         g = gameSuite.doGameTick(g);
@@ -260,7 +260,7 @@ export const makeGameSuite = () => {
   gameSuite.handleSubmitJoinGame = msg => {
     const prospImposter = gameSuite.getGame(msg.gameId.toUpperCase());
     gameSuite.updatePlayer(msg.socketId, {
-      gameId: msg.gameId,
+      gameId: msg.gameId.toUpperCase(),
       name: msg.playerName
     });
     const joiner = gameSuite.getPlayer(msg.socketId);
@@ -276,9 +276,38 @@ export const makeGameSuite = () => {
   };
 
   //Events
+  gameSuite.applyScenario = (state, scene) => {
+    const result = {
+      ...state,
+      imposterId: null,
+      scenario: scene.scenario,
+      condition: scene.condition,
+      roles: []
+    };
+    const randomId = state.players[Math.floor(Math.random() * state.players.length)].socketId;
+    logger.info('got random id ' + randomId);
+    result.imposterId = randomId;
+    result.roles.push({
+      socketId: randomId,
+      role: 'the imposter'
+    });
+    state.players.forEach(p => {
+      if(p.socketId !== randomId) {
+        const role = scene.roles[Math.floor(Math.random() * scene.roles.length)];
+        result.roles.push({
+          socketId: p.socketId,
+          role
+        });
+        scene.roles = scene.roles.filter(r => r !== role);
+      }
+    });
+    logger.info(`[GS] Applied scenario ${scene.scenario} to ${state.gameId}`);
+    return result;
+  };
+
   gameSuite.handleAccusePlayer = msg => {
     const currGame = gameSuite.getGame(msg.gameId);
-    if(currGame.votes.some(v => v.accuserId === msg.accuserId)) {
+    if(msg.accuserId === msg.accusedId || currGame.votes.some(v => v.accuserId === msg.accuserId)) {
       return;
     }
     const accusation = gameSuite.makeVote('accusation', msg.accuserId, msg.accusedId);
@@ -286,6 +315,7 @@ export const makeGameSuite = () => {
     gameSuite.updateGame(msg.gameId, {
       votes: newVotes
     });
+    logger.info(`[GS] ${msg.gameId}: ${msg.accuserId} accuses ${msg.accusedId}`);
     return newVotes;
   };
 

@@ -6,6 +6,7 @@ const initialState = {
     gameId: null,
     gameInSession: false,
     host: null,
+    imposterId: null,
     phase: 0,
     player: {
       extendTimerCt: 0,
@@ -13,6 +14,9 @@ const initialState = {
       name: 'Some Goon'
     },
     players: [],
+    scenario: null,
+    condition: null,
+    roles: [],
     socketId: null,
     socket: null,
     tick: 0,

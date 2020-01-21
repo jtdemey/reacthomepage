@@ -12,6 +12,16 @@ export const accusePlayer = (accuserId, accuserName, accusedId, accusedName, gam
   };
 };
 
+export const assignScenario = scene => {
+  return {
+    type: gameActionTypes.ASSIGN_SCENARIO,
+    imposterId: scene.imposterId,
+    scenario: scene.scenario,
+    condition: scene.condition,
+    roles: scene.roles
+  };
+};
+
 export const emitSocketMsg = msg => {
   const currGame = imposterStore.getState().game;
   if(!msg.command) {
@@ -47,7 +57,8 @@ export const gameTick = gs => {
   const deltas = {
     isPaused: currGame.isPaused !== gs.isPaused,
     players: currGame.players !== gs.players,
-    phase: currGame.phase !== gs.phase
+    phase: currGame.phase !== gs.phase,
+    scenario: currGame.scenario !== gs.scenario
   };
   return {
     type: gameActionTypes.GAME_TICK,

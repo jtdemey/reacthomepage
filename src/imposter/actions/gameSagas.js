@@ -28,7 +28,12 @@ export function* extendTimerSaga(action) {
 
 export function* gameTickSaga(action) {
   yield put(gameActions.syncGameState(action.gameState));
+  //Phase change
   if(action.deltas.phase === true) {
+    console.log(action.gameState);
+    if(action.gameState.phase === 'in-game') {
+      yield put(gameActions.assignScenario(action.gameState.scenario, action.gameState.condition, action.gameState.roles));
+    }
     const currPhaseView = getViewIdFromName(action.currentPhase);
     const destPhaseView = getViewIdFromName(action.gameState.phase);
     yield put(uiActions.fadeEntityOut(currPhaseView));
@@ -39,8 +44,13 @@ export function* gameTickSaga(action) {
     yield delay(200);
     yield put(uiActions.removeFadeInEntity(destPhaseView));
   }
+  //Players
   if(action.deltas.players === true) {
     yield put(gameActions.updatePlayers(action.gameState.players));
+  }
+  //Scenario
+  if(action.deltas.scenario === true) {
+    yield put(gameActions.assignScenario(action.gameState));
   }
 }
 
@@ -59,7 +69,6 @@ export function* hurryUpSaga(action) {
 
 export function* initGameSaga(action) {
   yield put(gameActions.syncGameState(action.gameState));
-  console.log(action.gameState);
   const phaseView = getViewIdFromName(action.gameState.phase);
   yield delay(1000);
   yield put(uiActions.fadeEntityOut(viewConstants.LOADING));

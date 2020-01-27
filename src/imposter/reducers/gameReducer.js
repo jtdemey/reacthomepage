@@ -7,10 +7,12 @@ const gameReducer = (state = {}, action) => {
         ...state
       };
     case 'ASSIGN_SCENARIO':
+      console.log(action);
       return {
         ...state,
         imposterId: action.imposterId,
         scenario: action.scenario,
+        scenarioList: action.scenarioList,
         condition: action.condition,
         roles: action.roles
       };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import GameCode from '../auxiliary/GameCode';
 import GameTimer from '../auxiliary/GameTimer';
 import ScenarioPrompt from './ScenarioPrompt';
@@ -9,62 +9,58 @@ import NotificationArea from '../auxiliary/NotificationArea';
 import PlayerList from '../auxiliary/PlayerList';
 import { toggleAccusing } from '../../actions/uiActions';
 
-const mapStateToProps = state => {
-  return {
-    gameId: state.game.gameId,
-    socketId: state.game.socketId,
-    players: state.game.players,
-    scenario: state.game.scenario,
-    condition: state.game.condition,
-    roles: state.game.roles,
-    isAccusing: state.ui.isAccusing,
-    isFadingIn: state.ui.isFadingIn,
-    isFadingOut: state.ui.isFadingOut
-  };
+const getClass = props => {
+  const viewName = 'in-game';
+  let res = 'game-view';
+  if(props.isFadingIn.some(e => e === viewName)) {
+    res += ' fade-in';
+  }
+  if(props.isFadingOut.some(e => e === viewName)) {
+    res += ' fade-out';
+  }
+  return res;
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    toggleAccusing: cv => {
-      dispatch(toggleAccusing(cv));
-    }
-  };
+const getClickFunc = (props, dispatch, accuse) => {
+  return props.isAccusing ? () => dispatch(accuse(props.isAccusing)) : () => false;
 };
 
-class GameView extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  getClickFunc() {
-    return this.props.isAccusing ? () => this.props.toggleAccusing(this.props.isAccusing) : () => false;
-  }
-
-  getFadeState(c) {
-    const sc = c;
-    if(this.props.isFadingOut.some(e => e === sc)) {
-      c += ' fade-out';
-    }
-    return c;
-  }
-
-  render() {
-    const role = this.props.roles.filter(r => r.socketId === this.props.socketId)[0];
+const getGamePrompt = (sockId, isImposter) => {
+  if(isImposter) {
     return (
-      <div className={`game-view fade-in ${this.getFadeState('in-game')}`} onClick={this.getClickFunc()}>
-        <PlayerList players={this.props.players} />
-        <GameCode />
-        <GameTimer title="Time left:" />
-        <VoteArea />
-        <ScenarioPrompt scenario={this.props.scenario} condition={this.props.condition} role={role.role} />
-        <NotificationArea />
-        <InGameBtns socketId={this.props.socketId}
-                    gameId={this.props.gameId} />
-      </div>
+      <React.Fragment>
+        <h3 className="text-center">You are the Imposter.</h3>
+        <h3 className="text-center">Select the correct scenario</h3>
+        <h3 className="text-center">or stall until time runs out.</h3>
+      </React.Fragment>
     );
   }
-}
+  return <ScenarioPrompt socketId={sockId} />;
+};
 
-const GameViewCon = connect(mapStateToProps, mapDispatchToProps)(GameView);
+const GameView = () => {
+  const state = useSelector(state => ({
+    gameId: state.game.gameId,
+    imposterId: state.game.imposterId,
+    socketId: state.game.socketId,
+    players: state.game.players,
+    isAccusing: state.ui.isAccusing,
+    isFadingIn: state.ui.isFadingIn,
+    isFadingOut: state.ui.isFadingOut,
+  }));
+  return (
+    <div className={getClass(state)} onClick={state, getClickFunc(useDispatch(), toggleAccusing)}>
+      <PlayerList players={state.players} />
+      <GameCode />
+      <GameTimer title="Time left:" />
+      <VoteArea />
+      <NotificationArea />
+      {getGamePrompt(state.socketId, state.imposterId)}
+      <InGameBtns socketId={state.socketId}
+                  gameId={state.gameId}
+                  isImposter={state.imposterId === state.socketId} />
+    </div>
+  );
+};
 
-export default GameViewCon;
+export default GameView;

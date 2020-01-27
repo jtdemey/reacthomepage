@@ -1,33 +1,24 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import RulesModal from './RulesModal';
 import SettingsModal from './SettingsModal';
 import { toggleModal } from '../../actions/uiActions';
+import ScenarioModal from '../ingame/ScenarioModal';
 
-const mapStateToProps = (state, ownProps) => {
-  return {
+const ModalArea = () => {
+  const state = useSelector(state => ({
     modal: state.ui.modal
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    toggleModal: modalInd => {
-      dispatch(toggleModal(modalInd));
-    }
-  };
-};
-
-const ModalArea = props => {
-  const css = props.modal > 0 ? 'modal-area' : 'modal-area modal-hidden';
+  }));
+  const dispatch = useDispatch();
+  const clearModals = () => dispatch(toggleModal(0));
+  const css = state.modal > 0 ? 'modal-area' : 'modal-area modal-hidden';
   return (
-    <div className={css} onClick={() => { props.toggleModal(0); }}>
-      <RulesModal isVisible={props.modal === 1} closeModalFunc={() => props.toggleModal(0)} />
-      <SettingsModal isVisible={props.modal === 2} closeModalFunc={() => props.toggleModal(0)} />
+    <div className={css} onClick={() => clearModals()}>
+      <RulesModal isVisible={state.modal === 1} closeModalFunc={() => clearModals()} />
+      <SettingsModal isVisible={state.modal === 2} closeModalFunc={() => clearModals()} />
+      <ScenarioModal isVisible={state.modal === 3} closeModalFunc={() => clearModals()} />
     </div>
   );
 };
 
-const ModalAreaCon = connect(mapStateToProps, mapDispatchToProps)(ModalArea);
-
-export default ModalAreaCon;
+export default ModalArea;

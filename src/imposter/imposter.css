@@ -301,14 +301,13 @@ table {
 
 html, body {
   width: 100% !important;
-  height: 100% !important;
+  min-height: 100% !important;
 } 
 
 .site-wrapper, .modal-area {
   width: 100% !important;
   max-width: 2000px;
   min-height: 100%;
-  max-height: 1000px;
   margin: 0;
   padding: 0;
   color: white;
@@ -356,7 +355,7 @@ input {
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.69);
   z-index: 99;
 }
 
@@ -373,17 +372,20 @@ input {
   font-size: 1em;
 }
 
-.rules-modal {
+.modal-body {
   width: 80vw;
   height: 80vh;
   display: grid;
   grid-template-rows: 1em 1fr;
   margin: 10vh 10vw 10vh 10vw;
-  background: #fff;
-  color: #000;
-  overflow: scroll;
+  background: rgba(30, 30, 30, 0.95);
+  color: #eee;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  box-shadow: 0px 4px 10px 3px #000;
 }
 
+/* Rules Modal */
 .rules-content-area {
   width: 100%;
   height: 100%;
@@ -402,17 +404,7 @@ input {
   margin-right: 10px;
 }
 
-.settings-modal {
-  width: 80vw;
-  height: 80vh;
-  display: grid;
-  grid-template-rows: 1em 1fr;
-  margin: 10vh 10vw 10vh 10vw;
-  background: #fff;
-  color: #000;
-  overflow: scroll;
-}
-
+/* Settings Modal */
 .settings-content-area {
   width: 100%;
   height: 100%;
@@ -458,6 +450,39 @@ input {
 
 .remnant-btn {
   background: #88A26F;
+}
+
+/* Scenario Modal */
+.scenario-list {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 1rem;
+}
+
+.scenario-list > li {
+  margin: 0.25rem;
+  padding: 0.69rem;
+}
+
+.unselected-scenario {
+  background: rgba(52, 52, 52, 0.8);
+}
+
+.selected-scenario {
+  background: #2d6a68;
+}
+
+.scenario-list-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.scenario-list-btns > div {
+  height: 3rem;
+  padding: 1rem;
+  text-align: center;
+  background: #262626;
+  border: 1px solid #111;
 }
 
 /* ALERT */
@@ -511,12 +536,11 @@ input {
 /* APP */
 #imposter-app {
   width: 100%;
-  height: 100% !important;
 }
 
 .imposter-gameview { 
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .game-view {

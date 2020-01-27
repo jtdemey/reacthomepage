@@ -15,6 +15,7 @@ const initialState = {
     },
     players: [],
     scenario: null,
+    scenarioList: [],
     condition: null,
     roles: [],
     socketId: null,
@@ -27,7 +28,7 @@ const initialState = {
   },
   ui: {
     theme: 4,
-    modal: 0, //0:none 1:rules 2:settings
+    modal: 0, //0:none 1:rules 2:settings 3:scenario
     notifications: [],
     view: viewConstants.MAIN_MENU,
     isAccusing: false,

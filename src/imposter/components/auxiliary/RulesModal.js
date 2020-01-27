@@ -1,7 +1,7 @@
 import React from 'react';
 
 const RulesModal = props => {
-  const css = props.isVisible ? 'rules-modal fade-in' : 'modal-hidden rules-modal';
+  const css = props.isVisible ? 'modal-body fade-in' : 'modal-hidden';
   return (
     <div className={css}>
       <div className="close-modal-row">
@@ -18,9 +18,9 @@ const RulesModal = props => {
         <span className="dark-highlight">scenario</span>&nbsp;
         and a&nbsp;
         <span className="light-highlight">condition</span>.</p><br />
-        <p>If you're <span className="light-hightlight">innocent</span>, the scenario and condition will 
+        <p>If you&apos;re <span className="light-hightlight">innocent</span>, the scenario and condition will 
           be shown on your screen.</p><br />
-        <p>If you're the <span className="dark-highlight">Imposter</span>, however, you won't
+        <p>If you&apos;re the <span className="dark-highlight">Imposter</span>, however, you won't
           know this information.</p><br />
         <p>The <span className="light-highlight">objective</span> for the innocents is to unanimously agree
           on who the Imposter is. If you think you know who the Imposter is, 

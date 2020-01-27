@@ -27,6 +27,13 @@ const mapDispatchToProps = dispatch => {
 
 const InGameBtns = props => {
   const look = getThemeColors(props.theme);
+  let scenarioBtn = null;
+  if(props.isImposter) {
+    scenarioBtn = (<ListButtonItem clickFunc={() => props.toggleAccusing(props.isAccusing)}
+                      look={{background: props.isAccusing ? '#fff' : look.secondary}}
+                      otherClasses={props.isAccusing ? 'control-lbi is-accusing-btn infinite-shake' : 'control-lbi'}
+                      text={props.isAccusing ? 'Select imposter' : 'Accuse'} />);
+  }
   return (
     <div className="lobby-btns">
       <ListButtonItem clickFunc={() => props.toggleAccusing(props.isAccusing)}
@@ -37,6 +44,7 @@ const InGameBtns = props => {
                       look={{background: look.secondary}}
                       otherClasses="control-lbi"
                       text="Return to Lobby" />
+      {scenarioBtn}
     </div>
   );
 };

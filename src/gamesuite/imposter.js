@@ -160,7 +160,6 @@ export const rollScenario = () => {
     `It's way too cold`,
     `You forgot to do something important`,
     `It smells like shit`,
-    `You accidentally took laxatives`,
     `You're nearly deaf`
   ];
   const scenarioRes = scenarios[Math.floor(Math.random() * scenarios.length)];

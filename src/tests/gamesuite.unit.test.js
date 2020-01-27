@@ -46,6 +46,7 @@ describe('GameSuite unit tests', () => {
     expect(r.condition).not.toBeNull();
     expect(r.roles.some(x => x.socketId === player1.socketId)).toEqual(true);
     expect(r.roles.some(x => x.socketId === player2.socketId)).toEqual(true);
+    expect(r.roles.some(x => x.role === 'the imposter')).toEqual(true);
   });
 
 });

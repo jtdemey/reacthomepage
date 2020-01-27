@@ -21,7 +21,7 @@ const makeBtn = (n, i, c, e) => {
 };
 
 const SettingsModal = props => {
-  const css = props.isVisible ? 'settings-modal fade-in' : 'modal-hidden settings-modal';
+  const css = props.isVisible ? 'modal-body fade-in' : 'modal-hidden';
   const themeOptions = [
     makeBtn(0, 'crystal-btn', () => props.changeTheme(0), 'Crystal'),
     makeBtn(1, 'seascape-btn', () => props.changeTheme(1), 'Seascape'),

@@ -17,6 +17,7 @@ export const assignScenario = scene => {
     type: gameActionTypes.ASSIGN_SCENARIO,
     imposterId: scene.imposterId,
     scenario: scene.scenario,
+    scenarioList: scene.scenarioList,
     condition: scene.condition,
     roles: scene.roles
   };

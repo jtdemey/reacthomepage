@@ -75,7 +75,7 @@ export const getThemeColors = themeId => {
   if(themeId === 0) {
     //Crystal
     return {
-      primary: '#511C29',
+      primary: '#39141E',
       secondary: '#A62639',
       highlight: '#DB324D'
     };
@@ -96,8 +96,8 @@ export const getThemeColors = themeId => {
   } else if(themeId === 3) {
     //Synth
     return {
-      primary: '#468387',
-      secondary: '#3b3c3b',
+      primary: '#3b3c3b',
+      secondary: '#468387',
       highlight: '#74ba9f'
     };
   } else if(themeId === 4) {

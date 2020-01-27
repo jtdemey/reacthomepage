@@ -28,12 +28,20 @@ export function* extendTimerSaga(action) {
 
 export function* gameTickSaga(action) {
   yield put(gameActions.syncGameState(action.gameState));
+  //Scenario
+  if(action.deltas.scenario === true) {
+    console.log(action.gameState);
+    console.log('aiefoisejfaieosj');
+    yield put(gameActions.assignScenario({
+      imposterId: action.gameState.imposterId,
+      scenario: action.gameState.scenario,
+      scenarioList: action.gameState.scenarioList,
+      condition: action.gameState.condition,
+      roles: action.gameState.roles
+    }));
+  }
   //Phase change
   if(action.deltas.phase === true) {
-    console.log(action.gameState);
-    if(action.gameState.phase === 'in-game') {
-      yield put(gameActions.assignScenario(action.gameState.scenario, action.gameState.condition, action.gameState.roles));
-    }
     const currPhaseView = getViewIdFromName(action.currentPhase);
     const destPhaseView = getViewIdFromName(action.gameState.phase);
     yield put(uiActions.fadeEntityOut(currPhaseView));
@@ -47,10 +55,6 @@ export function* gameTickSaga(action) {
   //Players
   if(action.deltas.players === true) {
     yield put(gameActions.updatePlayers(action.gameState.players));
-  }
-  //Scenario
-  if(action.deltas.scenario === true) {
-    yield put(gameActions.assignScenario(action.gameState));
   }
 }
 

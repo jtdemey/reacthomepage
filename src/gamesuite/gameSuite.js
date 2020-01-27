@@ -33,8 +33,9 @@ export const makeGameSuite = () => {
       phase: 'lobby',
       remainingTime: 10, //To-do: change this
       scenario: null,
+      scenarioList: [],
       condition: null,
-      roles: {}, 
+      roles: [], 
       tick: 0,
       votes: []
     };
@@ -162,6 +163,11 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.removePlayer = (socketId, debug = false) => {
+    const activeGames = gameSuite.gameList.filter(g => g.players.some(p => p.socketId === socketId));
+    if(activeGames.length > 0) {
+      gameSuite.removeGame(activeGames[0].gameId);
+      logger.info(`Removed empty game ${activeGames[0].gameId} (Total: ${gameSuite.gameList.length})`);
+    }
     const r = gameSuite.playerList.filter(p => p.socketId !== socketId);
     gameSuite.playerList = r;
     if(debug) {
@@ -281,11 +287,12 @@ export const makeGameSuite = () => {
       ...state,
       imposterId: null,
       scenario: scene.scenario,
+      scenarioList: scene.scenarioList,
       condition: scene.condition,
       roles: []
     };
     const randomId = state.players[Math.floor(Math.random() * state.players.length)].socketId;
-    logger.info('got random id ' + randomId);
+    logger.info(`${state.gameId}: Assigned imposter to ` + randomId);
     result.imposterId = randomId;
     result.roles.push({
       socketId: randomId,

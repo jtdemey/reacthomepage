@@ -26,6 +26,7 @@ export const makeGameSuite = () => {
     return {
       gameId: gameSuite.genGameId(),
       gameTitle: 'imposter',
+      gameOverReason: null,
       host: null,
       imposterId: null,
       isPaused: false,
@@ -53,11 +54,15 @@ export const makeGameSuite = () => {
     };
   };
 
-  gameSuite.makeVote = (type, callerId, accusedId = null) => {
+  gameSuite.makeVote = (type, callerId, callerName, threshold, accusedId = null) => {
     return {
+      voteId: gameSuite.genVoteId(),
       voteType: type,
       callerId: callerId,
+      callerName,
       accusedId: accusedId,
+      tick: 10,
+      threshold,
       yay: 0,
       nay: 0
     };
@@ -78,6 +83,17 @@ export const makeGameSuite = () => {
     const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let id = '';
     for(let i = 0; i < 4; i++) {
+      const cInd = Math.floor(Math.random() * abc.length);
+      const c = abc.charAt(cInd);
+      id += c;
+    }
+    return id;
+  };
+
+  gameSuite.genVoteId = () => {
+    const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+    let id = '';
+    for(let i = 0; i < 8; i++) {
       const cInd = Math.floor(Math.random() * abc.length);
       const c = abc.charAt(cInd);
       id += c;
@@ -185,37 +201,48 @@ export const makeGameSuite = () => {
     if(g.remainingTime < 0) {
       g = gameSuite.iteratePhase(g);
     }
+    if(g.votes.length > 0) {
+      const passedVotes = g.votes.filter(v => v.yay >= v.threshold);
+      if(passedVotes.length > 0) {
+        passedVotes.forEach(v => {
+          if(v.voteType === 'lobby') {
+            gameSuite.updateGame(g.gameId, {
+              phase: 'lobby',
+              remainingTime: 60
+            });
+          } else if(v.voteType === 'accusation') {
+            //Accuse stuff here
+          }
+        });
+      }
+      const tickedVotes = g.votes.map(v => ({ ...v, tick: v.tick - 1 })).filter(v => v.tick > 0);
+      g.votes = tickedVotes;
+    }
     return g;
   };
 
   gameSuite.iteratePhase = game => {
     let g = { ...game };
-    let phase;
-    let remain;
     switch(g.phase) {
       case 'lobby':
-        phase = 'in-game';
-        remain = '240';
+        g.phase = 'in-game';
+        g.remainingTime = 240;
         g = gameSuite.applyScenario(g, rollScenario());
         break;
       case 'in-game':
-        phase = 'imposter-victory';
-        remain = '20';
+        g.phase = 'imposter-victory';
+        g.remainingTime = 20;
         break;
       case 'bystander-victory':
       case 'imposter-victory':
-        phase = 'lobby';
-        remain = '60';
+        g.phase = 'lobby';
+        g.remainingTime = 60;
         break;
       default:
         logger.info(`Unrecognized game phase ${g.phase}`);
         break;
     }
-    return {
-      ...g,
-      phase: phase,
-      remainingTime: remain
-    };
+    return g;
   };
 
   gameSuite.startGameClock = () => {
@@ -314,28 +341,80 @@ export const makeGameSuite = () => {
 
   gameSuite.handleAccusePlayer = msg => {
     const currGame = gameSuite.getGame(msg.gameId);
-    if(msg.accuserId === msg.accusedId || currGame.votes.some(v => v.accuserId === msg.accuserId)) {
+    if(msg.accuserId === msg.accusedId || currGame.votes.some(v => v.callerId === msg.accuserId)) {
       return;
     }
-    const accusation = gameSuite.makeVote('accusation', msg.accuserId, msg.accusedId);
+    const callerName = currGame.players.filter(p => p.socketId === msg.accuserId)[0].name;
+    if(!callerName) {
+      logger.error(`[GS] Accuse player: Unable to find player name for ${msg.accuserId}`);
+    }
+    const thresh = currGame.players.length - 1;
+    const accusation = gameSuite.makeVote('accusation', msg.accuserId, callerName, thresh, msg.accusedId);
     const newVotes = currGame.votes.concat([accusation]);
     gameSuite.updateGame(msg.gameId, {
       votes: newVotes
     });
+    gameSuite.emitToGame(currGame.gameId, gameSuite.makeCommand('refreshVotes', {
+      votes: newVotes
+    }));
     logger.info(`[GS] ${msg.gameId}: ${msg.accuserId} accuses ${msg.accusedId}`);
-    return newVotes;
+  };
+
+  gameSuite.handleLobbyReturnVote = msg => {
+    const currGame = gameSuite.getGame(msg.gameId);
+    if(currGame.votes.some(v => v.callerId === msg.socketId)) {
+      return;
+    }
+    const callerName = currGame.players.filter(p => p.socketId === msg.socketId)[0].name;
+    if(!callerName) {
+      logger.error(`[GS] Return to lobby: Unable to find player name for ${msg.socketId}`);
+    }
+    const thresh = currGame.players.length - 1;
+    const vote = gameSuite.makeVote('lobby', msg.socketId, callerName, thresh);
+    const newVotes = currGame.votes.concat([vote]);
+    gameSuite.updateGame(msg.gameId, {
+      votes: newVotes
+    });
+    gameSuite.emitToGame(currGame.gameId, gameSuite.makeCommand('refreshVotes', {
+      votes: newVotes
+    }));
+    logger.info(`[GS] ${msg.gameId}: ${msg.socketId} votes to return to the lobby`);
   };
 
   gameSuite.extendTimer = (sockId, gameId) => {
     const game = gameSuite.getGame(gameId);
     game.remainingTime += 10;
-    logger.info(`[GS] Extended timer for ${gameId}`);
+    logger.info(`[GS] ${sockId} extended timer for ${gameId}`);
   };
 
   gameSuite.hurryUp = (sockId, gameId) => {
     const game = gameSuite.getGame(gameId);
     game.remainingTime -= 1;
-    logger.info(`[GS] Depleted timer for ${gameId}`);
+    logger.info(`[GS] ${sockId} depleted timer for ${gameId}`);
+  };
+
+  gameSuite.identifyScenario = msg => {
+    const game = gameSuite.getGame(msg.gameId);
+    const imposter = game.players.filter(p => p.socketId === msg.imposterId);
+    const imposterName = imposter.name || 'The Imposter';
+    if(imposter.length < 1) {
+      logger.error(`[GS] Identify scenario: unable to find imposter with ID ${msg.imposterId}`);
+    }
+    if(game.scenario === msg.scenario) {
+      gameSuite.updateGame(msg.gameId, {
+        gameOverReason: `${imposterName} identified your scenario.`,
+        phase: 'imposter-victory',
+        remainingTime: 15
+      });
+      logger.info(`[GS] Imposter for ${msg.gameId} guessed correct scenario`);
+    } else {
+      gameSuite.updateGame(msg.gameId, {
+        gameOverReason: `${imposterName} done goofed and guessed the wrong scenario.`,
+        phase: 'bystander-victory',
+        remainingTime: 15
+      });
+      logger.info(`[GS] Imposter for ${msg.gameId} guessed the wrong scenario`);
+    }
   };
 
   return gameSuite;

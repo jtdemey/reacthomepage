@@ -1,38 +1,41 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { emitSocketMsg } from '../../actions/gameActions';
 
+//CSS
 const getLiCss = isSelected => isSelected ? 'text-center selected-scenario' : 'text-center unselected-scenario';
+const getConfirmCss = isDisabled => isDisabled ? ({color: '#777', cursor: 'not-allowed'}) : ({cursor: 'pointer'});
 
-const getConfirmCss = isDisabled => isDisabled ? ({cursor: 'not-allowed'}) : ({cursor: 'pointer'});
-
+//Events
+const getConfirmFunc = (isDisabled, state, dispatch, closeModal, setSelected) => isDisabled ? () => false : () => {
+  dispatch(emitSocketMsg({
+    command: 'identifyScenario',
+    gameId: state.gameId,
+    imposterId: state.imposterId,
+    scenario: state.scenario
+  }));
+  setSelected(null);
+  closeModal();
+};
+const getCloseModalFunc = (setSelected, closeModal) => () => {
+  setSelected(null);
+  closeModal();
+};
+ 
 const ScenarioModal = props => {
   const state = useSelector(state => ({
+    gameId: state.game.gameId,
+    imposterId: state.game.imposterId,
     scenarios: state.game.scenarioList
   }));
-  state.scenarios = [
-    'iewjoriwjeroiwjeriwej',
-    'kdfjnv.dkfjnvkdfjvndfkjnv',
-    'woirerupwoeirywuioeyrpu',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-    '8273y48o237y482374y823',
-  ];
   const [selected, setSelected] = useState(null);
+  const dispatch = useDispatch();
   const css = props.isVisible ? 'modal-body fade-in' : 'modal-hidden';
   return (
     <div className={css} onClick={e => e.stopPropagation()}>
       <div className="close-modal-row">
         <span className="close-x"
-              onClick={props.closeModalFunc}>
+              onClick={getCloseModalFunc(setSelected, props.closeModalFunc)}>
           <strong>x</strong>
         </span>
       </div>
@@ -42,8 +45,12 @@ const ScenarioModal = props => {
         ))}
       </ul>
       <div className="scenario-list-btns">
-        <div className="scenario-confirm" style={getConfirmCss(selected === null)}>Confirm</div>
-        <div className="scenario-cancel">Cancel</div>
+        <div className="scenario-confirm"
+             onClick={getConfirmFunc(selected === null, state, dispatch, props.closeModalFunc, setSelected)}
+             style={getConfirmCss(selected === null)}>
+              Confirm
+        </div>
+        <div className="scenario-cancel" onClick={getCloseModalFunc(setSelected, props.closeModalFunc)}>Cancel</div>
       </div>
     </div>
   );

@@ -52,7 +52,10 @@ const handleSocketMsg = async (wss, ws, raw) => {
       wss.gs.handleAccusePlayer(msg);
       break;
     case 'returnToLobby':
-      wss.gs.handleReturnToLobby(msg);
+      wss.gs.handleLobbyReturnVote(msg);
+      break;
+    case 'identifyScenario':
+      wss.gs.identifyScenario(msg);
       break;
     default:
       logger.error(`[WS] Socket command '${msg.command}' not recognized`);

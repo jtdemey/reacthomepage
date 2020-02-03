@@ -7,7 +7,6 @@ const gameReducer = (state = {}, action) => {
         ...state
       };
     case 'ASSIGN_SCENARIO':
-      console.log(action);
       return {
         ...state,
         imposterId: action.imposterId,
@@ -15,6 +14,15 @@ const gameReducer = (state = {}, action) => {
         scenarioList: action.scenarioList,
         condition: action.condition,
         roles: action.roles
+      };
+    case gameActionTypes.CLEAR_TEMP_PHASE_DATA:
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          extendTimerCt: 0,
+          hurryUpCt: 0
+        }
       };
     case 'EMIT_SOCKET_MSG':
       return {
@@ -108,11 +116,13 @@ const gameReducer = (state = {}, action) => {
       return {
         ...state,
         gameId: action.gameId,
+        gameOverReason: action.gameOverReason,
         isPaused: action.isPaused,
         phase: action.phase,
         players: action.players,
         remainingTime: action.remainingTime,
-        tick: action.tick
+        tick: action.tick,
+        votes: action.votes
       };
     case 'UPDATE_PLAYERS':
       return {

@@ -23,6 +23,12 @@ export const assignScenario = scene => {
   };
 };
 
+export const clearTempPhaseData = () => {
+  return {
+    type: gameActionTypes.CLEAR_TEMP_PHASE_DATA
+  };
+};
+
 export const emitSocketMsg = msg => {
   const currGame = imposterStore.getState().game;
   if(!msg.command) {
@@ -158,11 +164,13 @@ export const syncGameState = gs => {
   return {
     type: gameActionTypes.SYNC_GAME_STATE,
     gameId: gs.gameId,
+    gameOverReason: gs.gameOverReason,
     isPaused: gs.isPaused,
     phase: gs.phase,
     players: gs.players,
     remainingTime: gs.remainingTime,
-    tick: gs.tick
+    tick: gs.tick,
+    votes: gs.votes
   };
 };
 

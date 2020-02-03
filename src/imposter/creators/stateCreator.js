@@ -5,6 +5,7 @@ const initialState = {
     alertText: null,
     gameId: null,
     gameInSession: false,
+    gameOverReason: null,
     host: null,
     imposterId: null,
     phase: 0,

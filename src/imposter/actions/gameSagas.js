@@ -30,8 +30,6 @@ export function* gameTickSaga(action) {
   yield put(gameActions.syncGameState(action.gameState));
   //Scenario
   if(action.deltas.scenario === true) {
-    console.log(action.gameState);
-    console.log('aiefoisejfaieosj');
     yield put(gameActions.assignScenario({
       imposterId: action.gameState.imposterId,
       scenario: action.gameState.scenario,
@@ -42,6 +40,7 @@ export function* gameTickSaga(action) {
   }
   //Phase change
   if(action.deltas.phase === true) {
+    yield put(gameActions.clearTempPhaseData());
     const currPhaseView = getViewIdFromName(action.currentPhase);
     const destPhaseView = getViewIdFromName(action.gameState.phase);
     yield put(uiActions.fadeEntityOut(currPhaseView));

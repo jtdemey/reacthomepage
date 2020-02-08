@@ -208,10 +208,15 @@ export const makeGameSuite = () => {
           if(v.voteType === 'lobby') {
             gameSuite.updateGame(g.gameId, {
               phase: 'lobby',
-              remainingTime: 60
+              remainingTime: 60,
+              votes: g.votes.filter(x => x.voteId !== v.voteId)
             });
           } else if(v.voteType === 'accusation') {
-            //Accuse stuff here
+            gameSuite.updateGame(g.gameId, {
+              phase: 'imposter-victory',
+              remainingTime: 20,
+              votes: g.votes.filter(x => x.voteId !== v.voteId)
+            });
           }
         });
       }

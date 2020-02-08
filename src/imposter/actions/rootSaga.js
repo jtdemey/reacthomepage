@@ -11,7 +11,9 @@ import { takeEvery, takeLatest } from 'redux-saga/effects'; import {
 import {
   alertMessageSaga,
   changeGameViewSaga,
-  changeViewValueSaga
+  changeViewValueSaga,
+  fadeEntityInSaga,
+  fadeEntityOutSaga
 } from './uiSagas';
 import {
   gameActionTypes,
@@ -30,4 +32,6 @@ function* rootSaga() {
   yield takeEvery(uiActionTypes.ALERT_MESSAGE, alertMessageSaga);
   yield takeEvery(uiActionTypes.CHANGE_VIEW_VALUE, changeViewValueSaga);
   yield takeEvery(uiActionTypes.CHANGE_GAME_VIEW, changeGameViewSaga);
+  yield takeEvery(uiActionTypes.FADE_ENTITY_IN, fadeEntityInSaga);
+  yield takeEvery(uiActionTypes.FADE_ENTITY_OUT, fadeEntityOutSaga);
 } export default rootSaga;

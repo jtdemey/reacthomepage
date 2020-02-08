@@ -61,27 +61,28 @@ export const clearNotifications = () => {
   };
 };
 
-export const fadeEntityIn = entityName => {
-  const fadeIns = [...imposterStore.getState().ui.isFadingIn];
-  fadeIns.push(entityName);
+export const fadeEntityIn = (entityName, delay = 500) => {
+  const fadeIns = [...imposterStore.getState().ui.isFadingIn].concat([entityName]);
   return {
     type: uiActionTypes.FADE_ENTITY_IN,
-    isFadingIn: fadeIns
+    isFadingIn: fadeIns,
+    entityName,
+    delay
   };
 };
 
-export const fadeEntityOut = entityName => {
-  const fadeOuts = [...imposterStore.getState().ui.isFadingOut];
-  fadeOuts.push(entityName);
+export const fadeEntityOut = (entityName, delay = 500) => {
+  const fadeOuts = [...imposterStore.getState().ui.isFadingOut].concat([entityName]);
   return {
     type: uiActionTypes.FADE_ENTITY_OUT,
-    isFadingOut: fadeOuts
+    isFadingOut: fadeOuts,
+    entityName,
+    delay
   };
 };
 
 export const removeFadeInEntity = entityName => {
-  const currentFadeIns = [...imposterStore.getState().ui.isFadingIn];
-  const fadeIns = currentFadeIns.filter(e => e !== entityName);
+  const fadeIns = imposterStore.getState().ui.isFadingIn.filter(e => e !== entityName);
   return {
     type: uiActionTypes.REMOVE_FADE_IN_ENTITY,
     isFadingIn: fadeIns
@@ -89,8 +90,7 @@ export const removeFadeInEntity = entityName => {
 };
 
 export const removeFadeOutEntity = entityName => {
-  const currentFadeOuts = [...imposterStore.getState().ui.isFadingOut];
-  const fadeOuts = currentFadeOuts.filter(e => e !== entityName);
+  const fadeOuts = imposterStore.getState().ui.isFadingOut.filter(e => e !== entityName);
   return {
     type: uiActionTypes.REMOVE_FADE_OUT_ENTITY,
     isFadingOut: fadeOuts

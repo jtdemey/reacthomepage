@@ -64,7 +64,7 @@ export const getFadeState = (fadingIn, fadingOut, entityId) => {
   } else if(fadingOut.some(e => e === entityId)) {
     return ' fade-out';
   }
-  return false;
+  return '';
 };
 
 export const getPlayerNameFromId = id => {

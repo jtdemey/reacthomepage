@@ -8,18 +8,8 @@ import VoteArea from './VoteArea';
 import NotificationArea from '../auxiliary/NotificationArea';
 import PlayerList from '../auxiliary/PlayerList';
 import { toggleAccusing } from '../../actions/uiActions';
-
-const getClass = props => {
-  const viewName = 'in-game';
-  let res = 'game-view';
-  if(props.isFadingIn.some(e => e === viewName)) {
-    res += ' fade-in';
-  }
-  if(props.isFadingOut.some(e => e === viewName)) {
-    res += ' fade-out';
-  }
-  return res;
-};
+import { viewConstants } from '../../app/imposterConstants';
+import { getFadeState } from '../../app/imposterUtilities';
 
 const getClickFunc = (props, dispatch, accuse) => {
   return props.isAccusing ? () => dispatch(accuse(props.isAccusing)) : () => false;
@@ -49,7 +39,7 @@ const GameView = () => {
     isFadingOut: state.ui.isFadingOut,
   }));
   return (
-    <div className={getClass(state)} onClick={state, getClickFunc(useDispatch(), toggleAccusing)}>
+    <div className={getFadeState(state.isFadingIn, state.isFadingOut, viewConstants.IN_GAME)} onClick={state, getClickFunc(useDispatch(), toggleAccusing)}>
       <PlayerList players={state.players} />
       <GameCode />
       <GameTimer title="Time left:" />

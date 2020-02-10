@@ -3,6 +3,7 @@ import { viewConstants } from '../app/imposterConstants';
 const initialState = {
   game: {
     alertText: null,
+    castedVotes: [],
     gameId: null,
     gameInSession: false,
     gameOverReason: null,

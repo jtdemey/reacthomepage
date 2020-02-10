@@ -6,7 +6,8 @@ import { takeEvery, takeLatest } from 'redux-saga/effects'; import {
   initGameSaga,
   returnToLobbySaga,
   submitHostGameFormSaga,
-  submitJoinGameFormSaga
+  submitJoinGameFormSaga,
+  castVoteSaga
 } from './gameSagas';
 import {
   alertMessageSaga,
@@ -22,6 +23,7 @@ import {
 
 function* rootSaga() {
   yield takeLatest(gameActionTypes.ACCUSE_PLAYER, accusePlayerSaga);
+  yield takeLatest(gameActionTypes.CAST_VOTE, castVoteSaga);
   yield takeLatest(gameActionTypes.EXTEND_TIMER, extendTimerSaga);
   yield takeLatest(gameActionTypes.GAME_TICK, gameTickSaga);
   yield takeLatest(gameActionTypes.HURRY_UP, hurryUpSaga);

@@ -23,6 +23,18 @@ export const assignScenario = scene => {
   };
 };
 
+export const castVote = (isYay, gameId, socketId, voteId) => {
+  const castedVote = { voteId, isYay };
+  return {
+    type: gameActionTypes.CAST_VOTE,
+    castedVote,
+    isYay,
+    gameId,
+    socketId,
+    voteId
+  };
+};
+
 export const clearTempPhaseData = () => {
   return {
     type: gameActionTypes.CLEAR_TEMP_PHASE_DATA
@@ -130,13 +142,17 @@ export const setPlayerSocket = socket => {
 };
 
 export const setSocketId = sockId => {
+  const parseDate = isoStr => {
+    const b = isoStr.split(/\D+/);
+    return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
+  };
   const storedId = window.localStorage.getItem('JTD_imposterSocketId');
-  const lastSeen = window.localStorage.getItem('JTD_imposterHourLastSeen');
-  if(storedId !== null && Math.abs(lastSeen - new Date().getHours()) < 2) {
+  const lastSeen = parseDate(window.localStorage.getItem('JTD_imposterHourLastSeen'));
+  if(storedId !== null && Math.abs(lastSeen.getHours() - new Date().getHours()) < 2) {
     console.log(`Welcome back, ${storedId}`);
   }
   window.localStorage.setItem('JTD_imposterSocketId', sockId);
-  window.localStorage.setItem('JTD_imposterHourLastSeen', new Date().getHours());
+  window.localStorage.setItem('JTD_imposterHourLastSeen', new Date().toISOString());
   return {
     type: gameActionTypes.SET_SOCKET_ID,
     socketId: sockId

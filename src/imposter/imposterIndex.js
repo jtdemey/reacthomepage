@@ -40,9 +40,9 @@ window.onload = () => {
     }));
   };
   socket.onerror = error => {
-    ImposterStore.dispatch(alertMessage('Error 69: your browser fucking sucks :(\n\nOR\n\nError 420: the dev just messed up', 5000));
+    ImposterStore.dispatch(alertMessage('Error 69: your browser sucks :(', 5000));
     console.log('Error 69: no socket for you :(');
-    console.log(error);
+    console.error(error);
   };
   socket.onmessage = e => {
     let msg;
@@ -51,7 +51,9 @@ window.onload = () => {
     } catch(e) {
       console.log('Unable to parse incoming socket message.', e);
     }
-    console.log(`\tGot command "${msg.command}"`);
+    if(msg.command !== 'gameTick') {
+      console.log(`\tGot command "${msg.command}"`);
+    }
     switch(msg.command) {
       case 'acceptImposterLaunch':
         ImposterStore.dispatch(setPlayerSocket(socket));
@@ -75,7 +77,7 @@ window.onload = () => {
     }
   };
   socket.onclose = () => {
-    ImposterStore.dispatch(alertMessage('Server died - blame the dev', 999999));
+    ImposterStore.dispatch(alertMessage('Lost connection; try refreshing', 999999));
   };
   window.onbeforeunload = () => {
     socket.send(JSON.stringify({

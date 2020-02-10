@@ -7,11 +7,11 @@ export function* alertMessageSaga(action) {
 }
 
 export function* changeGameViewSaga(action) {
-  yield put(uiActions.fadeEntityOut(action.currView, 500));
-  yield delay(500);
+  yield put(uiActions.fadeEntityOut(action.currView, 400));
+  yield delay(400);
   yield put(uiActions.clearNotifications());
   yield put(uiActions.changeViewValue(action.destView));
-  yield put(uiActions.fadeEntityIn(action.destView, 500));
+  yield put(uiActions.fadeEntityIn(action.destView, 400));
 }
 
 export function* changeViewValueSaga(action) {

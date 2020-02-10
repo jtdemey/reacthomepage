@@ -576,7 +576,7 @@ input {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 36px;
+  padding: 2rem;
 }
 
 .mm-form-area {
@@ -710,6 +710,13 @@ input {
   padding: 0.5rem;
 }
 
+.vote-text-half {
+  display: inline-block;
+  width: 30%;
+  margin: 0;
+  padding: 0.5rem;
+}
+
 .vote-btns {
   padding: 0.5rem;
 }
@@ -720,6 +727,7 @@ input {
   margin: 0 1rem;
   padding: 0.35rem 0.7rem;
   box-shadow: 8px 4px 6px #111;
+  border-radius: 4px;
 }
 
 /* ENDGAME */

@@ -2,7 +2,7 @@ import { gameActionTypes } from '../actions/actionConstants';
 
 const gameReducer = (state = {}, action) => {
   switch(action.type) {
-    case 'ACCUSE_PLAYER':
+    case gameActionTypes.ACCUSE_PLAYER:
       return {
         ...state
       };
@@ -14,6 +14,11 @@ const gameReducer = (state = {}, action) => {
         scenarioList: action.scenarioList,
         condition: action.condition,
         roles: action.roles
+      };
+    case gameActionTypes.CAST_VOTE:
+      return {
+        ...state,
+        castedVotes: state.castedVotes.concat([action.castedVote])
       };
     case gameActionTypes.CLEAR_TEMP_PHASE_DATA:
       return {

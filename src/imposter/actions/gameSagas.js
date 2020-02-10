@@ -13,6 +13,13 @@ export function* accusePlayerSaga(action) {
   }));
 }
 
+export function* castVoteSaga(action) {
+  yield put(gameActions.emitSocketMsg({
+    command: 'castVote',
+    ...action
+  }));
+}
+
 export function* extendTimerSaga(action) {
   if(action.extendTimerCt < 3) {
     yield put(gameActions.emitSocketMsg({ 
@@ -43,13 +50,10 @@ export function* gameTickSaga(action) {
     yield put(gameActions.clearTempPhaseData());
     const currPhaseView = getViewIdFromName(action.currentPhase);
     const destPhaseView = getViewIdFromName(action.gameState.phase);
-    yield put(uiActions.fadeEntityOut(currPhaseView));
-    yield delay(100);
-    yield put(uiActions.removeFadeOutEntity(currPhaseView));
+    yield put(uiActions.fadeEntityOut(currPhaseView, 400));
+    yield delay(400);
     yield put(uiActions.changeViewValue(destPhaseView));
-    yield put(uiActions.fadeEntityIn(destPhaseView));
-    yield delay(200);
-    yield put(uiActions.removeFadeInEntity(destPhaseView));
+    yield put(uiActions.fadeEntityIn(destPhaseView, 400));
   }
   //Players
   if(action.deltas.players === true) {
@@ -75,13 +79,10 @@ export function* initGameSaga(action) {
   const phaseView = getViewIdFromName(action.gameState.phase);
   yield delay(1000);
   yield put(uiActions.fadeEntityOut(viewConstants.LOADING));
-  yield delay(100);
-  yield put(uiActions.removeFadeOutEntity(viewConstants.LOADING));
+  yield delay(500);
   yield put(uiActions.changeViewValue(phaseView));
   yield put(gameActions.updatePlayers(action.gameState.players));
   yield put(uiActions.fadeEntityIn(phaseView));
-  yield delay(200);
-  yield put(uiActions.removeFadeInEntity(phaseView));
 }
 
 export function* returnToLobbySaga(action) {
@@ -93,12 +94,9 @@ export function* returnToLobbySaga(action) {
 
 export function* submitHostGameFormSaga(action) {
   yield put(uiActions.fadeEntityOut(viewConstants.HOST_GAME_FORM));
-  yield delay(100);
-  yield put(uiActions.removeFadeOutEntity(viewConstants.HOST_GAME_FORM));
+  yield delay(500);
   yield put(uiActions.changeViewValue(viewConstants.LOADING));
   yield put(uiActions.fadeEntityIn(viewConstants.LOADING));
-  yield delay(200);
-  yield put(uiActions.removeFadeInEntity(viewConstants.LOADING));
   yield put(gameActions.emitSocketMsg({
     command: 'submitHostGame',
     hostName: action.hostName,
@@ -108,12 +106,9 @@ export function* submitHostGameFormSaga(action) {
 
 export function* submitJoinGameFormSaga(action) {
   yield put(uiActions.fadeEntityOut(viewConstants.JOIN_GAME_FORM));
-  yield delay(100);
-  yield put(uiActions.removeFadeOutEntity(viewConstants.JOIN_GAME_FORM));
+  yield delay(500);
   yield put(uiActions.changeViewValue(viewConstants.LOADING));
   yield put(uiActions.fadeEntityIn(viewConstants.LOADING));
-  yield delay(200);
-  yield put(uiActions.removeFadeInEntity(viewConstants.LOADING));
   yield put(gameActions.emitSocketMsg({
     command: 'submitJoinGame',
     playerName: action.playerName,

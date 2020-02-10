@@ -54,6 +54,9 @@ const handleSocketMsg = async (wss, ws, raw) => {
     case 'returnToLobby':
       wss.gs.handleLobbyReturnVote(msg);
       break;
+    case 'castVote':
+      wss.gs.castVote(msg);
+      break;
     case 'identifyScenario':
       wss.gs.identifyScenario(msg);
       break;

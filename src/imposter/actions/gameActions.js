@@ -148,7 +148,7 @@ export const setSocketId = sockId => {
   };
   const storedId = window.localStorage.getItem('JTD_imposterSocketId');
   const lastSeen = parseDate(window.localStorage.getItem('JTD_imposterHourLastSeen'));
-  if(storedId !== null && Math.abs(lastSeen.getHours() - new Date().getHours()) < 2) {
+  if(storedId !== null && Math.abs(new Date().getTime() - lastSeen.getTime()) < 3600000) {
     console.log(`Welcome back, ${storedId}`);
   }
   window.localStorage.setItem('JTD_imposterSocketId', sockId);

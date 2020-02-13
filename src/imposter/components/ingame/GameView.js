@@ -45,7 +45,7 @@ const GameView = () => {
       <GameTimer title="Time left:" />
       <VoteArea />
       <NotificationArea />
-      {getGamePrompt(state.socketId, state.imposterId)}
+      {getGamePrompt(state.socketId, state.imposterId === state.socketId)}
       <InGameBtns socketId={state.socketId}
                   gameId={state.gameId}
                   isImposter={state.imposterId === state.socketId} />

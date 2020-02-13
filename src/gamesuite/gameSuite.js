@@ -202,26 +202,7 @@ export const makeGameSuite = () => {
       g = gameSuite.iteratePhase(g);
     }
     if(g.votes.length > 0) {
-      const passedVotes = g.votes.filter(v => v.yay >= v.threshold);
-      if(passedVotes.length > 0) {
-        passedVotes.forEach(v => {
-          if(v.voteType === 'lobby') {
-            gameSuite.updateGame(g.gameId, {
-              phase: 'lobby',
-              remainingTime: 60,
-              votes: g.votes.filter(x => x.voteId !== v.voteId)
-            });
-          } else if(v.voteType === 'accusation') {
-            gameSuite.updateGame(g.gameId, {
-              phase: 'imposter-victory',
-              remainingTime: 20,
-              votes: g.votes.filter(x => x.voteId !== v.voteId)
-            });
-          }
-        });
-      }
-      const tickedVotes = g.votes.map(v => ({ ...v, tick: v.tick - 1 })).filter(v => v.tick > 0);
-      g.votes = tickedVotes;
+      g.votes = g.votes.map(v => ({ ...v, tick: v.tick - 1 })).filter(v => v.tick > 0);
     }
     return g;
   };
@@ -355,10 +336,25 @@ export const makeGameSuite = () => {
     } else {
       vote.nay += 1;
     }
-    const result = currVotes.filter(v => v.voteId !== msg.voteId).concat([vote]);
-    gameSuite.updateGame(msg.gameId, {
-      votes: result
-    });
+    if(vote.yay >= vote.threshold) {
+      if(vote.voteType === 'lobby') {
+        gameSuite.updateGame(msg.gameId, {
+          phase: 'lobby',
+          remainingTime: 60,
+          votes: []
+        });
+      } else if(vote.voteType === 'accusation') {
+        gameSuite.updateGame(msg.gameId, {
+          phase: 'imposter-victory',
+          remainingTime: 20,
+          votes: []
+        });
+      }
+    } else {
+      gameSuite.updateGame(msg.gameId, {
+        votes: currVotes.filter(v => v.voteId !== msg.voteId).concat([vote]) 
+      });
+    }
     logger.info(`[GS] ${msg.gameId}: ${msg.socketId} voted ${msg.isYay ? 'yay' : 'nay'} on vote ${msg.voteId} (${vote.voteType})`);
   };
 
@@ -417,6 +413,7 @@ export const makeGameSuite = () => {
   };
 
   gameSuite.identifyScenario = msg => {
+    //To-do: this ain't catching correct guesses
     const game = gameSuite.getGame(msg.gameId);
     const imposter = game.players.filter(p => p.socketId === msg.imposterId);
     const imposterName = imposter.name || 'The Imposter';

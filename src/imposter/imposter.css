@@ -342,6 +342,10 @@ input {
   text-align: center;
 }
 
+.hidden {
+  display: none;
+}
+
 /* MODAL */
 .modal-hidden {
   display: none !important;
@@ -654,6 +658,10 @@ input {
   height: 2em;
   margin: 4px auto;
   border-radius: 4px;
+}
+
+.currplayer-lbi > h4 {
+  font-weight: bold;
 }
 
 .game-code-area {

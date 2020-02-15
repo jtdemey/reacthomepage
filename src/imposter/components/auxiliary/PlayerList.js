@@ -32,7 +32,7 @@ const PlayerList = props => {
           <ListButtonItem key={i}
                           socketId={p.socketId}
                           text={p.name}
-                          otherClasses={btnCss}
+                          otherClasses={props.socketId === p.socketId ? btnCss + ' currplayer-lbi' : btnCss}
                           look={{background: look.secondary}}
                           rgba={[86, 73, 78, 0.75]}
                           clickFunc={props.isAccusing ? () => props.accusePlayer(props.socketId, props.playerName, p.socketId, p.name, props.gameId) : null} />

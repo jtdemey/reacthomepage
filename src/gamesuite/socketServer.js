@@ -10,15 +10,7 @@ const makeServer = webServer => {
   return wss;
 };
 
-const confirmTransaction = txt => {
-  logger.info(`[GS] ${txt}`);
-};
-
-const handleGsErr = err => {
-  logger.error(`[GS] Error: ${err}`);
-};
-
-const handleSocketMsg = async (wss, ws, raw) => {
+const handleSocketMsg = (wss, ws, raw) => {
   const msg = wss.gs.parseRes(raw);
   if(msg.command !== 'ping') {
     logger.debug(`[GS] Socket ${msg.socketId} says "${msg.command}"`);

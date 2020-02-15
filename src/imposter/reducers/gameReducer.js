@@ -69,6 +69,11 @@ const gameReducer = (state = {}, action) => {
         ...state,
         gameInSession: true
       };
+    case gameActionTypes.REFRESH_PLAYERS:
+        return {
+          ...state,
+          players: action.players
+        };
     case gameActionTypes.REFRESH_VOTES:
         return {
           ...state,

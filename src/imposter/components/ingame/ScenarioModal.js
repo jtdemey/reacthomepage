@@ -26,6 +26,7 @@ const ScenarioModal = props => {
   const state = useSelector(state => ({
     gameId: state.game.gameId,
     imposterId: state.game.imposterId,
+    scenario: state.game.scenario,
     scenarios: state.game.scenarioList
   }));
   const [selected, setSelected] = useState(null);

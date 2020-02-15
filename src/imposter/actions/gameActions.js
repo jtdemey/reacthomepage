@@ -111,6 +111,13 @@ export const initGame = gameState => {
   };
 };
 
+export const refreshPlayers = v => {
+  return {
+    type: gameActionTypes.REFRESH_VOTES,
+    votes: v
+  };
+};
+
 export const refreshVotes = v => {
   return {
     type: gameActionTypes.REFRESH_VOTES,

@@ -39,7 +39,7 @@ const GameView = () => {
     isFadingOut: state.ui.isFadingOut,
   }));
   return (
-    <div className={getFadeState(state.isFadingIn, state.isFadingOut, viewConstants.IN_GAME)} onClick={state, getClickFunc(useDispatch(), toggleAccusing)}>
+    <div className={getFadeState(state.isFadingIn, state.isFadingOut, viewConstants.IN_GAME)} onClick={state, getClickFunc(state, useDispatch(), toggleAccusing)}>
       <PlayerList players={state.players} />
       <GameCode />
       <GameTimer title="Time left:" />

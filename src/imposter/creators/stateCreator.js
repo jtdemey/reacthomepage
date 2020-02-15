@@ -29,7 +29,7 @@ const initialState = {
     votes: []
   },
   ui: {
-    theme: 4,
+    theme: 3,
     modal: 0, //0:none 1:rules 2:settings 3:scenario
     notifications: [],
     view: viewConstants.MAIN_MENU,

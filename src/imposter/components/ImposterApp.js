@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { viewConstants } from '../app/imposterConstants';
 import PopupMessage from './auxiliary/PopupMessage';
 import BannerArea from './navbar/BannerArea';
 import NavBar from './navbar/NavBar';
@@ -12,6 +11,7 @@ import LobbyView from './lobby/LobbyView';
 import GameView from './ingame/GameView';
 import EndgameView from './ingame/EndgameView';
 import ModalArea from './auxiliary/ModalArea';
+import { viewConstants } from '../app/imposterConstants';
 import { getThemeColors } from '../app/imposterUtilities';
 
 const mapStateToProps = state => {
@@ -38,10 +38,12 @@ class ImposterApp extends React.Component {
         return <LobbyView />;
       case viewConstants.IN_GAME:
         return <GameView />;
+      case viewConstants.TIME_EXPIRED:
+        return <EndgameView title="Time's up!" viewId={this.props.view} />;
       case viewConstants.IMPOSTER_VICTORY:
-        return <EndgameView title="The Imposter Wins!" />;
+        return <EndgameView title="The Imposter Wins!" viewId={this.props.view} />;
       case viewConstants.BYSTANDER_VICTORY:
-        return <EndgameView title="The Bystanders Win!" />;
+        return <EndgameView title="The Bystanders Win!" viewId={this.props.view} />;
       case viewConstants.LOADING:
         return <LoadingView />;
       default:

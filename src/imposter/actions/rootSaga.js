@@ -25,7 +25,7 @@ function* rootSaga() {
   yield takeLatest(gameActionTypes.ACCUSE_PLAYER, accusePlayerSaga);
   yield takeLatest(gameActionTypes.CAST_VOTE, castVoteSaga);
   yield takeLatest(gameActionTypes.EXTEND_TIMER, extendTimerSaga);
-  yield takeLatest(gameActionTypes.GAME_TICK, gameTickSaga);
+  yield takeEvery(gameActionTypes.GAME_TICK, gameTickSaga);
   yield takeLatest(gameActionTypes.HURRY_UP, hurryUpSaga);
   yield takeLatest(gameActionTypes.INIT_GAME, initGameSaga);
   yield takeLatest(gameActionTypes.RETURN_TO_LOBBY, returnToLobbySaga);

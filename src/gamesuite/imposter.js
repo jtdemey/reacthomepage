@@ -121,18 +121,18 @@ export const rollScenario = () => {
       ]
     },
     {
-      title: 'ISIS Camp',
+      title: 'Bandit Camp',
       roles: [
         'Interrogator',
         'Executioner',
         'Captain',
         'Demolitionist',
         'Mercenary',
-        'Terrorist',
-        'Jihadist',
+        'Thief',
+        'Bruiser',
         'Prisoner of War',
         'Captured Journalist',
-        'Soldier'
+        'Deserter'
       ]
     },
     {
@@ -148,6 +148,36 @@ export const rollScenario = () => {
         'Tourist',
         'Art Enthusiast',
         'Artist'
+      ]
+    },
+    {
+      title: 'Movie Set',
+      roles: [
+        'Director',
+        'Actor',
+        'Producer',
+        'Makeup Artist',
+        'Costume Designer',
+        'Cameraman',
+        'The Celebrity Cameo',
+        'Boom Operator',
+        'Intern',
+        'Stunt Double'
+      ]
+    },
+    {
+      title: 'Psychiatric Hospital',
+      roles: [
+        'Doctor',
+        'Nurse',
+        'Nurse',
+        'Schizophrenic',
+        'Patient',
+        'Criminal',
+        'Psychiatrist',
+        'Guard',
+        'Guard',
+        ''
       ]
     }
   ];

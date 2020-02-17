@@ -7,16 +7,6 @@ const getLiCss = isSelected => isSelected ? 'text-center selected-scenario' : 't
 const getConfirmCss = isDisabled => isDisabled ? ({color: '#777', cursor: 'not-allowed'}) : ({cursor: 'pointer'});
 
 //Events
-const getConfirmFunc = (isDisabled, state, dispatch, closeModal, setSelected) => isDisabled ? () => false : () => {
-  dispatch(emitSocketMsg({
-    command: 'identifyScenario',
-    gameId: state.gameId,
-    imposterId: state.imposterId,
-    scenario: state.scenario
-  }));
-  setSelected(null);
-  closeModal();
-};
 const getCloseModalFunc = (setSelected, closeModal) => () => {
   setSelected(null);
   closeModal();
@@ -27,11 +17,21 @@ const ScenarioModal = props => {
     gameId: state.game.gameId,
     imposterId: state.game.imposterId,
     scenario: state.game.scenario,
-    scenarios: state.game.scenarioList
+    scenarioList: state.game.scenarioList
   }));
   const [selected, setSelected] = useState(null);
   const dispatch = useDispatch();
   const css = props.isVisible ? 'modal-body fade-in' : 'modal-hidden';
+  const confirmFunc = selected === null ? () => false : () => {
+    dispatch(emitSocketMsg({
+      command: 'identifyScenario',
+      gameId: state.gameId,
+      imposterId: state.imposterId,
+      scenario: state.scenarioList[selected]
+    }));
+    setSelected(null);
+    props.closeModalFunc();
+  };
   return (
     <div className={css} onClick={e => e.stopPropagation()}>
       <div className="close-modal-row">
@@ -41,13 +41,13 @@ const ScenarioModal = props => {
         </span>
       </div>
       <ul className="scenario-list">
-        {state.scenarios.map((scenario, i) => (
+        {state.scenarioList.map((scenario, i) => (
           <li key={i} className={getLiCss(selected === i)} onClick={() => setSelected(i)}>{scenario}</li>
         ))}
       </ul>
       <div className="scenario-list-btns">
         <div className="scenario-confirm"
-             onClick={getConfirmFunc(selected === null, state, dispatch, props.closeModalFunc, setSelected)}
+             onClick={() => confirmFunc()}
              style={getConfirmCss(selected === null)}>
               Confirm
         </div>

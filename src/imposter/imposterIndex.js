@@ -52,7 +52,7 @@ window.onload = () => {
       console.log('Unable to parse incoming socket message.', e);
     }
     if(msg.command !== 'gameTick') {
-      console.log(`\tGot command "${msg.command}"`);
+      console.debug(`\tGot command "${msg.command}"`);
     }
     switch(msg.command) {
       case 'acceptImposterLaunch':

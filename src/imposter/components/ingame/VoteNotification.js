@@ -4,7 +4,7 @@ import { castVote } from '../../actions/gameActions';
 
 const getVoteBtnsCss = (canVote, hasCasted) => {
   let css = 'vote-btns';
-  if(canVote) {
+  if(!canVote) {
     css += ' hidden';
   }
   if(hasCasted) {
@@ -31,7 +31,7 @@ const VoteNotification = props => {
   const dispatch = useDispatch();
   //To-do: return to lobby votes allow caller to vote
   const canVote = props.voteType === 'accusation' ?
-    props.callerId !== state.socketId || props.accusedId !== state.socketId :
+    props.callerId !== state.socketId && props.accusedId !== state.socketId :
     props.callerId !== state.socketId;
   const hasCasted = state.castedVotes.some(v => v.voteId === props.voteId);
   const look = {

@@ -50,7 +50,7 @@ export function* gameTickSaga(action) {
     yield put(gameActions.clearTempPhaseData());
     const currPhaseView = getViewIdFromName(action.currentPhase);
     const destPhaseView = getViewIdFromName(action.gameState.phase);
-    console.log('phase change to ' + destPhaseView);
+    console.log(action.gameState.players);
     yield put(uiActions.fadeEntityOut(currPhaseView, 400));
     yield delay(400);
     yield put(uiActions.changeViewValue(destPhaseView));

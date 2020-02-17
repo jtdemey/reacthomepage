@@ -604,7 +604,7 @@ input {
   margin: 5vh 10vw 0 10vw;
   padding: 0 5px;
   border: 1px solid #777;
-  border-radius: 0.75em;
+  border-radius: 4px;
 }
 
 .mm-form-submit {
@@ -708,7 +708,7 @@ input {
 }
 
 .vote-notification {
-  margin: auto;
+  margin: 0.25rem auto;
   text-align: center;
   border-radius: 4px;
   box-shadow: 4px 8px 8px #111;

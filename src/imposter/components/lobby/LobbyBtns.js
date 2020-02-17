@@ -24,6 +24,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+//To-do: add ready up
 const LobbyBtns = props => {
   const look = getThemeColors(props.theme);
   return (

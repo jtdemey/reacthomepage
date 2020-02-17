@@ -36,10 +36,10 @@ const GameView = () => {
     players: state.game.players,
     isAccusing: state.ui.isAccusing,
     isFadingIn: state.ui.isFadingIn,
-    isFadingOut: state.ui.isFadingOut,
+    isFadingOut: state.ui.isFadingOut
   }));
   return (
-    <div className={getFadeState(state.isFadingIn, state.isFadingOut, viewConstants.IN_GAME)} onClick={state, getClickFunc(state, useDispatch(), toggleAccusing)}>
+    <div className={`game-view${getFadeState(state.isFadingIn, state.isFadingOut, viewConstants.IN_GAME)}`} onClick={state, getClickFunc(state, useDispatch(), toggleAccusing)}>
       <PlayerList players={state.players} />
       <GameCode />
       <GameTimer title="Time left:" />

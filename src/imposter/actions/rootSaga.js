@@ -4,6 +4,7 @@ import { takeEvery, takeLatest } from 'redux-saga/effects'; import {
   gameTickSaga,
   hurryUpSaga,
   initGameSaga,
+  readyUpSaga,
   returnToLobbySaga,
   submitHostGameFormSaga,
   submitJoinGameFormSaga,
@@ -28,6 +29,7 @@ function* rootSaga() {
   yield takeEvery(gameActionTypes.GAME_TICK, gameTickSaga);
   yield takeLatest(gameActionTypes.HURRY_UP, hurryUpSaga);
   yield takeLatest(gameActionTypes.INIT_GAME, initGameSaga);
+  yield takeLatest(gameActionTypes.READY_UP, readyUpSaga);
   yield takeLatest(gameActionTypes.RETURN_TO_LOBBY, returnToLobbySaga);
   yield takeLatest(gameActionTypes.SUBMIT_HOST_GAME_FORM, submitHostGameFormSaga);
   yield takeLatest(gameActionTypes.SUBMIT_JOIN_GAME_FORM, submitJoinGameFormSaga);

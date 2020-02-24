@@ -33,6 +33,23 @@ export const anyChildEquals = (obj, val) => {
   return false;
 };
 
+export const detectPlayerDiffs = (ogPlayers, newPlayers) => {
+  if(ogPlayers.length !== newPlayers.length) {
+    return true;
+  }
+  let diff = false;
+  ogPlayers.forEach((p, i) => {
+    const n = newPlayers[i];
+    for(let [key, val] of Object.entries(p)) {
+      if(key === 'socket') continue;
+      if(n[key] !== val) {
+        diff = true;
+      }
+    }
+  });
+  return diff;
+};
+
 export const determineLiBorderRadius = (listInd, listMax) => {
   let r = false;
   //If first
@@ -65,10 +82,6 @@ export const getFadeState = (fadingIn, fadingOut, entityId) => {
     return ' fade-out';
   }
   return '';
-};
-
-export const getPlayerNameFromId = id => {
-console.log('uhhhh');
 };
 
 export const getThemeColors = themeId => {

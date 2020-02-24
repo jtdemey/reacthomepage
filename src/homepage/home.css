@@ -376,11 +376,11 @@ p {
 }
 
 ::-webkit-scrollbar {
-  width: 9px;
+  width: 0.25rem;
 }
 
 ::-webkit-scrollbar-track {
-  display: hidden;
+  display: none;
   background: #777;
 }
 
@@ -413,6 +413,10 @@ p {
 
 .about-container {
 	background: #45050C;
+}
+
+.default-cursor {
+	cursor: default;
 }
 /* background: linear-gradient(#545778, #494c69, #3f415a); */
 
@@ -501,9 +505,27 @@ p {
 }
 
 /* MOBILE NAV ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.mnav-container {
+	width: 100vw;
+	height: 48px;
+}
+
 .mnav-area {
+	width: 100vw;
+	height: 48px;
   margin: 0;
-  padding: 0;
+	padding: 0;
+	background-color: #222222;
+	transition: top 0.2s ease-in-out;
+}
+
+.mnav-fixed {
+	position: fixed;
+	top: -48px;
+}
+
+.mnav-top {
+	top: 0;
 }
 
 .mnavlist {
@@ -644,12 +666,6 @@ p {
 	margin-top: 25px;
 	margin-bottom: 25px;
 	z-index: 1;
-}
-
-.mnav-area {
-	width: 100vw;
-	height: 48px;
-	background-color: #222222;
 }
 
 /* CONTENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -911,6 +927,10 @@ p {
 }
 
 @media all and (min-width: 701px) {
+	.mnav-container {
+		display: none;
+	}
+
 	.mnav-area {
 		display: none;
 	}

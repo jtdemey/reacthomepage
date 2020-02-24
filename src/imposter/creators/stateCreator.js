@@ -13,7 +13,8 @@ const initialState = {
     player: {
       extendTimerCt: 0,
       hurryUpCt: 0,
-      name: 'Some Goon'
+      name: 'Some Goon',
+      isReady: false
     },
     players: [],
     scenario: null,

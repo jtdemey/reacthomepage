@@ -3,12 +3,14 @@ import { connect } from 'react-redux';
 import ListButtonItem from '../auxiliary/ListButtonItem';
 import {
   hurryUp,
-  extendTimer
+  extendTimer,
+  readyUp
 } from '../../actions/gameActions';
 import { getThemeColors } from '../../app/imposterUtilities';
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
   return {
+    isReady: state.game.player.isReady,
     theme: state.ui.theme
   };
 };
@@ -20,11 +22,13 @@ const mapDispatchToProps = dispatch => {
     },
     hurryUp: (sockId, gameId, actCt) => {
       dispatch(hurryUp(sockId, gameId, actCt));
+    },
+    readyUp: (readyValue, socketId, gameId) => {
+      dispatch(readyUp(readyValue, socketId, gameId));
     }
   };
 };
 
-//To-do: add ready up
 const LobbyBtns = props => {
   const look = getThemeColors(props.theme);
   return (
@@ -37,6 +41,10 @@ const LobbyBtns = props => {
                       look={{background: look.secondary}}
                       otherClasses="control-lbi"
                       text="Hurry tf up" />
+      <ListButtonItem clickFunc={() => props.readyUp(!props.isReady, props.socketId, props.gameId)}
+                      look={{background: look.secondary}}
+                      otherClasses="control-lbi"
+                      text={props.isReady ? 'Ready!' : 'Ready up'} />
     </div>
   );
 };

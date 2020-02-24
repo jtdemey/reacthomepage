@@ -600,6 +600,7 @@ input {
 }
 
 .mm-form-text-input {
+  min-width: 200px;
   height: 2em;
   margin: 5vh 10vw 0 10vw;
   padding: 0 5px;
@@ -751,7 +752,23 @@ input {
 
 .endgame-view > h2 {
   padding: 0 2rem 2rem;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+}
+
+.imposter-notification {
+  max-width: 60%;
+  margin: 2rem auto 0;
+  text-align: center;
+  border-radius: 4px;
+  box-shadow: 4px 8px 8px #111;
+  overflow: hidden;
+}
+.imposter-notification > h2 {
+  padding: 0.25rem;
+  font-size: 1.25rem;
+}
+.imposter-notification > h3 {
+  padding: 0.25rem;
 }
 
 /* AUX */

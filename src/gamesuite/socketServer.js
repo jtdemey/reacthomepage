@@ -40,6 +40,9 @@ const handleSocketMsg = (wss, ws, raw) => {
     case 'hurryUp':
       wss.gs.hurryUp(msg.socketId, msg.gameId);
       break;
+    case 'toggleReadyState':
+      wss.gs.toggleReadyState(msg);
+      break;
     case 'accusePlayer':
       wss.gs.handleAccusePlayer(msg);
       break;

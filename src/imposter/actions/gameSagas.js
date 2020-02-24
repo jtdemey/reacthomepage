@@ -50,7 +50,6 @@ export function* gameTickSaga(action) {
     yield put(gameActions.clearTempPhaseData());
     const currPhaseView = getViewIdFromName(action.currentPhase);
     const destPhaseView = getViewIdFromName(action.gameState.phase);
-    console.log(action.gameState.players);
     yield put(uiActions.fadeEntityOut(currPhaseView, 400));
     yield delay(400);
     yield put(uiActions.changeViewValue(destPhaseView));
@@ -84,6 +83,13 @@ export function* initGameSaga(action) {
   yield put(uiActions.changeViewValue(phaseView));
   yield put(gameActions.updatePlayers(action.gameState.players));
   yield put(uiActions.fadeEntityIn(phaseView));
+}
+
+export function* readyUpSaga(action) {
+  yield put(gameActions.emitSocketMsg({
+    command: 'toggleReadyState',
+    ...action
+  }));
 }
 
 export function* returnToLobbySaga(action) {

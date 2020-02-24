@@ -26,7 +26,8 @@ const gameReducer = (state = {}, action) => {
         player: {
           ...state.player,
           extendTimerCt: 0,
-          hurryUpCt: 0
+          hurryUpCt: 0,
+          isReady: false
         }
       };
     case 'EMIT_SOCKET_MSG':
@@ -69,16 +70,19 @@ const gameReducer = (state = {}, action) => {
         ...state,
         gameInSession: true
       };
-    case gameActionTypes.REFRESH_PLAYERS:
-        return {
-          ...state,
-          players: action.players
-        };
+    case gameActionTypes.READY_UP:
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          isReady: action.readyValue
+        } 
+      };
     case gameActionTypes.REFRESH_VOTES:
-        return {
-          ...state,
-          votes: action.votes
-        };
+      return {
+        ...state,
+        votes: action.votes
+      };
     case gameActionTypes.RESET_LOBBY_ACTION_COUNTS:
       return {
         ...state,
@@ -134,7 +138,7 @@ const gameReducer = (state = {}, action) => {
         tick: action.tick,
         votes: action.votes
       };
-    case 'UPDATE_PLAYERS':
+    case gameActionTypes.UPDATE_PLAYERS:
       return {
         ...state,
         players: action.players

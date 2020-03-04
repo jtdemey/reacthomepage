@@ -1,7 +1,6 @@
 import imposterStore from '../store/imposterStore';
 import { gameActionTypes } from './actionConstants';
-import { doExpression } from '@babel/types';
-import { detectPlayerDiffs } from '../app/imposterUtilities';
+import { detectPlayersDiffs } from '../app/imposterUtilities';
 
 export const accusePlayer = (accuserId, accuserName, accusedId, accusedName, gameId) => {
   return {
@@ -77,7 +76,7 @@ export const gameTick = gs => {
   const currGame = imposterStore.getState().game;
   const deltas = {
     isPaused: currGame.isPaused !== gs.isPaused,
-    players: detectPlayerDiffs(currGame.players, gs.players),
+    players: detectPlayersDiffs(currGame.players, gs.players),
     phase: currGame.phase !== gs.phase,
     scenario: currGame.scenario !== gs.scenario
   };

@@ -28,11 +28,15 @@ const handleSocketMsg = (wss, ws, raw) => {
       break;
     case 'submitHostGame':
       result = wss.gs.handleSubmitHostGame(msg);
-      ws.send(wss.gs.makeCommand('initGame', { gameState: result }));
+      if(result) {
+        ws.send(wss.gs.makeCommand('initGame', { gameState: result }));
+      }
       break;
     case 'submitJoinGame':
       result = wss.gs.handleSubmitJoinGame(msg);
-      ws.send(wss.gs.makeCommand('initGame', { gameState: result }));
+      if(result) {
+        ws.send(wss.gs.makeCommand('initGame', { gameState: result }));
+      }
       break;
     case 'extendTimer':
       wss.gs.extendTimer(msg.socketId, msg.gameId);

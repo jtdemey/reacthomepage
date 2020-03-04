@@ -148,6 +148,7 @@ export const makeGameSuite = () => {
     const r = gameSuite.gameList.filter(g => g.gameId === gameId)[0];
     if(!r) {
       logError(`Could not get game ${gameId}`);
+      return false;
     }
     return r;
   };
@@ -156,6 +157,7 @@ export const makeGameSuite = () => {
     const r = gameSuite.playerList.filter(p => p.socketId === socketId)[0];
     if(!r) {
       logError(`Could not get player ${socketId}`);
+      return false;
     }
     return r;
   };
@@ -255,13 +257,20 @@ export const makeGameSuite = () => {
   gameSuite.iteratePhase = game => {
     let g = { ...game };
     for(let i = 0; i < g.players.length; i++) {
-      g.players[i].isReady = false;
+      game.players[i].isReady = false;
     }
     switch(g.phase) {
       case 'lobby':
-        g.phase = 'in-game';
-        g.remainingTime = 240;
-        g = gameSuite.applyScenario(g, rollScenario());
+        if(g.players.length < 3) {
+          g.remainingTime = 30;
+          gameSuite.emitToGame(g.gameId, gameSuite.makeCommand('imposterError', {
+            text: `At least 3 players are required to play`
+          }));
+        } else {
+          g.phase = 'in-game';
+          g.remainingTime = 240;
+          g = gameSuite.applyScenario(g, rollScenario());
+        }
         break;
       case 'in-game':
         g.phase = 'imposter-victory';
@@ -485,6 +494,13 @@ export const makeGameSuite = () => {
     if(currGame.votes.some(v => v.callerId === msg.socketId)) {
       return;
     }
+    if(currGame.players.length === 1) {
+      gameSuite.updateGame(msg.gameId, {
+        phase: 'lobby',
+        remainingTime: 60,
+        votes: []
+      });
+    }
     const callerName = currGame.players.filter(p => p.socketId === msg.socketId)[0].name;
     if(!callerName) {
       logError(`Return to lobby: Unable to find player name for ${msg.socketId}`);
@@ -516,7 +532,6 @@ export const makeGameSuite = () => {
   gameSuite.identifyScenario = msg => {
     const game = gameSuite.getGame(msg.gameId);
     const imposter = game.players.filter(p => p.socketId === msg.imposterId);
-    const imposterName = imposter.name || 'The Imposter';
     if(imposter.length < 1) {
       logError(`Identify scenario: unable to find imposter with ID ${msg.imposterId}`);
     }
@@ -549,7 +564,11 @@ export const makeGameSuite = () => {
       isReady: msg.readyValue
     });
     //To-do: all ready
-    //if(game.players.filter(p => ))
+    if(game.players.filter(p => p.isReady).length === game.players.length) {
+      gameSuite.updateGame(game.gameId, {
+        remainingTime: 0
+      });
+    }
     logInfo(`${msg.socketId} toggled ready state`, msg.gameId);
   };
 

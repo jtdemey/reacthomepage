@@ -33,7 +33,7 @@ export const anyChildEquals = (obj, val) => {
   return false;
 };
 
-export const detectPlayerDiffs = (ogPlayers, newPlayers) => {
+export const detectPlayersDiffs = (ogPlayers, newPlayers) => {
   if(ogPlayers.length !== newPlayers.length) {
     return true;
   }

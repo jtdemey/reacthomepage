@@ -10,7 +10,7 @@ import { getThemeColors } from '../../app/imposterUtilities';
 
 const mapStateToProps = state => {
   return {
-    isReady: state.game.player.isReady,
+    isReady: state.game.players.filter(p => p.socketId === state.game.socketId)[0].isReady,
     theme: state.ui.theme
   };
 };
@@ -37,10 +37,6 @@ const LobbyBtns = props => {
                       look={{background: look.secondary}}
                       otherClasses="control-lbi"
                       text="Extend timer" />
-      <ListButtonItem clickFunc={() => props.hurryUp(props.socketId, props.gameId, props.hurryUpCt)}
-                      look={{background: look.secondary}}
-                      otherClasses="control-lbi"
-                      text="Hurry tf up" />
       <ListButtonItem clickFunc={() => props.readyUp(!props.isReady, props.socketId, props.gameId)}
                       look={{background: look.secondary}}
                       otherClasses="control-lbi"

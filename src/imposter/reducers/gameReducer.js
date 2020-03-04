@@ -126,7 +126,7 @@ const gameReducer = (state = {}, action) => {
           name: action.playerName
         }
       };
-    case 'SYNC_GAME_STATE':
+    case gameActionTypes.SYNC_GAME_STATE:
       return {
         ...state,
         gameId: action.gameId,

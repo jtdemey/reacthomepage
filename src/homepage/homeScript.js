@@ -1,4 +1,4 @@
-/****** State ******/
+//--- State ---//
 const uiState = {
   background: 0,
   bgShiftTimer: null,
@@ -10,7 +10,7 @@ const uiState = {
   mobile: true
 };
 
-/****** Const ******/
+//--- Const ---//
 //Home #4B4E6D, Imposter #334152, Survive #451119, Pistolwhip #284c4a
 const bgColors = [
   '#4B4E6D',
@@ -19,13 +19,13 @@ const bgColors = [
   '#284c4a'
 ];
 
-/****** Refs ******/
+//--- Refs ---//
 const siteWrapper = document.querySelector('.site-wrapper');
 const mainContainer = document.querySelector('.main-container');
 const mobileNav = document.querySelector('.mnav-area');
 const contentViews = document.querySelectorAll('.content-view');
 
-/****** Background ******/
+//--- Background ---//
 const clearBgShift = () => {
   clearInterval(uiState.bgShiftTimer);
   uiState.bgShiftTimer = undefined;
@@ -45,7 +45,7 @@ const startBgShift = v => {
   }, 420);
 };
 
-/****** Events ******/
+//--- Events ---//
 const resizeUpdate = () => {
   uiState.contentHeight = contentViews[0].clientHeight;
   if(uiState.mobileCheckTimer === undefined) {
@@ -91,7 +91,7 @@ const scrollUpdate = () => {
   uiState.lastScrollPos = ypos;
 };
 
-/****** Pahticles ******/
+//--- Pahticles ---//
 /*const loadParticles = configSrc => {
   const particles = document.createElement('script');
   particles.onload = () => {
@@ -101,7 +101,7 @@ const scrollUpdate = () => {
   document.head.appendChild(particles);
 };*/
 
-/****** Init ******/
+//--- Init ---//
 (() => {
   if(window.getComputedStyle(mobileNav).display !== 'block') {
     uiState.mobile = false;

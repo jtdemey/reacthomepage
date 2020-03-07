@@ -686,20 +686,19 @@ p {
 }
 
 .content-view {
-	height: 800px;
 	display: block;
-	width: calc(100vw - 86px);
+	min-width: calc(100% - 86px);
 	height: 100vh;
 	margin: 0;
-	padding: 0;
-  padding-top: 10vh;
-  padding-right: 9px;
-	float: left;
 	text-align: center;
 }
 
 .content-view-fixed-nav {
 	margin-left: 86px;
+}
+
+.project-content {
+	padding-top: 15vh;
 }
 
 .content-header {

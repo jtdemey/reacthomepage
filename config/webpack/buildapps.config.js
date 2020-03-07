@@ -2,7 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlPluginRemove = require('html-webpack-plugin-remove');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const Terser = require('terser-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map',
@@ -18,11 +18,6 @@ module.exports = {
     path: path.join(process.cwd(), 'dist', 'public'),
     publicPath: '/',
     filename: '[name]Bundle.[hash:8].js'
-  },
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin()
-    ]
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -46,7 +41,13 @@ module.exports = {
       filename: 'survive.html',
       template: './src/survive/survive.html'
     }),
-    new HtmlPluginRemove(/<\s*script[^>]*>(.*?)<\s*\/\s*script>/)
+    new HtmlPluginRemove(/<\s*script[^>]*>(.*?)<\s*\/\s*script>/),
+    new Terser({
+      parallel: true,
+      terserOptions: {
+        ecma: 6
+      },
+    })
   ],
   module: {
     rules: [

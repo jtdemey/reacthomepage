@@ -356,6 +356,12 @@ export const makeGameSuite = () => {
       }));
       return;
     }
+    if(prospImposter.players.length > 11) {
+      gameSuite.emitToPlayer(msg.socketId, gameSuite.makeCommand('imposterError', {
+        text: `Game ${msg.gameId.toUpperCase()} is full`
+      }));
+      return;
+    }
     let rawName = msg.playerName || 'Dingus';
     const playerName = getOriginalName(rawName.trim(), prospImposter.players);
     gameSuite.updatePlayer(msg.socketId, {

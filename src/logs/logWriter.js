@@ -6,7 +6,7 @@ const padDigit = n => {
 
 const logFormat = winston.format.printf(function(info) {
   const d = new Date();
-  const p = `{${info.level}}[${padDigit(d.getMonth() + 1)}/${d.getDate()}/${d.getFullYear()}@${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}]:`; 
+  const p = `${info.level}@${padDigit(d.getMonth() + 1)}/${d.getDate()}/${d.getFullYear()}@${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}:`; 
   const b = `${JSON.stringify(info.message, null, 4)}`;
   return p + b;
 });
@@ -16,7 +16,7 @@ const logger = winston.createLogger({
   format: winston.format.combine(winston.format.colorize(), logFormat),
   transports: [
     new winston.transports.Console({ timestamp: 'true' }),
-    new winston.transports.File({ filename: '/src/logs/combined.log' })
+    new winston.transports.File({ filename: 'combined.log' })
   ]
 });
 

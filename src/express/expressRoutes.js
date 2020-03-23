@@ -40,6 +40,11 @@ router.post('/contact', (req, res) => {
   });
 });
 
+router.route('/doodles')
+  .get((req, res) => {
+    sendHtmlFile(res, 'doodles/doodles.html', 'doodles.html');
+  });
+
 router.route('/imposter')
   .get((req, res) => {
     sendHtmlFile(res, 'imposter/imposter.html', 'imposter.html');
@@ -50,14 +55,14 @@ router.route('/imposter/:gameCode')
     sendHtmlFile(res, 'imposter/imposter.html', 'imposter.html');
   });
 
-router.route('/survive')
-  .get((req, res) => {
-    sendHtmlFile(res, 'survive/survive.html', 'survive.html');
-  });
-
 router.route('/pistolwhip')
   .get((req, res) => {
     sendHtmlFile(res, 'pistolwhip/pistolwhip.html', 'pistolwhip.html');
+  });
+
+router.route('/resume')
+  .get((req, res) => {
+    sendHtmlFile(res, 'media/resume.html', 'media/resume.html');
   });
 
 router.route('/roleroller')
@@ -67,7 +72,12 @@ router.route('/roleroller')
 
 router.route('/sandbox')
   .get((req, res) => {
-    sendHtmlFile(res, 'static/sandbox.html', isProd);
+    sendHtmlFile(res, 'sandbox/sandbox.html', 'sandbox.html');
+  });
+
+router.route('/survive')
+  .get((req, res) => {
+    sendHtmlFile(res, 'survive/survive.html', 'survive.html');
   });
 
 export default router;

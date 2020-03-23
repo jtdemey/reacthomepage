@@ -38,6 +38,7 @@ const buildCss = () => {
         '../src/about/about.html',
         '../src/imposter/imposter.html',
         '../src/survive/survive.html',
+        '../src/doodles/doodles.html',
         '../src/**/*.jsx',
         '../src/**/*.js',
       ],
@@ -58,7 +59,8 @@ const replaceHrefs = () => {
       '../dist/public/home.html',
       '../dist/public/about.html',
       '../dist/public/imposter.html',
-      '../dist/public/survive.html'
+      '../dist/public/survive.html',
+      '../dist/public/doodles.html'
     ])
     .pipe(replace('href="homepage/home.css', `href="home.${hash}.css`))
     .pipe(replace('href="/homepage/home.css', `href="/home.${hash}.css`))

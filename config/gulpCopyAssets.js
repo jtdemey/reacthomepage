@@ -11,4 +11,9 @@ const copyMedia = () => {
     .pipe(gulp.dest(path.join('..', 'dist', 'public', 'media')));
 };
 
-exports.default = gulp.series(copyMedia, copyLib);
+const copyErrPages = () => {
+  return gulp.src(path.join(process.cwd(), '..', 'src', 'errors', '**'))
+    .pipe(gulp.dest(path.join('..', 'dist', 'public')));
+};
+
+exports.default = gulp.series(copyMedia, copyLib, copyErrPages);

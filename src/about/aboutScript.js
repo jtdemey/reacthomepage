@@ -3,7 +3,7 @@ import "regenerator-runtime/runtime";
 const uiState = {
   background: 0,
   bgShiftTimer: null,
-  doodleCt: 18 
+  doodleCt: 22
 };
 
 //About #595F62, Skills #7F9C96, Contact #92BEA6, Doodles #6C474F
@@ -71,9 +71,7 @@ const ajaxPost = (url, payload) => {
       'content-type': 'application/json'
     }
   }).then(res => {
-    if(res.ok) {
-      window.localStorage[subKey] = 'true';
-    } else {
+    if(!res.ok) {
       console.error(res.status);
     }
   });
@@ -92,6 +90,19 @@ const genUserHash = () => {
   return Math.abs(hash).toString(16);
 };
 
+const sanitize = str => {
+  const charMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    "/": '&#x2F;',
+  };
+  const reg = /[&<>"'/]/ig;
+  return str.replace(reg, m => charMap[m]);
+};
+
 const setBtnStyle = () => {
   const contactSubmit = document.querySelector('.contact-submit');
   const contactText = document.querySelector('.contact-submit > h5');
@@ -102,32 +113,7 @@ const setBtnStyle = () => {
 };
 
 window.submitContactForm = function() {
-  const sanitize = str => {
-    const charMap = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#x27;',
-      "/": '&#x2F;',
-    };
-    const reg = /[&<>"'/]/ig;
-    return str.replace(reg, m => charMap[m]);
-  };
-  const subKey = 'JtdUserContactFormSubmitted';
-  let subbed = window.localStorage[subKey];
-  if(subbed === 'true') {
-    setBtnStyle();
-    return;
-  }
-
-  const hashKey = 'JtdUserHashIdentifier';
-  let hash = window.localStorage[hashKey];
-  if(!hash) {
-    hash = genUserHash();
-    window.localStorage[hashKey] = hash;
-  }
-
+  const hash = genUserHash();
   const name = sanitize(document.getElementById('contact-name').value);
   const inquiry = sanitize(document.getElementById('contact-text').value);
   if(name === '' || inquiry === '') {
@@ -158,8 +144,15 @@ const loadDoodle = async ind => {
 };
 
 const loadDoodles = () => {
-  for(let i = 0; i < uiState.doodleCt; i++) {
-    loadDoodle(i);
+  const randInts = [];
+  while(randInts.length < 5) {
+    const ind = Math.floor(Math.random() * uiState.doodleCt);
+    if(!randInts.some(int => int === ind)) {
+      randInts.push(ind);
+    }
+  }
+  for(let i = 0; i < randInts.length; i++) {
+    loadDoodle(randInts[i]);
   }
 };
 
@@ -167,8 +160,5 @@ const loadDoodles = () => {
 (() => {
   mainContainer.style.transition = 'background 1.2s';
   //loadParticles('../media/particles/homeParticles.json');
-  if(window.localStorage['JtdUserContactFormSubmitted'] === 'true') {
-    setBtnStyle();
-  }
   loadDoodles();
 })();

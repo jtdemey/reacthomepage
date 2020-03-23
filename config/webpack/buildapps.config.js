@@ -11,7 +11,8 @@ module.exports = {
     home: path.join(process.cwd(), 'src/homepage/homeScript.js'),
     about: path.join(process.cwd(), 'src/about/aboutScript.js'),
     imposter: path.join(process.cwd(), 'src/imposter/imposterIndex.js'),
-    survive: path.join(process.cwd(), 'src/survive/surviveIndex.js')
+    survive: path.join(process.cwd(), 'src/survive/surviveIndex.js'),
+    doodles: path.join(process.cwd(), 'src/doodles/doodleScript.js')
   },
   target: 'web',
   output: {
@@ -41,6 +42,11 @@ module.exports = {
       filename: 'survive.html',
       template: './src/survive/survive.html'
     }),
+    new HtmlWebpackPlugin({
+      chunks: ['doodles'],
+      filename: 'doodles.html',
+      template: './src/doodles/doodles.html'
+    }), 
     new HtmlPluginRemove(/<\s*script[^>]*>(.*?)<\s*\/\s*script>/),
     new Terser({
       parallel: true,

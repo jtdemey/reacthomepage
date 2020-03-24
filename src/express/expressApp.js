@@ -4,7 +4,9 @@ import express from 'express';
 import serverLogger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import mongoSanitize from 'express-mongo-sanitize';
 import rateLimit from 'express-rate-limit';
+import xss from 'xss-clean';
 
 //LOCAL DEPENDENCIES
 import expressRoutes from './expressRoutes';
@@ -30,6 +32,8 @@ app.use(serverLogger('short'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(mongoSanitize());
+app.use(xss());
 app.use(express.static(path.join(process.cwd(), filePrefix))); //DEVELOPMENT //PRODUCTION
 app.use('/', expressRoutes);
 app.use('/', baseRateLimiter);

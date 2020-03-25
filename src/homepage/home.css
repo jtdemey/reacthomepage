@@ -904,6 +904,7 @@ strong {
 
 /* DRAWINGS PAGE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .drawings-container {
+	padding-bottom: 0.5rem;
 	background: #111;
 	text-align: center;
 	color: #fff;

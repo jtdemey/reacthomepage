@@ -1,7 +1,8 @@
 import "regenerator-runtime/runtime";
 
 const uiState = {
-  doodleCt: 22
+  doodlesLoaded: 0,
+  doodleTotal: 21
 };
 
 const loadDoodle = async ind => {
@@ -23,9 +24,28 @@ const loadDoodle = async ind => {
   cards.appendChild(card);
 };
 
+const loadDoodles = amt => {
+  const s = uiState.doodlesLoaded;
+  for(let i = s; i < (s + amt); i++) {
+    if(uiState.doodlesLoaded <= uiState.doodleTotal) {
+      uiState.doodlesLoaded += 1;
+      loadDoodle(i);
+    }
+  }
+};
+
+const setBtnListener = () => {
+  console.log('ay');
+  const moreBtn = document.querySelector('.content-btn');
+  console.log(moreBtn);
+  moreBtn.addEventListener('click', () => {
+    console.log('wut');
+    loadDoodles(4);
+  });
+};
+
 //Init
 (() => {
-  for(let i = 0; i < uiState.doodleCt; i++) {
-    loadDoodle(i);
-  }
+  loadDoodles(4);
+  setBtnListener();
 })();

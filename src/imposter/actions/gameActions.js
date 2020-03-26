@@ -157,9 +157,11 @@ export const setSocketId = sockId => {
     return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
   };
   const storedId = window.localStorage.getItem('JTD_imposterSocketId');
-  const lastSeen = parseDate(window.localStorage.getItem('JTD_imposterHourLastSeen'));
-  if(storedId !== null && Math.abs(new Date().getTime() - lastSeen.getTime()) < 3600000) {
-    console.log(`Welcome back, ${storedId}`);
+  if(storedId) {
+    const lastSeen = parseDate(window.localStorage.getItem('JTD_imposterHourLastSeen'));
+    if(storedId !== undefined && Math.abs(new Date().getTime() - lastSeen.getTime()) < 3600000) {
+      console.log(`Welcome back, ${storedId}`);
+    }
   }
   window.localStorage.setItem('JTD_imposterSocketId', sockId);
   window.localStorage.setItem('JTD_imposterHourLastSeen', new Date().toISOString());

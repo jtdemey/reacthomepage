@@ -1,8 +1,16 @@
+const dotenv = require('dotenv');
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlPluginRemove = require('html-webpack-plugin-remove');
 const Terser = require('terser-webpack-plugin');
+const webpack = require('webpack');
+
+const env = dotenv.config().parsed;
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  return prev;
+}, {});
 
 module.exports = {
   devtool: 'source-map',
@@ -21,6 +29,7 @@ module.exports = {
     filename: '[name]Bundle.[hash:8].js'
   },
   plugins: [
+    new webpack.DefinePlugin(envKeys),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       chunks: ['home'],

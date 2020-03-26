@@ -16,7 +16,8 @@ import { alertMessage } from "./actions/uiActions";
 window.onload = () => {
 
   //Socket client
-  const socket = new WebSocket('ws://localhost:5260');
+  const socketUrl = process.env.WEBSOCKET_URI;
+  const socket = new WebSocket(socketUrl);
   let socketId;
 
   const genSocketId = () => {

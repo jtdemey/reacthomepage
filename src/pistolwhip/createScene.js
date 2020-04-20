@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { getClientDims, getRandBetween } from './pwUtils';
 
 // class Pistolwhip extends Phaser.Scene {
 
@@ -53,10 +54,60 @@ import Phaser from 'phaser';
 //     //   }
 //   }
 // }
+let ground = {
+  lastX: 0,
+  lastY: 0,
+  xInd: 0,
+  yInd: 0
+};
 
 export default function() {
+
+  //Client dims
+  const dims = getClientDims();
+  ground.yInd = dims.height;
+  console.log(this.impact);
+
+  //Background
   this.add.image(0, 0, 'day').setOrigin(0);
-  this.player = this.physics.add.sprite(50, 300, 'player');
-  this.player.setBounce(0.1);
-  this.player.setCollideWorldBounds(true);
+
+  //Player
+  const player = this.impact.add.sprite(50, 300, 'player');
+  player.setBounce(0.1);
+
+  //Ground
+  const getSlopes =  (unitCt, viewHeight, widthRange, altRange) => {
+    let points = [0, viewHeight, 0, viewHeight - 100];
+    let xInd = 0, yInd = 0;
+    for(let i = 0; i < unitCt; i++) {
+      const w = getRandBetween(widthRange[0], widthRange[1]);
+      xInd = xInd + w;
+      yInd = getRandBetween(altRange[0], altRange[1]);
+      const newPt = [xInd, yInd];
+      points = points.concat(newPt);
+    }
+    points = points.concat([xInd, viewHeight]);
+    return new Phaser.Geom.Polygon(points);
+  };
+
+  const groundGraphics = this.add.graphics({
+    fillStyle: {
+      color: 0x000000
+    },
+    lineStyle: {
+      width: 2,
+      color: '#000'
+    }
+  });
+  const renderedSlopes = getSlopes(10, dims.height, [100, 300], [dims.height - 100, dims.height - 300]);
+  groundGraphics.fillPoints(renderedSlopes.points, true);
+
+  //Physics
+  console.log(renderedSlopes);
+  //const slopes = this.impact.add.existing(renderedSlopes);
+  //slopes.body.y = dims.height - 100;
+  //console.log(slopes.body);
+
+  //Colliders
+  //this.physics.add.collider(player, slopes);
 }

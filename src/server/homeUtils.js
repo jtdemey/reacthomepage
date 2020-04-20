@@ -36,5 +36,5 @@ export const handleServerListen = expressApp => {
   const addr = expressApp.address();
   const addrType = typeof adr === 'string';
   const bind = `${addrType ? 'pipe' : 'port'} ${addrType ? addr : addr.port}`;
-  logger.info(`Bound to ${bind}: http://localhost:${addr.port}`);
+  logger.info(`Bound to ${bind}: ${addr.port}`);
 };

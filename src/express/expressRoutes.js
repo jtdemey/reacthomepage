@@ -65,11 +65,6 @@ router.route('/resume')
     sendHtmlFile(res, 'media/resume.html', 'media/resume.html');
   });
 
-router.route('/roleroller')
-  .get((req, res) => {
-    sendHtmlFile(res, 'static/roleroller.html', 'roleroller.html');
-  });
-
 router.route('/sandbox')
   .get((req, res) => {
     sendHtmlFile(res, 'sandbox/sandbox.html', 'sandbox.html');
@@ -78,6 +73,16 @@ router.route('/sandbox')
 router.route('/survive')
   .get((req, res) => {
     sendHtmlFile(res, 'survive/survive.html', 'survive.html');
+  });
+
+router.route('/rollfighter')
+  .get((req, res) => {
+    sendHtmlFile(res, 'rollfighter/rollfighter.html', 'rollfighter.html');
+  });
+
+router.route('/mibs')
+  .get((req, res) => {
+    sendHtmlFile(res, 'mibs/brb.html', 'brb.html');
   });
 
 export default router;

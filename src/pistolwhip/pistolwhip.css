@@ -58,5 +58,6 @@ body {
 }
 #site-wrapper {
   height: 100%;
-  background: #333;
+	background: #333;
+	overflow: hidden;
 }

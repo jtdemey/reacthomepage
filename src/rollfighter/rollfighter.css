@@ -1,0 +1,270 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+@-webkit-keyframes fadein-now {
+  0% {
+  	opacity: 0;
+  	-webkit-transform: translateX(-10px);
+    -moz-transform: translateX(-10px);
+    -o-transform: translateX(-10px);
+    -ms-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  100% {
+  	opacity: 1;
+  	-webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+}
+@-moz-keyframes fadein-now {
+  0% {
+  	opacity: 0;
+  	-webkit-transform: translateX(-10px);
+    -moz-transform: translateX(-10px);
+    -o-transform: translateX(-10px);
+    -ms-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  100% {
+  	opacity: 1;
+  	-webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+}
+@keyframes fadein-now {
+  0% {
+  	opacity: 0;
+  	-webkit-transform: translateX(-10px);
+    -moz-transform: translateX(-10px);
+    -o-transform: translateX(-10px);
+    -ms-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  100% {
+  	opacity: 1;
+  	-webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+}
+.fadein-now {
+	-webkit-animation: fadein-now 0.5s ease-out 0.12s 1;
+  -moz-animation: fadein-now 0.5s ease-out 0.12s 1;
+  -o-animation: fadein-now 0.5s ease-out 0.12s 1;
+  animation: fadein-now 0.5s ease-out 0.12s 1;
+  animation-fill-mode: forwards;
+}
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+@-webkit-keyframes fadeout-now {
+  0% {
+  	opacity: 0;
+  	-webkit-transform: translateX(-10px);
+    -moz-transform: translateX(-10px);
+    -o-transform: translateX(-10px);
+    -ms-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  100% {
+  	opacity: 1;
+  	-webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+}
+@-moz-keyframes fadeout-now {
+  0% {
+  	opacity: 0;
+  	-webkit-transform: translateX(-10px);
+    -moz-transform: translateX(-10px);
+    -o-transform: translateX(-10px);
+    -ms-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  100% {
+  	opacity: 1;
+  	-webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+}
+@keyframes fadeout-now {
+  0% {
+  	opacity: 1;
+  	-webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+  100% {
+  	opacity: 0;
+  	-webkit-transform: translateX(-10px);
+    -moz-transform: translateX(-10px);
+    -o-transform: translateX(-10px);
+    -ms-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+}
+.fadeout-now {
+	-webkit-animation: fadeout-now 0.5s ease-out 0.12s 1;
+  -moz-animation: fadeout-now 0.5s ease-out 0.12s 1;
+  -o-animation: fadeout-now 0.5s ease-out 0.12s 1;
+  animation: fadeout-now 0.5s ease-out 0.12s 1;
+  animation-fill-mode: forwards;
+}
+@keyframes btn-hover-fade {
+  0% {
+  	background: rgba(87, 103, 100, 0.75);
+  }
+  100% {
+  	background: rgba(87, 103, 100, 1.0);
+  }
+}
+@keyframes loading-spinner { 
+  to { 
+    transform: rotate(360deg);
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.body-wrapper {
+  width: 100%;
+  height: 100%;
+  background-image: url("../media/dreamland.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.highlight {
+  position: relative;
+  bottom: 5px;
+  border: 5px solid #ff531a;
+}
+
+.fighter-cards {
+	display: flex;
+	flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 4rem;
+	padding: 12rem 1rem 1rem 1rem;
+	background: rgba(0, 0, 0, 0);
+}
+
+.fighter-card {
+  position: relative;
+  padding: 0.8rem;
+}
+
+.fighter-card > img {
+	flex: 0 1 96px;
+  width: 180px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+}
+
+.winner-card {
+  position: relative;
+  padding: 0.8rem;
+}
+
+.winner-card > img {
+	flex: 0 1 96px;
+  width: 300px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+}
+
+.roll-btn {
+	width: 28rem;
+	height: 10rem;
+	margin: auto;
+  background: rgba(87, 103, 100, 0.9);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  cursor: grab;
+  border-radius: 1rem;
+}
+
+.roll-btn > h5 {
+  height: 100%;
+  margin: 0;
+  font-family: 'Corben', cursive;
+  font-size: 4rem;
+  color: #eee;
+  text-align: center;
+}
+
+.p-t-1r {
+  padding-top: 1rem;
+}
+
+.p-t-2r {
+  padding-top: 2rem;
+}
+
+.spinny-wheel {
+  height: 40px;
+  width: 40px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  border-right: 2px solid transparent;
+  border-bottom: none;
+  border-left: none;
+  animation: loading-spinner 700ms linear infinite;
+}

@@ -644,8 +644,8 @@ input {
   background: rgba(0, 0, 0, 0.4);
   border-radius: 50%;
   border-right: 2px solid transparent;
-  border-bottom:none;
-  border-left:none;
+  border-bottom: none;
+  border-left: none;
   animation: loading-spinner 700ms linear infinite;
 }
 

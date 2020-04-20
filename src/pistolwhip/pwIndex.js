@@ -1,23 +1,22 @@
 import Phaser from 'phaser';
 import createScene from './createScene.js';
 import preload from './preload.js';
-
-const siteWrapper = document.querySelector('#site-wrapper');
-const screenWidth = siteWrapper.clientWidth;
-const screenHeight = siteWrapper.clientHeight;
+import { getClientDims } from './pwUtils';
 
 let config = (() => {
+  const dims = getClientDims();
   const conf = {
     type: Phaser.AUTO,
-    width: screenWidth,
-    height: screenHeight,
+    width: dims.width,
+    height: dims.height,
     parent: 'site-wrapper',
     physics: {
-      default: 'arcade',
-      arcade: {
+      default: 'impact',
+      impact: {
         gravity: {
-          y: 200
-        }
+          y: 400
+        },
+        debug: true
       }
     },
     scene: {

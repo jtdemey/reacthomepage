@@ -1,5 +1,8 @@
 import Phaser from 'phaser';
-import { getClientDims, getRandBetween } from './pwUtils';
+import { getClientDims, getRandBetween, convertPathToPoints } from './pwUtils';
+import player from './player';
+import ground, { makeGroundPath, fillGroundSegment, addBodyToGround, setGroundGraphics } from './ground';
+import game, { loadLevel } from './game';
 
 // class Pistolwhip extends Phaser.Scene {
 
@@ -54,43 +57,25 @@ import { getClientDims, getRandBetween } from './pwUtils';
 //     //   }
 //   }
 // }
-let ground = {
-  lastX: 0,
-  lastY: 0,
-  xInd: 0,
-  yInd: 0
-};
-
 export default function() {
 
   //Client dims
   const dims = getClientDims();
-  ground.yInd = dims.height;
-  console.log(this.impact);
+  game.width = dims.width;
+  game.height = dims.height;
 
   //Background
   this.add.image(0, 0, 'day').setOrigin(0);
 
   //Player
-  const player = this.impact.add.sprite(50, 300, 'player');
-  player.setBounce(0.1);
+  player.setScene(this);
+  player.initSprite();
+
+  //Game world
+  this.matter.world.setBounds(0, 0, dims.width, dims.height, 1, true, true, false, true);
 
   //Ground
-  const getSlopes =  (unitCt, viewHeight, widthRange, altRange) => {
-    let points = [0, viewHeight, 0, viewHeight - 100];
-    let xInd = 0, yInd = 0;
-    for(let i = 0; i < unitCt; i++) {
-      const w = getRandBetween(widthRange[0], widthRange[1]);
-      xInd = xInd + w;
-      yInd = getRandBetween(altRange[0], altRange[1]);
-      const newPt = [xInd, yInd];
-      points = points.concat(newPt);
-    }
-    points = points.concat([xInd, viewHeight]);
-    return new Phaser.Geom.Polygon(points);
-  };
-
-  const groundGraphics = this.add.graphics({
+  setGroundGraphics(this.add.graphics({
     fillStyle: {
       color: 0x000000
     },
@@ -98,16 +83,10 @@ export default function() {
       width: 2,
       color: '#000'
     }
-  });
-  const renderedSlopes = getSlopes(10, dims.height, [100, 300], [dims.height - 100, dims.height - 300]);
-  groundGraphics.fillPoints(renderedSlopes.points, true);
+  }));
 
-  //Physics
-  console.log(renderedSlopes);
-  //const slopes = this.impact.add.existing(renderedSlopes);
-  //slopes.body.y = dims.height - 100;
-  //console.log(slopes.body);
-
+  loadLevel(this, 1);
+  console.log(player.sprite);
   //Colliders
   //this.physics.add.collider(player, slopes);
 }

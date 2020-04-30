@@ -6,7 +6,7 @@ module.exports = {
   mode: 'development',
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    path.join(process.cwd(), 'src', 'pistolwhip', 'pwIndex.js')
+    path.join(process.cwd(), 'src', 'pistolwhip', 'src', 'pwIndex.js')
   ],
   target: 'web',
   output: {

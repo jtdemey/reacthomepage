@@ -80,9 +80,4 @@ router.route('/rollfighter')
     sendHtmlFile(res, 'rollfighter/rollfighter.html', 'rollfighter.html');
   });
 
-router.route('/mibs')
-  .get((req, res) => {
-    sendHtmlFile(res, 'mibs/brb.html', 'brb.html');
-  });
-
 export default router;

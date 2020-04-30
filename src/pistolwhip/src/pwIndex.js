@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import createScene from './createScene.js';
 import preload from './preload.js';
+import update from './updateGame';
 import { getClientDims } from './pwUtils';
 
 let config = (() => {
@@ -11,17 +12,19 @@ let config = (() => {
     height: dims.height,
     parent: 'site-wrapper',
     physics: {
-      default: 'impact',
-      impact: {
+      default: 'matter',
+      matter: {
+        debug: true,
         gravity: {
-          y: 400
-        },
-        debug: true
+          x: 0,
+          y: 0.8
+        }
       }
     },
     scene: {
+      create: createScene,
       preload: preload,
-      create: createScene
+      update: update
     }
   };
   return conf;

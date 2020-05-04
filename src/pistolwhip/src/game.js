@@ -1,4 +1,6 @@
 import ground, { makeGroundSegments } from './ground';
+import player from './player';
+import collisionCats from './collision';
 
 const game = {
   width: 800,
@@ -7,6 +9,10 @@ const game = {
   paused: false,
   tick: 0,
   speed: 1
+};
+
+game.onTick = () => {
+  game.tick += 1;
 };
 
 export default game;

@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import game from './game';
 import { getRandBetween } from './pwUtils';
 import player from './player';
+import collisionCats from './collision';
 
 const ground = {
   xInd: 0,
@@ -16,8 +17,13 @@ const ground = {
 export default ground;
 
 export const addBodyToGround = (scene, path, xPos) => {
-  const body = scene.matter.add.fromVertices(xPos, 0, path);
+  const body = scene.matter.add.fromVertices(xPos, 0, path, {
+    collisionFilter: {
+      category: collisionCats.GROUND
+    }
+  });
   body.isStatic = true;
+  body.pwType = 'body';
   scene.matter.alignBody(body, xPos, path[0].y, Phaser.Display.Align.BOTTOM_LEFT);
   ground.bodies.push(body);
 };

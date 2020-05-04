@@ -12,6 +12,10 @@ export const convertPathToPoints = path => {
   return res;
 };
 
+export const getHypotenuseAngle = (oppLen, adjLen) => {
+  return Math.atan(oppLen / adjLen);
+};
+
 export const getClientDims = () => {
   const siteWrapper = document.querySelector('#site-wrapper');
   const w = siteWrapper.clientWidth;
@@ -20,6 +24,10 @@ export const getClientDims = () => {
     width: w,
     height: h 
   };
+};
+
+export const getLineLength = line => {
+  return Math.sqrt(Math.pow((line.x2 - line.x1), 2) + Math.pow((line.y2 - line.y1), 2));
 };
 
 export const getRandBetween = (min, max) => {

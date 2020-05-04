@@ -6,4 +6,5 @@ export default function() {
     startFrame: 0,
     endFrame: 1
   });
+  this.load.image('pistol', 'assets/pistol.png');
 }

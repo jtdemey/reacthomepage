@@ -1,19 +1,35 @@
 import player from './player';
 
+const controls = {
+  mouseX: 0,
+  mouseY: 0
+};
+
+export default controls;
+
+export const setMousePos = (x, y) => {
+  controls.mouseX = x;
+  controls.mouseY = y;
+};
+
+export const handleClick = e => {
+  console.log(e);
+};
+
 export const handleKeyDown = e => {
   switch(e.key) {
     case 'a':
     case 'ArrowLeft':
-      player.sprite.setVelocityX(-10);
+      player.isMovingLeft = true;
       break;
     case 'd':
     case 'ArrowRight':
-      player.sprite.setVelocityX(10);
+      player.isMovingRight = true;
       break;
     case 'w':
     case 'ArrowUp':
     case ' ':
-      player.sprite.setVelocityY(-10);
+      player.jump();
       break;
     default:
       break;
@@ -24,18 +40,23 @@ export const handleKeyUp = e => {
   switch(e.key) {
     case 'a':
     case 'ArrowLeft':
-      player.sprite.setVelocityX(-4);
+      player.isMovingLeft = false;
       break;
     case 'd':
     case 'ArrowRight':
-      player.sprite.setVelocityX(4);
+      player.isMovingRight = false;
       break;
     case 'w':
     case 'ArrowUp':
     case ' ':
-      player.sprite.setVelocityY(-10);
       break;
     default:
       break;
   }
+};
+
+export const mapInputEvents = input => {
+  input.keyboard.on('keydown', e => handleKeyDown(e));
+  input.keyboard.on('keyup', e => handleKeyUp(e));
+  input.on('pointerdown', e => handleClick(e));
 };

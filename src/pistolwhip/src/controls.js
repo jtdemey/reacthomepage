@@ -13,10 +13,16 @@ export const setMousePos = (x, y) => {
 };
 
 export const handleClick = e => {
+  if(!player.hasControl) {
+    return;
+  }
   console.log(e);
 };
 
 export const handleKeyDown = e => {
+  if(!player.hasControl) {
+    return;
+  }
   switch(e.key) {
     case 'a':
     case 'ArrowLeft':
@@ -37,6 +43,9 @@ export const handleKeyDown = e => {
 };
 
 export const handleKeyUp = e => {
+  if(!player.hasControl) {
+    return;
+  }
   switch(e.key) {
     case 'a':
     case 'ArrowLeft':

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import game from './game';
-import { getRandBetween } from './pwUtils';
+import { getRandBetween, makePt } from './pwUtils';
 import player from './player';
 import collisionCats from './collision';
 
@@ -46,7 +46,6 @@ export const makeGroundSegments = (segmentLength) => {
     yInd = lastPath[lastPath.length - 2].y;
   }
   let wr = ground.widthRange, ar = ground.altRange, ogX = xInd;
-  const makePt = (x, y) => new Phaser.Geom.Point(x, y);
   const path = [makePt(xInd, game.height), makePt(xInd, yInd)];
   for(let i = 0; i < segmentLength; i++) {
     const w = getRandBetween(wr[0], wr[1]);
@@ -86,6 +85,14 @@ export const scrollGround = (scene, speed) => {
   }
 };
 
-export const setGroundGraphics = graphics => {
-  ground.graphics = graphics;
+export const setGroundGraphics = scene => {
+  ground.graphics = scene.add.graphics({
+    fillStyle: {
+      color: 0x000000
+    },
+    lineStyle: {
+      width: 2,
+      color: '#000'
+    }
+  });
 };

@@ -3,13 +3,14 @@ import createScene from './createScene.js';
 import preload from './preload.js';
 import update from './updateGame';
 import { getClientDims } from './pwUtils';
+import game from './game.js';
 
 let config = (() => {
-  const dims = getClientDims();
+  getClientDims();
   const conf = {
     type: Phaser.AUTO,
-    width: dims.width,
-    height: dims.height,
+    width: game.width,
+    height: game.height,
     parent: 'site-wrapper',
     physics: {
       default: 'matter',
@@ -30,4 +31,4 @@ let config = (() => {
   return conf;
 })();
 
-const game = new Phaser.Game(config);
+const gameInstance = new Phaser.Game(config);

@@ -25,4 +25,5 @@ export const initCollisionCats = world => {
   collisionCats.ENEMY = n();
   collisionCats.CONSUMABLE = n();
   collisionCats.BULLET = n();
+  collisionCats.BOUNDARY = n();
 };

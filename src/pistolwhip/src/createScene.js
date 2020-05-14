@@ -1,48 +1,38 @@
-import { getClientDims } from './pwUtils';
-import controls, { mapInputEvents } from './controls';
-import player from './player';
+import { mapInputEvents } from './controls';
+import player, { initSprite } from './player';
 import { setGroundGraphics } from './ground';
-import game, { loadLevel } from './game';
+import game, { loadLevel, setFixedBounds, setExtendedBounds } from './game';
 import { handleCollisions, initCollisionCats } from './collision';
+import { LEVEL_IDS } from './constants';
+import { initProgressBar } from './progressbar';
+import { initBounds } from './bounds';
 
 export default function() {
 
+  //Slide whistle
+  //Hank Hill whaa
+
   //undo this dummy
   // setInterval(() => {
-  //   console.log(Math.abs(controls.mouseX - player.sprite.body.position.x));
+  // console.log(player.sprite.body.position.x);
   // }, 1000);
 
   //Client dims
-  const dims = getClientDims();
-  game.width = dims.width;
-  game.height = dims.height;
   initCollisionCats(this.matter.world);
 
   //Inputs
   mapInputEvents(this.input);
 
-  //Background
-  this.add.image(0, 0, 'day').setOrigin(0);
-
-  //Player
+  //Prep
   player.setScene(this);
-  player.initSprite();
-
-  //Game world
-  this.matter.world.setBounds(0, 0, dims.width, dims.height, 1, true, true, false, true);
+  game.setScene(this);
+  setExtendedBounds();
   this.matter.world.on('collisionstart', e => handleCollisions(e));
 
-  //Ground
-  setGroundGraphics(this.add.graphics({
-    fillStyle: {
-      color: 0x000000
-    },
-    lineStyle: {
-      width: 2,
-      color: '#000'
-    }
-  }));
-
   //Init
-  loadLevel(this, 1);
+  loadLevel(this, LEVEL_IDS.DUSK);
+  initSprite();
+  setGroundGraphics(this);
+  initBounds();
+  initProgressBar(this);
 }

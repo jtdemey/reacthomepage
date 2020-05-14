@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import game from './game';
 
 export const convertPathToPoints = path => {
   const res = [];
@@ -18,12 +19,9 @@ export const getHypotenuseAngle = (oppLen, adjLen) => {
 
 export const getClientDims = () => {
   const siteWrapper = document.querySelector('#site-wrapper');
-  const w = siteWrapper.clientWidth;
-  const h = siteWrapper.clientHeight;
-  return {
-    width: w,
-    height: h 
-  };
+  game.width = siteWrapper.clientWidth;
+  game.height = siteWrapper.clientHeight;
+   
 };
 
 export const getLineLength = line => {
@@ -33,3 +31,5 @@ export const getLineLength = line => {
 export const getRandBetween = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
+
+export const makePt = (x, y) => new Phaser.Geom.Point(x, y);

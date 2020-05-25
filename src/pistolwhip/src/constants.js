@@ -6,6 +6,8 @@ export const ENEMY_TYPES = {
   BOMBER: 4
 };
 
+export const ENEMY_TYPE_NAMES = ['roller', 'glider', 'hopper', 'driver', 'bomber'];
+
 export const LEVEL_COLORS = ['#E77329', '#B15243', '#2D2E55', '#1F2347', '#382F58', '#9A371E'];
 
 export const LEVEL_IDS = {

@@ -21,3 +21,11 @@ export const initBounds = () => {
   bounds.left = makeBound(-10, game.height / 2, rectPts);
   bounds.right = makeBound(game.width + 10, game.height / 2, rectPts);
 };
+
+export const setExtendedBounds = () => {
+  game.scene.matter.world.setBounds(-100, 0, game.width + 400, game.height, 1, true, true, false, true);
+};
+
+export const setFixedBounds = () => {
+  game.scene.matter.world.setBounds(0, 0, game.width, game.height, 1, true, true, false, true);
+};

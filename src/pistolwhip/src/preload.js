@@ -12,6 +12,7 @@ export default function() {
     frameHeight: 32
   });
   this.load.image('pistol', 'assets/pistol.png');
+  this.load.image('bullet', 'assets/bullet.png');
   this.load.spritesheet('roller', 'assets/rollersprite.png', {
     frameWidth: 64,
     frameHeight: 64 

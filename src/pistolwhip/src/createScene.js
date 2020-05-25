@@ -1,11 +1,12 @@
 import { mapInputEvents } from './controls';
 import player, { initSprite } from './player';
 import { setGroundGraphics } from './ground';
-import game, { loadLevel, setFixedBounds, setExtendedBounds } from './game';
+import game, { loadLevel } from './game';
 import { handleCollisions, initCollisionCats } from './collision';
 import { LEVEL_IDS } from './constants';
 import { initProgressBar } from './progressbar';
-import { initBounds } from './bounds';
+import { initBounds, setFixedBounds, setExtendedBounds } from './bounds';
+import enemies from './enemies';
 
 export default function() {
 
@@ -13,9 +14,10 @@ export default function() {
   //Hank Hill whaa
 
   //undo this dummy
-  // setInterval(() => {
-  // console.log(player.sprite.body.position.x);
-  // }, 1000);
+  setInterval(() => {
+    // console.log(enemies[0].sprite.body.position.x)
+    // console.log(game.width - game.enemySpawnDist, game.width + 50);
+  }, 1000);
 
   //Client dims
   initCollisionCats(this.matter.world);

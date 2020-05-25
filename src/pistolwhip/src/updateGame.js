@@ -4,9 +4,9 @@ import game from './game';
 import { setMousePos } from './controls';
 import { updateProgressBar } from './progressbar';
 import enemies from './enemies';
+import { updateBullets } from './bullets';
 
 export default function() {
-  //game.paused = true;
   if(!game.paused) {
     ground.graphics.clear();
     ground.graphics.strokeLineShape(player.aimLine);
@@ -19,5 +19,6 @@ export default function() {
     scrollGround(this, game.speed);
     drawGround();
     updateProgressBar();
+    updateBullets();
   }
 }

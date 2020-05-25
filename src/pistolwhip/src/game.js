@@ -1,7 +1,7 @@
 import ground, { makeGroundSegments } from './ground';
 import { LEVEL_IDS, LEVEL_NAMES } from './constants';
-import player, { enterLevel } from './player';
-import enemies, { spawnNextEnemy } from './enemies';
+import enemies, { spawnNextEnemy, spawnCheck } from './enemies';
+import { getRandBetween } from './pwUtils';
 
 const game = {
   background: null,
@@ -18,9 +18,7 @@ const game = {
 };
 
 game.onTick = () => {
-  // if(!enemies.some(e => e.sprite.body.position.x > game.width - game.enemySpawnDist && e.sprite.body.position.x < game.width + 50)) {
-
-  // }
+  spawnCheck();
 };
 
 game.setScene = scene => {
@@ -35,7 +33,7 @@ export const loadLevel = (scene, lvlId) => {
   game.nextLevelTick = scene.time.now + 100000;
   switch(lvlId) {
     case LEVEL_IDS.DUSK:
-      game.enemySpawnRange = [200, 300];
+      game.enemySpawnRange = [400, 500];
       ground.widthRange = [150, 220];
       ground.altRange = [game.height - 100, game.height - 220];
       break;
@@ -54,16 +52,12 @@ export const loadLevel = (scene, lvlId) => {
   //enterLevel();
 };
 
+export const rollNextEnemySpawnDist = () => {
+  game.enemySpawnDist = getRandBetween(game.enemySpawnRange[0], game.enemySpawnRange[1]);
+};
+
 export const setBackground = (scene, lvlId) => {
   game.background = scene.add.image(0, 0, LEVEL_NAMES[lvlId - 1]).setOrigin(0);
   game.background.width = game.width;
   game.background.height = game.height;
-};
-
-export const setExtendedBounds = () => {
-  game.scene.matter.world.setBounds(-100, 0, game.width + 300, game.height, 1, true, true, false, true);
-};
-
-export const setFixedBounds = () => {
-  game.scene.matter.world.setBounds(0, 0, game.width, game.height, 1, true, true, false, true);
 };

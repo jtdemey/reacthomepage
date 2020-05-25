@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
 import controls from "./controls";
 import { getLineLength, getHypotenuseAngle } from './pwUtils';
-import { setExtendedBounds } from './game';
+import { detectAimLineHit } from './collision';
 
 const player = {
   aimLine: null,
+  damage: 40,
   gunPosition: null,
   gunSprite: null,
   hasControl: true,
@@ -54,6 +55,12 @@ player.setScene = scene => {
   player.scene = scene;
 };
 
+player.shoot = () => {
+  if(detectAimLineHit()) {
+    console.log('oi');
+  }
+};
+
 player.updateAimLine = () => {
   player.aimLine.x1 = player.sprite.body.position.x;
   player.aimLine.y1 = player.sprite.body.position.y;
@@ -77,7 +84,6 @@ export const disablePlayerCollision = () => {
 
 export const enterLevel = () => {
   console.log(player);
-  setExtendedBounds();
   player.hasControl = false;
   player.sprite.x = -80;
   player.isEnteringLevel = true;

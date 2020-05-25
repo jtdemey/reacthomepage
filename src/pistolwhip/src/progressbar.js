@@ -14,7 +14,7 @@ const progressBar = {
 };
 
 export const initProgressBar = scene => {
-  const barColor = new Phaser.Display.Color.HexStringToColor('#444444');
+  const barColor = new Phaser.Display.Color.HexStringToColor('#00ace6');
   //scene.add.text
   progressBar.bar = scene.add.rectangle(game.width / 2, 4, game.width, 8, barColor.color);
 };

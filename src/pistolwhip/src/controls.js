@@ -1,4 +1,5 @@
 import player from './player';
+import { shootBullet, fireBullet } from './bullets';
 
 const controls = {
   mouseX: 0,
@@ -16,7 +17,9 @@ export const handleClick = e => {
   if(!player.hasControl) {
     return;
   }
-  console.log(e);
+  // player.shoot();
+  fireBullet();
+  // shootBullet();
 };
 
 export const handleKeyDown = e => {
@@ -36,6 +39,10 @@ export const handleKeyDown = e => {
     case 'ArrowUp':
     case ' ':
       player.jump();
+      break;
+    case 'f':
+    case 'j':
+      // player.shoot();
       break;
     default:
       break;

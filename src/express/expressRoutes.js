@@ -55,6 +55,11 @@ router.route('/imposter/:gameCode')
     sendHtmlFile(res, 'imposter/imposter.html', 'imposter.html');
   });
 
+router.route('/meyhemn')
+  .get((req, res) => {
+    sendHtmlFile(res, 'meyhemn/meyhemn.html', 'meyhemn.html');
+  });
+
 router.route('/pistolwhip')
   .get((req, res) => {
     sendHtmlFile(res, 'pistolwhip/pistolwhip.html', 'pistolwhip.html');
@@ -65,6 +70,11 @@ router.route('/resume')
     sendHtmlFile(res, 'media/resume.html', 'media/resume.html');
   });
 
+router.route('/rollfighter')
+  .get((req, res) => {
+    sendHtmlFile(res, 'rollfighter/rollfighter.html', 'rollfighter.html');
+  });
+
 router.route('/sandbox')
   .get((req, res) => {
     sendHtmlFile(res, 'sandbox/sandbox.html', 'sandbox.html');
@@ -73,11 +83,6 @@ router.route('/sandbox')
 router.route('/survive')
   .get((req, res) => {
     sendHtmlFile(res, 'survive/survive.html', 'survive.html');
-  });
-
-router.route('/rollfighter')
-  .get((req, res) => {
-    sendHtmlFile(res, 'rollfighter/rollfighter.html', 'rollfighter.html');
   });
 
 export default router;

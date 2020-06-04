@@ -14,15 +14,21 @@ const bullets = {
 
 export default bullets;
 
-export const fireBullet = () => {
-  const bulletId = genId(8);
+const getBulletDestPt = () => {
+  const l = player.aimLine;
+  const pathLine = new Phaser.Curves.Line([l.x1, l.y1, l.x2, l.y2]);
+  const tan = pathLine.getTangentAt(1);
+  let xd = l.x1 + (tan.x * player.range);
+  let yd = l.y1 + (tan.y * player.range);
+  return new Phaser.Curves.Line([l.x1, l.y1, xd, yd]);
+};
 
-  const point = {
-    t: 0,
+const getBulletPt = () => ({
+  t: 0,
     vec: new Phaser.Math.Vector2()
-  };
-  bullets.points.push(point);
+});
 
+const getBulletSprite = () => {
   const l = player.aimLine;
   const sprite = game.scene.matter.add.sprite(l.x1, l.y1, 'bullet');
   sprite.body.collisionFilter = {
@@ -31,19 +37,22 @@ export const fireBullet = () => {
     mask: collisionCats.GROUND | collisionCats.ENEMY | collisionCats.BOUNDARY
   };
   sprite.body.gravityScale.y = 0;
-  sprite.bulletId = bulletId;
-  bullets.sprites.push(sprite);
+  sprite.bulletId = genId(12);
+  return sprite;
+};
 
-  const pathLine = new Phaser.Curves.Line([l.x1, l.y1, l.x2, l.y2]);
+export const fireBullet = () => {
+  const point = getBulletPt();
+  bullets.points.push(point);
+  bullets.sprites.push(getBulletSprite());
   const path = game.scene.add.path();
-  path.add(pathLine);
+  path.add(getBulletDestPt());
   bullets.paths.push(path);
-
   const fireTween = game.scene.tweens.add({
     targets: point,
     t: 1,
     ease: 'linear',
-    duration: 100,
+    duration: 500,
     repeat: 0
   });
   bullets.tweens.push(fireTween);

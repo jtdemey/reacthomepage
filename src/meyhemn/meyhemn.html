@@ -3,7 +3,7 @@
   <head>
     <title>Meyhemn</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <link href="https://fonts.googleapis.com/css2?family=Overpass&family=Vollkorn&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Halant&family=Nunito+Sans:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen" href="meyhemn.css" title="Default">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
   </head>
@@ -15,26 +15,76 @@
     <div class="noscript-alert">This site requires JavaScript to be enabled.</div>
   </noscript>
   <body>
-    <div class="site-wrapper">
-      <div class="header">
-        <h5>The Mysterious Land of</h5>
-        <h1>Meyhemn</h1>
-        <div></div>
-      </div>
-      <div class="section-break"></div>
-      <section class="toc">
-        <h1 class="align-center">Table of Contents</h1>
+    <main id="site-wrapper">
+      <div id="main-overlay"></div>
+      <header class="mobile-header">
+        <span>Menu</span>
+        <h3>Mayhemn</h3>
+      </header>
+      <nav class="mobile-nav">
         <ul>
-          <li>Intro</li>
-          <li>Intro</li>
-          <li>Intro</li>
+          <li><a href="#">World</a></li>
+          <li><a href="#">People</a></li>
+          <li><a href="#">Beastiary</a></li>
         </ul>
+      </nav>
+      <nav class="desktop-nav">
+        <ul>
+          <li><a href="#">Meyhemn</a></li>
+          <span id="header-line"></span>
+          <li>World</li>
+          <li>People</li>
+          <li>Beastiary</li>
+        </ul>
+      </nav>
+      <section id="content-area">
+        <div id="world-splash">
+          <div id="splash-text">
+            <h5>There's no peace in</h5>
+            <h1>Meyhemn</h1>
+          </div>
+          <div id="splash-img">
+            <img src="worldmap.png">
+          </div>
+        </div>
+        <h2>WORLD</h2>
+        <div class="content-pane">
+          <h2>THE PRINCIPALITY OF MIDBURLAND</h2>
+          <p>
+            "Midburland? The north is real nice - they got fertile fields, sturdy roofs, and flushing shitters.
+            Down here you're lucky to have walls thick enough to protect your hide from the bandits and beasts - the
+            real ugly sons-a-bitches that reside out there in the swamplands."
+
+              -Lenny Shagrits, Boghelm resident
+          </p>
+          <p>
+          North Midburland is a relatively peaceful continent. The same cannot be said for the South.
+          The land is best understood as three disparate lands strung together.
+          Northern Midburland is a wide, lush continent with a diverse ecosystem and thriving population of humanoids and creatures.
+          Southern Midburland is a land of steep, jagged, untraversable cliffs dispersed by lowly swamps and wetlands rife with unfavorable
+          wildlife, speckled with shantytowns and fishing villages.
+          The two lands are attached by a terrible stretch of dense forest known as the Tether. Nobody lives in the Tether, at least not for very long.
+          The coastal oceans of Midburland are plagued by frequent storms and tumultuous waves, making conventional sailing ill-advised.
+          </p>
+          <h3>BOGHELM</h3>
+          <p>
+          Boghelm is where your journey begins. A meager fishing village built on a strip of grasslands amongst a swamp teeming with
+          fish of all shapes and sizes.
+
+          The Boathouse:
+          The swampy forest abruptly gives way to a small sandy shore, atop which perches a pier and its accompanying boathouse. The mahogany wood looks
+          sturdy and ornate, sharply contrasting with most of the shoddy infrastructure you're used to seeing in Boghelm.  The pier houses a few skiffs
+          and two larger ships, and on the right is an elevated boathouse with intricately carved windows and a thatch roof.  Through the window, you
+          can see a group of people and racks stacked with canoes.
+          </p>
+          <h3>CITY</h3>
+          <p>
+          Bulletin: antidotes are dispersed among the population based on occupation. One determined citizen compiles the amount from members of each
+          occupation and hangs it behind the town hall. Numbers change based upon the will of the king, with some occupations, such as guards, missing.
+          </p>
+        </div>
       </section>
-      <div class="section-break"></div>
-      <section class="main-content">
-        <h1>Hi there</h1>
-      </section>
-    </div>
+    </main>
     <script type="text/javascript" src="/meyhemn/meyhemn.js" async></script>
   </body>
 </html>

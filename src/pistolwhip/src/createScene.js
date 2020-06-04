@@ -7,6 +7,7 @@ import { LEVEL_IDS } from './constants';
 import { initProgressBar } from './progressbar';
 import { initBounds, setFixedBounds, setExtendedBounds } from './bounds';
 import enemies from './enemies';
+import { initGui } from './gui';
 
 export default function() {
 
@@ -37,4 +38,5 @@ export default function() {
   setGroundGraphics(this);
   initBounds();
   initProgressBar(this);
+  initGui();
 }

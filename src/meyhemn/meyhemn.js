@@ -1,14 +1,13 @@
 window.onload = () => {
-  console.log('hehe');
-  const makeHeaderRect = () => {
-    const rect = document.querySelector('.header > div');
-    const getHeight = selector => {
-      const h = document.defaultView.getComputedStyle(document.querySelector(selector)).height;
-
-    };
-    const height = getHeight('.header > h5')
-    const height = document.defaultView.getComputedStyle(document.querySelector());
-    console.log(getHeight(rect));
+  const overlay = document.getElementById('main-overlay');
+  const exitMobileNav = () => {
+    document.querySelector('.mobile-nav').style.width = '0';
+    overlay.style.backgroundColor = 'transparent';
+    overlay.removeEventListener('click', () => exitMobileNav());
   };
-  makeHeaderRect();
+  document.querySelector('.mobile-header > span').addEventListener('click', () => {
+    document.querySelector('.mobile-nav').style.width = '12rem';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+    overlay.addEventListener('click', () => exitMobileNav());
+  });
 };

@@ -7,7 +7,9 @@ import enemies from './enemies';
 import { updateBullets } from './bullets';
 
 export default function() {
-  if(!game.paused) {
+  if(game.paused) {
+    return;
+  } else {
     ground.graphics.clear();
     ground.graphics.strokeLineShape(player.aimLine);
     game.onTick();

@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import controls from "./controls";
 import { getLineLength, getHypotenuseAngle } from './pwUtils';
 import { detectAimLineHit } from './collision';
+import { refreshHealthBar } from './gui';
+import { gameOver } from './game';
 
 const player = {
   aimLine: null,
@@ -9,6 +11,7 @@ const player = {
   gunPosition: null,
   gunSprite: null,
   hasControl: true,
+  hitCooldown: 0,
   hp: 100,
   jumps: 0,
   maxJumps: 1,
@@ -51,6 +54,9 @@ player.onTick = () => {
   }
   player.updateAimLine();
   player.updateGunSprite();
+  if(player.hitCooldown > 0) {
+    player.hitCooldown -= 1;
+  }
 };
 
 player.setScene = scene => {
@@ -90,6 +96,17 @@ export const enterLevel = () => {
   player.sprite.x = -80;
   player.isEnteringLevel = true;
   console.log(player.sprite);
+};
+
+export const hurtPlayer = amt => {
+  if(player.hitCooldown < 1) {
+    player.hitCooldown = 120;
+    player.hp = player.hp - amt < 0 ? 0 : player.hp - amt;
+    if(player.hp === 0) {
+      gameOver();
+    }
+    refreshHealthBar();
+  }
 };
 
 export const initSprite = () => {

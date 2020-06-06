@@ -13,7 +13,7 @@ export default function() {
   });
   this.load.image('pistol', 'assets/pistol.png');
   this.load.image('bullet', 'assets/bullet.png');
-  this.load.spritesheet('roller', 'assets/rollersprite.png', {
+  this.load.spritesheet('roller', 'assets/rollerspriteV2.png', {
     frameWidth: 64,
     frameHeight: 64 
   });

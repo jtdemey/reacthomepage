@@ -1,5 +1,6 @@
 import player from './player';
-import { shootBullet, fireBullet } from './bullets';
+import { fireBullet } from './bullets';
+import { togglePause } from './game';
 
 const controls = {
   mouseX: 0,
@@ -26,7 +27,11 @@ export const handleKeyDown = e => {
   if(!player.hasControl) {
     return;
   }
+  console.log(e.key);
   switch(e.key) {
+    case 'Escape':
+      togglePause();
+      break;
     case 'a':
     case 'ArrowLeft':
       player.isMovingLeft = true;

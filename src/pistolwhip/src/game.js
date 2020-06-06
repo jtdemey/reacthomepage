@@ -2,6 +2,8 @@ import ground, { makeGroundSegments } from './ground';
 import { LEVEL_IDS, LEVEL_NAMES } from './constants';
 import enemies, { spawnNextEnemy, spawnCheck } from './enemies';
 import { getRandBetween } from './pwUtils';
+import player from './player';
+import { showPauseMenu, hidePauseMenu } from './pausemenu';
 
 const game = {
   background: null,
@@ -26,6 +28,13 @@ game.setScene = scene => {
 };
 
 export default game;
+
+export const gameOver = () => {
+  game.paused = true;
+  player.gunSprite.setIgnoreGravity(false);
+  player.gunSprite.setVelocityX(3);
+  player.gunSprite.setVelocityY(-10);
+};
 
 export const loadLevel = (scene, lvlId) => {
   game.level = lvlId;
@@ -52,6 +61,12 @@ export const loadLevel = (scene, lvlId) => {
   //enterLevel();
 };
 
+export const pauseGame = () => {
+  game.paused = true;
+  game.scene.matter.world.pause();
+  showPauseMenu();
+};
+
 export const rollNextEnemySpawnDist = () => {
   game.enemySpawnDist = getRandBetween(game.enemySpawnRange[0], game.enemySpawnRange[1]);
 };
@@ -60,4 +75,18 @@ export const setBackground = (scene, lvlId) => {
   game.background = scene.add.image(0, 0, LEVEL_NAMES[lvlId - 1]).setOrigin(0);
   game.background.width = game.width;
   game.background.height = game.height;
+};
+
+export const togglePause = () => {
+  if(game.paused) {
+    unpauseGame();
+  } else {
+    pauseGame();
+  }
+};
+
+export const unpauseGame = () => {
+  game.paused = false;
+  game.scene.matter.world.resume();
+  hidePauseMenu();
 };

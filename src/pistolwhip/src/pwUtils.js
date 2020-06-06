@@ -27,19 +27,21 @@ export const genId = len => {
   return id;
 };
 
-export const getHypotenuseAngle = (oppLen, adjLen) => {
-  return Math.atan(oppLen / adjLen);
-};
-
 export const getClientDims = () => {
   const siteWrapper = document.querySelector('#site-wrapper');
   game.width = siteWrapper.clientWidth;
   game.height = siteWrapper.clientHeight;
 };
 
+export const getHypotenuseAngle = (oppLen, adjLen) => {
+  return Math.atan(oppLen / adjLen);
+};
+
 export const getLineLength = line => {
   return Math.sqrt(Math.pow((line.x2 - line.x1), 2) + Math.pow((line.y2 - line.y1), 2));
 };
+
+export const getPhaserColorFromHex = hex => new Phaser.Display.Color.HexStringToColor(hex).color;
 
 export const getRandBetween = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);

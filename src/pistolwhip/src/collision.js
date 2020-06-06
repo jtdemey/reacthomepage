@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import player from './player';
+import player, { hurtPlayer } from './player';
 import enemies, { hurtEnemy, hurtEnemyByBodyId } from './enemies';
 import { detectCatColl } from './pwUtils';
 import { removeBulletByBodyId } from './bullets';
@@ -20,6 +20,12 @@ const checkBulletEnemyColl = pair => {
   if(detectCatColl(pair.bodyA, pair.bodyB, collisionCats.ENEMY, collisionCats.BULLET)) {
     removeBulletByBodyId(pair.bodyA.collisionFilter.category === collisionCats.BULLET ? pair.bodyA.id : pair.bodyB.id);
     hurtEnemyByBodyId(pair.bodyA.collisionFilter.category === collisionCats.BULLET ? pair.bodyB.id : pair.bodyA.id, player.damage);
+  }
+};
+
+const checkPlayerEnemyColl = pair => {
+  if(detectCatColl(pair.bodyA, pair.bodyB, collisionCats.PLAYER, collisionCats.ENEMY)) {
+    hurtPlayer(20);
   }
 };
 
@@ -48,6 +54,7 @@ export const handleCollisions = event => {
   event.pairs.forEach(pair => {
     checkBulletEnemyColl(pair);
     checkBulletGroundColl(pair);
+    checkPlayerEnemyColl(pair);
     checkPlayerGroundColl(pair);
   });
 };

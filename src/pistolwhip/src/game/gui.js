@@ -1,6 +1,6 @@
 import game from "./game";
 import player from './player';
-import { getPhaserColorFromHex } from './pwUtils';
+import { getPhaserColorFromHex } from '../pwUtils';
 
 //Hp bar gradient: #800000, #6c2509, #574d13, #3e7c1f, #29a329
 const gui = {

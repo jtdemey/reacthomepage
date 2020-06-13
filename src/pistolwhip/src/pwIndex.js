@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
-import createScene from './createScene.js';
-import preload from './preload.js';
-import update from './updateGame';
+import createScene from './game/createScene';
+import preload from './game/preload';
+import update from './game/updateGame';
 import { getClientDims } from './pwUtils';
-import game from './game.js';
+import game from './game/game';
 
 let config = (() => {
   getClientDims();

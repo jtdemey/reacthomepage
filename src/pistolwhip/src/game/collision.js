@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import player, { hurtPlayer } from './player';
 import enemies, { hurtEnemy, hurtEnemyByBodyId } from './enemies';
-import { detectCatColl } from './pwUtils';
+import { detectCatColl } from '../pwUtils';
 import { removeBulletByBodyId } from './bullets';
 
 const collisionCatNames = ['PLAYER', 'GROUND', 'ENEMY', 'CONSUMABLE', 'BULLET', 'BOUNDARY'];

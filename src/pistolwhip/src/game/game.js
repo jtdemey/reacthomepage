@@ -1,9 +1,9 @@
 import ground, { makeGroundSegments } from './ground';
-import { LEVEL_IDS, LEVEL_NAMES } from './constants';
-import enemies, { spawnNextEnemy, spawnCheck } from './enemies';
-import { getRandBetween } from './pwUtils';
+import { LEVEL_IDS, LEVEL_NAMES } from '../constants';
+import { spawnNextEnemy, spawnCheck } from './enemies';
+import { getRandBetween } from '../pwUtils';
 import player from './player';
-import { showPauseMenu, hidePauseMenu } from './pausemenu';
+import { showPauseMenu, hidePauseMenu } from '../pausemenu/pausemenu';
 
 const game = {
   background: null,

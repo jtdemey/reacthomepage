@@ -27,7 +27,6 @@ export const handleKeyDown = e => {
   if(!player.hasControl) {
     return;
   }
-  console.log(e.key);
   switch(e.key) {
     case 'Escape':
       togglePause();

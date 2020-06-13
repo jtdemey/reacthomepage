@@ -3,10 +3,9 @@ import player, { initSprite } from './player';
 import { setGroundGraphics } from './ground';
 import game, { loadLevel } from './game';
 import { handleCollisions, initCollisionCats } from './collision';
-import { LEVEL_IDS } from './constants';
+import { LEVEL_IDS } from '../constants';
 import { initProgressBar } from './progressbar';
-import { initBounds, setFixedBounds, setExtendedBounds } from './bounds';
-import enemies from './enemies';
+import { initBounds, setExtendedBounds } from './bounds';
 import { initGui } from './gui';
 
 export default function() {

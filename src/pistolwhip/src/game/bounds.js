@@ -1,6 +1,6 @@
 import game from './game';
 import collisionCats from './collision';
-import { makePt } from './pwUtils';
+import { makePt } from '../pwUtils';
 
 const bounds = {
   left: null,

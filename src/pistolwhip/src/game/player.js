@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import controls from "./controls";
-import { getLineLength, getHypotenuseAngle } from './pwUtils';
+import { getLineLength, getHypotenuseAngle } from '../pwUtils';
 import { detectAimLineHit } from './collision';
 import { refreshHealthBar } from './gui';
 import { gameOver } from './game';

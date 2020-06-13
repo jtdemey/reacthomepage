@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import game from './game';
+import game from './game/game';
 
 export const convertPathToPoints = path => {
   const res = [];
@@ -50,3 +50,7 @@ export const getRandBetween = (min, max) => {
 export const isCollCat = (body, cat) => body.collisionFilter.category === cat;
 
 export const makePt = (x, y) => new Phaser.Geom.Point(x, y);
+
+export const makeScene = (game, key) => {
+  
+};

@@ -3,7 +3,7 @@ import game from './game';
 import player from './player';
 import collisionCats from './collision';
 import ground from './ground';
-import { genId } from './pwUtils';
+import { genId } from '../pwUtils';
 
 const bullets = {
   sprites: [],
@@ -25,7 +25,7 @@ const getBulletDestPt = () => {
 
 const getBulletPt = () => ({
   t: 0,
-    vec: new Phaser.Math.Vector2()
+  vec: new Phaser.Math.Vector2()
 });
 
 const getBulletSprite = () => {

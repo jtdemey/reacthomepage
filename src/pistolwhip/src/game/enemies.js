@@ -1,7 +1,7 @@
 import game, { rollNextEnemySpawnDist } from './game';
-import { ENEMY_TYPES, LEVEL_IDS, ENEMY_TYPE_NAMES } from './constants';
+import { ENEMY_TYPES, LEVEL_IDS, ENEMY_TYPE_NAMES } from '../constants';
 import collisionCats from './collision';
-import { genId } from './pwUtils';
+import { genId } from '../pwUtils';
 
 const enemies = [];
 

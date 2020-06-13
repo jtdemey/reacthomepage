@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import game from './game';
-import { getRandBetween, makePt } from './pwUtils';
+import { getRandBetween, makePt } from '../pwUtils';
 import player from './player';
 import collisionCats from './collision';
 

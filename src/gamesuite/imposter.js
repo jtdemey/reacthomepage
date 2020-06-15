@@ -177,9 +177,144 @@ export const rollScenario = () => {
         'Psychiatrist',
         'Guard',
         'Guard',
-        ''
+        'Patient'
       ]
-    }
+    },
+    {
+      title: 'Construction Site',
+      roles: [
+        'Foreman',
+        'Laborer',
+        'Operator',
+        'Inspector',
+        'Superintendent',
+        'Laborer',
+        'Operator',
+        'Laborer',
+        'Foreman',
+        'Laborer'
+      ]
+    },
+    {
+      title: 'High Security Prison',
+      roles: [
+        'Serial killer',
+        'Guard',
+        'Guard',
+        'Robber',
+        'Jewel thief',
+        'Laborer',
+        'Overseer',
+        'Cook',
+        'Contraband trader',
+        'Hustler'
+      ]
+    },
+    {
+      title: 'College Lecture Hall',
+      roles: [
+        'Professor',
+        'Student',
+        'Student',
+        'Student',
+        'Delinquent',
+        'Sleepy student',
+        'Slacker',
+        'Gamer',
+        'Weeb',
+        `Teacher's pet`
+      ]
+    },
+    {
+      title: 'Public Hanging',
+      roles: [
+        'Executioner',
+        'Accused',
+        'Accuser',
+        'Jeering peasant',
+        'Town crier',
+        'Priest',
+        'King',
+        'Queen',
+        'Jester',
+        'Knight'
+      ]
+    },
+    {
+      title: 'Medical Dispensary',
+      roles: [
+        'Bud tender',
+        'Old person',
+        'Stoner',
+        'Stoner',
+        'Employee',
+        'Patient',
+        'Patient',
+        'Marijuana enthusiast',
+        'Patient',
+        'Cashier'
+      ]
+    },
+    {
+      title: 'Open Heart Surgery',
+      roles: [
+        'Surgeon',
+        'Nurse',
+        'Surgeon',
+        'Anesthesiologist',
+        'Medical student',
+        'Medical student',
+        'Nurse',
+        'Surgical tech',
+        'Medical aid',
+        'Physician assistant'
+      ]
+    },
+    {
+      title: 'Fight Club',
+      roles: [
+        'Director',
+        'Brawler',
+        'Kickboxer',
+        'Worker',
+        'Bouncer',
+        'Boxer',
+        'Martial artist',
+        'Veteran',
+        'Fighter',
+        'Fighter'
+      ]
+    },
+    {
+      title: 'Rock Concert',
+      roles: [
+        'Guitarist',
+        'Drummer',
+        'Bassist',
+        'Singer',
+        'Lighting tech',
+        'Audio tech',
+        'Band manager',
+        'Fan',
+        'Mosher',
+        'Raving fan'
+      ]
+    },
+    {
+      title: 'Baptist Church',
+      roles: [
+        'Preacher',
+        'Old lady',
+        'Old man',
+        'Avid Christian',
+        'Acolyte',
+        'Choir singer',
+        'Choir director',
+        'Organist',
+        'Usher',
+        'Bored kid'
+      ]
+    },
   ];
   const conditions = [
     `Everyone's injured`,
@@ -190,7 +325,10 @@ export const rollScenario = () => {
     `It's way too cold`,
     `You forgot to do something important`,
     `It smells like shit`,
-    `You're nearly deaf`
+    `You're nearly deaf`,
+    `Everyone's tripping balls`,
+    `There's a persistent, annoying humming sound`,
+    `There's a roach infestation`
   ];
   const scenarioRes = scenarios[Math.floor(Math.random() * scenarios.length)];
   const conditionRes = conditions[Math.floor(Math.random() * conditions.length)];

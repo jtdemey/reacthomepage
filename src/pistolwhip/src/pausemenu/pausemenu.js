@@ -1,4 +1,4 @@
-import game from "../game/game";
+import game, { unpauseGame } from '../game/game';
 import { getPhaserColorFromHex } from "../pwUtils";
 
 const pauseMenu = {
@@ -28,7 +28,7 @@ export const showPauseMenu = () => {
   } else {
     pauseMenu.background = game.scene.add.rectangle(game.width / 2, game.height / 2, game.width, game.height / 8, getPhaserColorFromHex('#333'));
     pauseMenu.background.alpha = 0.75;
-    const addMenuItem = (x, y, key) => {
+    const addMenuItem = (x, y, key, clickFunc = undefined) => {
       const menuItem = game.scene.add.image(x, y, key);
       menuItem.setInteractive();
       menuItem.on('pointerover', e => {
@@ -45,9 +45,12 @@ export const showPauseMenu = () => {
         menuItem.alpha = 1;
         pauseMenu.tweens[key].stop();
       });
+      if(clickFunc !== undefined) {
+        menuItem.on('pointerdown', clickFunc);
+      }
       return menuItem;
     };
-    pauseMenu.resumeText = addMenuItem(game.width / 2, game.height / 2 - 80, 'resumeBtn');
+    pauseMenu.resumeText = addMenuItem(game.width / 2, game.height / 2 - 80, 'resumeBtn', () => unpauseGame());
     pauseMenu.optionsText = addMenuItem(game.width / 2, game.height / 2, 'optionsBtn');
     pauseMenu.quitText = addMenuItem(game.width / 2, game.height / 2 + 80, 'quitBtn');
   }

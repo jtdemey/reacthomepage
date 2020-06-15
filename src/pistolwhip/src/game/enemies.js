@@ -1,7 +1,7 @@
 import game, { rollNextEnemySpawnDist } from './game';
 import { ENEMY_TYPES, LEVEL_IDS, ENEMY_TYPE_NAMES } from '../constants';
 import collisionCats from './collision';
-import { genId } from '../pwUtils';
+import { genId, getRandBetween } from '../pwUtils';
 
 const enemies = [];
 
@@ -12,15 +12,21 @@ const deleteEnemy = enemyId => {
     if(e.enemyId === enemyId) {
       e.sprite.destroy();
       enemies.splice(i, 1);
+      i -= 1;
     }
   });
+};
+
+export const clearEnemies = () => {
+  while(enemies.length) {
+    enemies.pop().sprite.destroy();
+  }
 };
 
 export const getEnemyFromBodyId = bodyId => {
   enemies.forEach((goon, i) => {
     if(goon.sprite.body !== undefined) {
-      console.log(goon.sprite.body)
-      console.log(bodyId)
+      console.error(`Enemy sprite ${goon.enemyId} contains no defined body`);
     }
     if(goon.sprite.body && goon.sprite.body.id === bodyId) {
       return enemies[i];
@@ -30,17 +36,39 @@ export const getEnemyFromBodyId = bodyId => {
 };
 
 const getPossibleEnemyTypes = () => {
+  let ids = LEVEL_IDS;
   let x = ENEMY_TYPES;
-  if(game.level === LEVEL_IDS.DUSK) {
-    return [x.ROLLER];
-  } else if(game.level === LEVEL_IDS.NIGHTFALL) {
-    return [x.ROLLER, x.GLIDER];
-  } else if(game.level === LEVEL_IDS.NIGHT) {
-    return [x.ROLLER, x.GLIDER, x.HOPPER];
-  } else if(game.level === LEVEL_IDS.MIDNIGHT) {
-    return [x.GLIDER, x.HOPPER, x.DRIVER];
-  } else if(game.level === LEVEL_IDS.NIGHTFALL) {
-    return [x.HOPPER, x.DRIVER, x.BOMBER];
+  switch(game.level) {
+    case ids.CIVIL_DUSK:
+      return [x.ROLLER];
+    case ids.NAUTICAL_DUSK:
+      return [x.ROLLER];
+    case ids.ASTRONOMICAL_DUSK:
+      return [x.ROLLER];
+    case ids.NIGHTFALL:
+      return [x.ROLLER];
+    case ids.NIGHTFALL2:
+      return [x.ROLLER];
+    case ids.NIGHTFALL3:
+      return [x.ROLLER];
+    case ids.NIGHT:
+      return [x.ROLLER];
+    case ids.MIDNIGHT:
+      return [x.ROLLER];
+    case ids.MORNING:
+      return [x.ROLLER];
+    case ids.SUNRISE:
+      return [x.ROLLER];
+    case ids.SUNRISE2:
+      return [x.ROLLER];
+    case ids.SUNRISE3:
+      return [x.ROLLER];
+    case ids.ASTRONOMICAL_DAWN:
+      return [x.ROLLER];
+    case ids.NAUTICAL_DAWN:
+      return [x.ROLLER];
+    case ids.CIVIL_DAWN:
+      return [x.ROLLER];
   }
 };
 
@@ -49,7 +77,7 @@ export const hurtEnemy = (enemyId, amt) => {
     if(e.enemyId === enemyId) {
       e.hp -= amt;
       if(e.hp < 1) {
-        deleteEnemy(enemyId);
+        killEnemy(enemyId);
       }
     }
   });
@@ -63,8 +91,28 @@ export const hurtEnemyByBodyId = (bodyId, amt) => {
     if(e.sprite.body && e.sprite.body.id === bodyId) {
       e.hp -= amt;
       if(e.hp < 1) {
-        deleteEnemy(e.enemyId);
+        killEnemy(e.enemyId);
       }
+    }
+  });
+};
+
+export const killAllEnemies = () => {
+  enemies.map(e => killEnemy(e.enemyId));
+};
+
+export const killEnemy = enemyId => {
+  enemies.map(e => {
+    if(e.enemyId === enemyId) {
+      e.speed = 0;
+      e.sprite.setVelocity(getRandBetween(-1.5, 1.5), getRandBetween(-3, -6));
+      // e.sprite.setRotation(2);
+      e.sprite.setAngularVelocity(0.15);
+      e.sprite.body.collisionFilter.category = 0;
+      e.onTick = () => { return; }
+      setTimeout(() => {
+        deleteEnemy(enemyId);
+      }, 500);
     }
   });
 };
@@ -87,6 +135,7 @@ const makeEnemy = type => {
     };
     sprite.body.friction = 0;
     sprite.setBounce(0);
+    console.log(sprite);
     onTick = () => {
       sprite.rotation = 0;
       sprite.setVelocityX(-2);
@@ -101,7 +150,8 @@ const makeEnemy = type => {
 };
 
 export const spawnCheck = () => {
-  if(!enemies.some(e => e.sprite.body.position.x > game.width - game.enemySpawnDist)) {
+  if(!enemies.some(e => e.sprite && e.sprite.body && e.sprite.body.position.x > game.width - game.enemySpawnDist)
+  && !game.isTransitioningLevels) {
     spawnNextEnemy();
   }
 };

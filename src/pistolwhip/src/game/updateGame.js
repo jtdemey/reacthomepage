@@ -2,7 +2,7 @@ import ground, { scrollGround, drawGround } from './ground';
 import player from './player';
 import game from './game';
 import { setMousePos } from './controls';
-import { updateProgressBar } from './progressbar';
+import { updateProgressBar } from './progressBar';
 import enemies from './enemies';
 import { updateBullets } from './bullets';
 

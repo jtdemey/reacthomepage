@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import game, { loadLevel } from './game';
+import game, { advanceLevel } from './game';
 import player from './player';
 
 const progressBar = {
@@ -20,11 +20,12 @@ export const initProgressBar = scene => {
 };
 
 export const updateProgressBar = () => {
-  let ticksComplete = player.scene.time.now - game.levelStartTick;
+  let ticksComplete = game.tick - game.levelStartTick;
   let tickTotal = game.nextLevelTick;
   let pctComplete = ticksComplete / tickTotal * 100;
   progressBar.bar.width = pctComplete / 100 * (game.width - 120);
-  if(ticksComplete > tickTotal) {
+  if(ticksComplete > tickTotal && player.hasControl) {
+    advanceLevel();
     //loadLevel(player.scene, game.level + 1);
   }
 };

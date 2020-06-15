@@ -4,7 +4,7 @@ import { setGroundGraphics } from './ground';
 import game, { loadLevel } from './game';
 import { handleCollisions, initCollisionCats } from './collision';
 import { LEVEL_IDS } from '../constants';
-import { initProgressBar } from './progressbar';
+import { initProgressBar } from './progressBar';
 import { initBounds, setExtendedBounds } from './bounds';
 import { initGui } from './gui';
 
@@ -32,7 +32,7 @@ export default function() {
   this.matter.world.on('collisionstart', e => handleCollisions(e));
 
   //Init
-  loadLevel(this, LEVEL_IDS.DUSK);
+  loadLevel(this, LEVEL_IDS.CIVIL_DUSK);
   initSprite();
   setGroundGraphics(this);
   initBounds();

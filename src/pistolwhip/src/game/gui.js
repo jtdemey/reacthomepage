@@ -17,12 +17,11 @@ export const initGui = () => {
 
 export const initHealthBar = () => {
   gui.healthBarBg = game.scene.add.rectangle(110, 32, 200, 30, getPhaserColorFromHex('#333')); 
-  gui.healthBar = game.scene.add.rectangle(110, 32, 200, 30, getPhaserColorFromHex('#29a329'));
+  gui.healthBar = game.scene.add.rectangle(110, 32, 198, 28, getPhaserColorFromHex('#29a329'));
   gui.healthCt = game.scene.add.text(30, 22, '100', {
     fontFamily: `'Archivo Black', sans-serif`,
     fontSize: '1.25rem'
   });
-  console.log(gui.healthCt);
 };
 
 export const refreshHealthBar = () => {

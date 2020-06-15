@@ -20,7 +20,7 @@ const player = {
   scene: null,
   score: 0,
   sprite: null,
-  isEnteringLevel: false,
+  isInvulnerable: false,
   isJumping: false,
   isMovingLeft: false,
   isMovingRight: false,
@@ -90,16 +90,8 @@ export const disablePlayerCollision = () => {
   player.sprite.body.collisionFilter.mask = 0;
 };
 
-export const enterLevel = () => {
-  console.log(player);
-  player.hasControl = false;
-  player.sprite.x = -80;
-  player.isEnteringLevel = true;
-  console.log(player.sprite);
-};
-
 export const hurtPlayer = amt => {
-  if(player.hitCooldown < 1) {
+  if(player.hitCooldown < 1 && player.isInvulnerable === false) {
     player.hitCooldown = 120;
     player.hp = player.hp - amt < 0 ? 0 : player.hp - amt;
     if(player.hp === 0) {
@@ -130,6 +122,19 @@ export const initSprite = () => {
   });
   player.sprite.anims.load('walk');
   player.sprite.anims.play('walk');
+};
+
+export const tweenPlayerVelocityX = (target, time, cb = undefined) => {
+  let velocityModifer = { x: 1 };
+  player.scene.tweens.add({
+    targets: velocityModifer,
+    x: target,
+    ease: 'Sine.easeInOut',
+    duration: time,
+    repeat: 0,
+    onUpdate: () => player.sprite.setVelocityX(velocityModifer.x),
+    onComplete: cb === undefined ? () => { return; } : cb
+  });
 };
 
 export default player;

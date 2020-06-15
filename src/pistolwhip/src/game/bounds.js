@@ -9,6 +9,16 @@ const bounds = {
 
 export default bounds;
 
+export const disableBoundCollision = () => {
+  bounds.left.collisionFilter.category = 0;
+  bounds.right.collisionFilter.category = 0;
+};
+
+export const enableBoundCollision = () => {
+  bounds.left.collisionFilter.category = collisionCats.BOUNDARY;
+  bounds.right.collisionFilter.category = collisionCats.BOUNDARY;
+};
+
 export const initBounds = () => {
   const makeBound = (x, y, verts) => game.scene.matter.add.fromVertices(x, y, verts, {
     collisionFilter: {

@@ -67,6 +67,14 @@ player.shoot = () => {
   if(detectAimLineHit()) {
     console.log('oi');
   }
+  // console.log(player.aimLine.getPoints(100));
+  //let shot = player.scene.matter.add.image(player.sprite.x, player.sprite.y, 'shot_tracer');
+};
+
+player.stopMoving = () => {
+  player.isJumping = false;
+  player.isMovingLeft = false;
+  player.isMovingRight = false;
 };
 
 player.updateAimLine = () => {

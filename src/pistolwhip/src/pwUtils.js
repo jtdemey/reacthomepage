@@ -33,6 +33,24 @@ export const getClientDims = () => {
   game.height = siteWrapper.clientHeight;
 };
 
+export const getClosestPtTo = (targetX, targetY, points) => {
+  if(points.length < 2) {
+    return points[0];
+  }
+  let ptInd = 0;
+  let leastDist = undefined;
+  points.forEach((p, i) => {
+    let dist = getDistBetweenPts(p.x, p.y, targetX, targetY);
+    if(leastDist === undefined || dist < leastDist) {
+      leastDist = dist;
+      ptInd = i;
+    }
+  });
+  return points[ptInd];
+};
+
+export const getDistBetweenPts = (x1, y1, x2, y2) => Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
 export const getHypotenuseAngle = (oppLen, adjLen) => {
   return Math.atan(oppLen / adjLen);
 };
@@ -50,7 +68,3 @@ export const getRandBetween = (min, max) => {
 export const isCollCat = (body, cat) => body.collisionFilter.category === cat;
 
 export const makePt = (x, y) => new Phaser.Geom.Point(x, y);
-
-export const makeScene = (game, key) => {
-  
-};

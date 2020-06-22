@@ -1,5 +1,5 @@
 import ground, { makeGroundSegments } from './ground';
-import { LEVEL_IDS, LEVEL_NAMES } from '../constants';
+import { LEVEL_IDS, LEVEL_NAMES, LEVEL_DATA } from '../constants';
 import { spawnCheck, killAllEnemies } from './enemies';
 import { getRandBetween } from '../pwUtils';
 import player, { tweenPlayerVelocityX } from './player';
@@ -8,6 +8,7 @@ import { disableBoundCollision, enableBoundCollision } from './bounds';
 
 const game = {
   background: null,
+  graphics: null,
   enemySpawnDist: null,
   enemySpawnRange: 100,
   width: 800,
@@ -23,6 +24,7 @@ const game = {
 };
 
 game.onTick = () => {
+  game.graphics.clear();
   game.tick += 1;
   spawnCheck();
 };
@@ -70,6 +72,7 @@ export const advanceLevel = () => {
         repeat: 0,
         speed: 1,
         onComplete: () => {
+          player.stopMoving();
           player.hasControl = true;
           player.isInvulnerable = false;
           enableBoundCollision();
@@ -90,30 +93,18 @@ export const gameOver = () => {
 };
 
 export const loadLevel = (scene, lvlId) => {
+  const lvlData = LEVEL_DATA[lvlId - 1];
   game.level = lvlId;
   game.levelStartTick = game.tick;
-  game.nextLevelTick = game.tick + 2000;//+ 100000;
-  switch(lvlId) {
-    case LEVEL_IDS.CIVIL_DUSK:
-      game.enemySpawnRange = [400, 500];
-      ground.widthRange = [150, 220];
-      ground.altRange = [game.height - 100, game.height - 220];
-      break;
-    case LEVEL_IDS.NAUTICAL_DUSK:
-      game.enemySpawnRange = [380, 490];
-      ground.widthRange = [180, 260];
-      ground.altRange = [game.height - 100, game.height - 300];
-      break;
-    default:
-      console.error(`No level associated to ID ${lvlId}`);
-      break;
-  }
+  game.nextLevelTick = game.tick + 2000;
+  game.enemySpawnRange = lvlData.enemySpawnRange;
+  ground.widthRange = lvlData.groundWidthRange;
+  ground.altRange = [game.height - lvlData.groundAltRange[0], game.height - lvlData.groundAltRange[1]];
   setBackground(scene, lvlId);
   makeGroundSegments(10);
 };
 
 export const pauseGame = () => {
-  console.log(game.scene);
   game.paused = true;
   game.scene.matter.world.pause();
   showPauseMenu();
@@ -128,6 +119,18 @@ export const setBackground = (scene, lvlId) => {
   game.background.width = game.width;
   game.background.height = game.height;
   game.background.setDepth(-1);
+};
+
+export const setGraphics = scene => {
+  game.graphics = scene.add.graphics({
+    fillStyle: {
+      color: 0x000000
+    },
+    lineStyle: {
+      width: 2,
+      color: '#000'
+    }
+  });
 };
 
 export const togglePause = () => {

@@ -14,4 +14,7 @@ window.onload = () => {
     overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
     overlay.addEventListener('click', () => exitMobileNav());
   });
+  const scrollUpCheck = () => {
+    
+  };
 };

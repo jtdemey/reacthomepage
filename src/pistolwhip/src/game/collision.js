@@ -1,27 +1,17 @@
 import Phaser from 'phaser';
 import player, { hurtPlayer } from './player';
 import enemies, { hurtEnemy, hurtEnemyByBodyId } from './enemies';
-import { detectCatColl } from '../pwUtils';
-import { removeBulletByBodyId } from './bullets';
+import { detectCatColl, getDistBetweenPts, getClosestPtTo } from '../pwUtils';
+import { addHit, addTracer } from './bullets';
+import { ENEMY_TYPES } from '../constants';
+import game from './game';
+import ground from './ground';
 
 const collisionCatNames = ['PLAYER', 'GROUND', 'ENEMY', 'CONSUMABLE', 'BULLET', 'BOUNDARY'];
 
 const collisionCats = {};
 
 export default collisionCats;
-
-const checkBulletGroundColl = pair => {
-  if(detectCatColl(pair.bodyA, pair.bodyB, collisionCats.GROUND, collisionCats.BULLET)) {
-    removeBulletByBodyId(pair.bodyA.collisionFilter.category === collisionCats.BULLET ? pair.bodyA.id : pair.bodyB.id);
-  }
-};
-
-const checkBulletEnemyColl = pair => {
-  if(detectCatColl(pair.bodyA, pair.bodyB, collisionCats.ENEMY, collisionCats.BULLET)) {
-    removeBulletByBodyId(pair.bodyA.collisionFilter.category === collisionCats.BULLET ? pair.bodyA.id : pair.bodyB.id);
-    hurtEnemyByBodyId(pair.bodyA.collisionFilter.category === collisionCats.BULLET ? pair.bodyB.id : pair.bodyA.id, player.damage);
-  }
-};
 
 const checkPlayerEnemyColl = pair => {
   if(detectCatColl(pair.bodyA, pair.bodyB, collisionCats.PLAYER, collisionCats.ENEMY)) {
@@ -38,22 +28,63 @@ const checkPlayerGroundColl = pair => {
   }
 };
 
-export const detectAimLineHit = () => {
-  let circle;
-  enemies.forEach(e => {
-    if(e.sprite.body) {
-      circle = new Phaser.Geom.Circle(e.sprite.body.position.x, e.sprite.body.position.y, e.sprite.body.circleRadius);
-      if(Phaser.Geom.Intersects.LineToCircle(player.aimLine, circle)) {
-        hurtEnemy(e.enemyId, player.damage);
-      }
+const getAimLineEnemyCollisionPts = () => {
+  const enemyHits = [];
+  let ptContainer;
+  const collectPts = (enemyId, speed) => {
+    if(ptContainer.length) {
+      ptContainer.forEach(pt => {
+        pt.enemyId = enemyId;
+        pt.enemySpeed = speed;
+        enemyHits.push(pt);
+      });
     }
+  };
+  enemies.forEach(e => {
+    if(!e.sprite.body) {
+      return;
+    }
+    if(e.type === ENEMY_TYPES.ROLLER) {
+      const circle = new Phaser.Geom.Circle(e.sprite.body.position.x, e.sprite.body.position.y, e.sprite.body.circleRadius);
+      ptContainer = Phaser.Geom.Intersects.GetLineToCircle(player.aimLine, circle);
+    } else if(e.type === ENEMY_TYPES.GLIDER) {
+      const rect = new Phaser.Geom.Rectangle(e.sprite.body.position.x - e.sprite.width / 2, e.sprite.body.position.y - e.sprite.width / 2, e.sprite.width, e.sprite.height);
+      ptContainer = Phaser.Geom.Intersects.GetLineToRectangle(player.aimLine, rect);
+    }
+    collectPts(e.enemyId, e.speed);
   });
+  return enemyHits;
+};
+
+const getAimLineGroundCollisionPts = () => {
+  const pts = [];
+  let outPt = new Phaser.Geom.Point(0, 0);
+  ground.paths.forEach(path => {
+    path.forEach((pt, i) => {
+      if(!path[i + 1]) return;
+      if(Phaser.Geom.Intersects.LineToLine(new Phaser.Geom.Line(pt.x, pt.y, path[i + 1].x, path[i + 1].y), player.aimLine, outPt)) {
+        pts.push(new Phaser.Geom.Point(outPt.x, outPt.y));
+      }
+    });
+  });
+  return pts;
+};
+
+export const detectAimLineHit = () => {
+  const enemyHits = getAimLineEnemyCollisionPts();
+  const groundHits = getAimLineGroundCollisionPts();
+  const closestPt = getClosestPtTo(player.sprite.body.position.x, player.sprite.body.position.y, enemyHits.concat(groundHits));
+  // addTracer(closestPt);
+  if(closestPt) {
+    addHit(closestPt);
+    if(closestPt.enemyId) {
+      hurtEnemy(closestPt.enemyId, player.damage);
+    }
+  }
 };
 
 export const handleCollisions = event => {
   event.pairs.forEach(pair => {
-    checkBulletEnemyColl(pair);
-    checkBulletGroundColl(pair);
     checkPlayerEnemyColl(pair);
     checkPlayerGroundColl(pair);
   });

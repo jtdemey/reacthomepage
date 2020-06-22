@@ -18,8 +18,8 @@ export const handleClick = e => {
   if(!player.hasControl) {
     return;
   }
-  // player.shoot();
-  fireBullet();
+  player.shoot();
+  //fireBullet();
   // shootBullet();
 };
 
@@ -46,7 +46,7 @@ export const handleKeyDown = e => {
       break;
     case 'f':
     case 'j':
-      // player.shoot();
+      player.shoot();
       break;
     default:
       break;

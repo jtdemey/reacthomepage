@@ -36,7 +36,7 @@ export const drawGround = () => {
   }
 };
 
-export const fillGroundSegment = path => ground.graphics.fillPoints(path, true);
+export const fillGroundSegment = path => game.graphics.fillPoints(path, true);
 
 export const makeGroundSegments = (segmentLength) => {
   let xInd = 0, yInd = game.height - 100;
@@ -83,16 +83,4 @@ export const scrollGround = (scene, speed) => {
       scene.matter.body.setPosition(body, {x: newX, y: body.position.y});
     });
   }
-};
-
-export const setGroundGraphics = scene => {
-  ground.graphics = scene.add.graphics({
-    fillStyle: {
-      color: 0x000000
-    },
-    lineStyle: {
-      width: 2,
-      color: '#000'
-    }
-  });
 };

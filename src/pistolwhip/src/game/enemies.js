@@ -23,6 +23,14 @@ export const clearEnemies = () => {
   }
 };
 
+export const getEnemy = enemyId => {
+  const enemy = enemies.map(e => e.enemyId === enemyId)[0];
+  if(!enemy) {
+    console.error(`Enemy ${enemyId} not found`);
+  }
+  return enemy;
+};
+
 export const getEnemyFromBodyId = bodyId => {
   enemies.forEach((goon, i) => {
     if(goon.sprite.body !== undefined) {
@@ -42,7 +50,7 @@ const getPossibleEnemyTypes = () => {
     case ids.CIVIL_DUSK:
       return [x.ROLLER];
     case ids.NAUTICAL_DUSK:
-      return [x.ROLLER];
+      return [x.ROLLER, x.GLIDER];
     case ids.ASTRONOMICAL_DUSK:
       return [x.ROLLER];
     case ids.NIGHTFALL:
@@ -105,9 +113,8 @@ export const killEnemy = enemyId => {
   enemies.map(e => {
     if(e.enemyId === enemyId) {
       e.speed = 0;
-      e.sprite.setVelocity(getRandBetween(-1.5, 1.5), getRandBetween(-3, -6));
-      // e.sprite.setRotation(2);
-      e.sprite.setAngularVelocity(0.15);
+      e.sprite.setVelocity(getRandBetween(-1, 1), getRandBetween(-3, -6));
+      e.sprite.setAngularVelocity(getRandBetween(1, 3) / 10);
       e.sprite.body.collisionFilter.category = 0;
       e.onTick = () => { return; }
       setTimeout(() => {
@@ -117,34 +124,85 @@ export const killEnemy = enemyId => {
   });
 };
 
+const makeRoller = (enemyId, type, sprite) => {
+  let hp = 100;
+  let speed = 2;
+  sprite.setBody({
+    type: 'circle',
+    radius: 32
+  });
+  sprite.body.collisionFilter = {
+    category: collisionCats.ENEMY,
+    group: 0,
+    mask: collisionCats.PLAYER | collisionCats.GROUND | collisionCats.ENEMY | collisionCats.BULLET
+  };
+  sprite.body.friction = 0;
+  sprite.setBounce(0);
+  let onTick = () => {
+    sprite.rotation = 0;
+    sprite.setVelocityX(-2);
+    if(sprite.body.position.x < -50) {
+      deleteEnemy(enemyId);
+    }
+  };
+  return {
+    enemyId,
+    hp,
+    onTick,
+    speed,
+    sprite,
+    type
+  };
+};
+
+const makeGlider = (enemyId, type, sprite) => {
+  let hp = 130;
+  let speed = 2;
+  sprite.setBody({
+    type: 'rectangle',
+    width: 80,
+    height: 40
+  });
+  sprite.body.collisionFilter = {
+    category: collisionCats.ENEMY,
+    group: 0,
+    mask: collisionCats.PLAYER | collisionCats.GROUND | collisionCats.ENEMY | collisionCats.BULLET
+  };
+  sprite.setBounce(0);
+  sprite.body.ignoreGravity = true;
+  sprite.setPosition(game.width + 250, getRandBetween(game.height - 400, game.height - 600));
+  let onTick = () => {
+    sprite.rotation = 0;
+    sprite.setVelocityX(-2);
+    if(sprite.body.position.x < -50) {
+      deleteEnemy(enemyId);
+    }
+  };
+  return {
+    enemyId,
+    hp,
+    onTick,
+    speed,
+    sprite,
+    type
+  };
+};
+
 const makeEnemy = type => {
-  let enemyId, sprite, hp, speed, onTick;
-  enemyId = genId(16);
-  if(type === ENEMY_TYPES.ROLLER) {
-    hp = 100;
-    speed = 2;
-    sprite = game.scene.matter.add.sprite(game.width + 250, 200, ENEMY_TYPE_NAMES[type]);
-    sprite.setBody({
-      type: 'circle',
-      radius: 32
-    });
-    sprite.body.collisionFilter = {
-      category: collisionCats.ENEMY,
-      group: 0,
-      mask: collisionCats.PLAYER | collisionCats.GROUND | collisionCats.ENEMY | collisionCats.BULLET
-    };
-    sprite.body.friction = 0;
-    sprite.setBounce(0);
-    console.log(sprite);
-    onTick = () => {
-      sprite.rotation = 0;
-      sprite.setVelocityX(-2);
-      if(sprite.body.position.x < -50) {
-        deleteEnemy(enemyId);
-      }
-    };
+  const enemyId = genId(16);
+  let sprite = game.scene.matter.add.sprite(game.width + 250, 200, ENEMY_TYPE_NAMES[type]);
+  let enemy;
+  switch(type) {
+    case ENEMY_TYPES.ROLLER:
+      enemy = makeRoller(enemyId, type, sprite);
+      break;
+    case ENEMY_TYPES.GLIDER:
+      enemy = makeGlider(enemyId, type, sprite);
+      break;
+    default:
+      console.error(`Unrecognized enemy type ${type}`);
+      break;
   }
-  const enemy = {enemyId, type, hp, speed, sprite, onTick};
   enemies.push(enemy);
   return enemy;
 };

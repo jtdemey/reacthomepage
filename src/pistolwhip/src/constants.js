@@ -45,3 +45,86 @@ export const LEVEL_NAMES = [
   'nauticaldawn',
   'civildawn'
 ];
+
+export const LEVEL_DATA = [
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [380, 490],
+    groundWidthRange: [180, 260],
+    groundAltRange: [150, 300]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+  {
+    enemySpawnRange: [400, 500],
+    groundWidthRange: [180, 260],
+    groundAltRange: [100, 220]
+  },
+];

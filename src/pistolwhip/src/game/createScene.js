@@ -1,7 +1,7 @@
 import { mapInputEvents } from './controls';
 import player, { initSprite } from './player';
 import { setGroundGraphics } from './ground';
-import game, { loadLevel } from './game';
+import game, { loadLevel, setGraphics } from './game';
 import { handleCollisions, initCollisionCats } from './collision';
 import { LEVEL_IDS } from '../constants';
 import { initProgressBar } from './progressBar';
@@ -34,7 +34,8 @@ export default function() {
   //Init
   loadLevel(this, LEVEL_IDS.CIVIL_DUSK);
   initSprite();
-  setGroundGraphics(this);
+  //setGroundGraphics(this);
+  setGraphics(this);
   initBounds();
   initProgressBar(this);
   initGui();

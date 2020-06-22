@@ -1,4 +1,4 @@
-import ground, { scrollGround, drawGround } from './ground';
+import { scrollGround, drawGround } from './ground';
 import player from './player';
 import game from './game';
 import { setMousePos } from './controls';
@@ -10,8 +10,7 @@ export default function() {
   if(game.paused) {
     return;
   } else {
-    ground.graphics.clear();
-    ground.graphics.strokeLineShape(player.aimLine);
+    game.graphics.strokeLineShape(player.aimLine);
     game.onTick();
     player.onTick();
     if(enemies.length > 0) {

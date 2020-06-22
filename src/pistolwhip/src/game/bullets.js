@@ -1,98 +1,59 @@
 import Phaser from 'phaser';
 import game from './game';
+import { getPhaserColorFromHex, getHypotenuseAngle } from '../pwUtils';
 import player from './player';
 import collisionCats from './collision';
-import ground from './ground';
-import { genId } from '../pwUtils';
 
 const bullets = {
-  sprites: [],
-  paths: [],
-  points: [],
-  tweens: []
+  hits: []
 };
 
 export default bullets;
 
-const getBulletDestPt = () => {
-  const l = player.aimLine;
-  const pathLine = new Phaser.Curves.Line([l.x1, l.y1, l.x2, l.y2]);
-  const tan = pathLine.getTangentAt(1);
-  let xd = l.x1 + (tan.x * player.range);
-  let yd = l.y1 + (tan.y * player.range);
-  return new Phaser.Curves.Line([l.x1, l.y1, xd, yd]);
-};
-
-const getBulletPt = () => ({
-  t: 0,
-  vec: new Phaser.Math.Vector2()
-});
-
-const getBulletSprite = () => {
-  const l = player.aimLine;
-  const sprite = game.scene.matter.add.sprite(l.x1, l.y1, 'bullet');
-  sprite.body.collisionFilter = {
-    category: collisionCats.BULLET,
-    group: 0,
-    mask: collisionCats.GROUND | collisionCats.ENEMY | collisionCats.BOUNDARY
-  };
-  sprite.body.gravityScale.y = 0;
-  sprite.bulletId = genId(12);
-  return sprite;
-};
-
-export const fireBullet = () => {
-  const point = getBulletPt();
-  bullets.points.push(point);
-  bullets.sprites.push(getBulletSprite());
-  const path = game.scene.add.path();
-  path.add(getBulletDestPt());
-  bullets.paths.push(path);
-  const fireTween = game.scene.tweens.add({
-    targets: point,
-    t: 1,
-    ease: 'linear',
-    duration: 500,
+export const addHit = pt => {
+  const hit = new Phaser.Geom.Circle(pt.x, pt.y, 2);
+  if(pt.enemyId) {
+    hit.enemyId = pt.enemyId;
+    hit.enemySpeed = pt.enemySpeed;
+  }
+  game.scene.tweens.add({
+    targets: hit,
+    radius: 16,
+    ease: 'Sine.easeOut',
+    duration: 280,
     repeat: 0
   });
-  bullets.tweens.push(fireTween);
+  bullets.hits.push(hit);
 };
 
-export const getBulletIndexFromBodyId = bodyId => {
-  bullets.sprites.forEach((sprite, i) => {
-    if(sprite.body && sprite.body.id === bodyId) {
-      return i;
-    }
-  });
-  return false;
-};
-
-export const removeBullet = ind => {
-  bullets.sprites[ind].destroy();
-  bullets.sprites.splice(ind, 1);
-  bullets.paths.splice(ind, 1);
-  bullets.points.splice(ind, 1);
-  bullets.tweens.splice(ind, 1);
-};
-
-export const removeBulletByBodyId = bodyId => {
-  bullets.sprites.forEach((sprite, i) => {
-    if(sprite.body && sprite.body.id === bodyId) {
-      removeBullet(i);
-      return true;
-    }
-  });
-  return false;
+export const addTracer = contactPt => {
+  const gunshot = game.scene.matter.add.image(player.gunSprite.x, player.gunSprite.y, 'gunshot');
+  gunshot.scaleX = 3;
+  gunshot.setCollisionCategory(0);
+  gunshot.setIgnoreGravity(true);
+  gunshot.angle = getHypotenuseAngle(player.aimLine.y2 - player.gunSprite.y, player.aimLine.x2 - player.gunSprite.x) / 2;
+  console.log(gunshot);
+  console.log(player.aimLine);
+  // game.scene.tweens.add({
+  //   targets: gunshot,
+  //   ease: 'Sine.easeOut',
+  //   duration: 1000,
+  //   repeat: 0
+  // });
 };
 
 export const updateBullets = () => {
-  bullets.paths.forEach((path, i) => {
-    path.getPoint(bullets.points[i].t, bullets.points[i].vec);
-    ground.graphics.fillRect(bullets.points[i].vec.x - 2, bullets.points[i].vec.y - 2, 4, 2);
-    bullets.sprites[i].body.position.x = bullets.points[i].vec.x;
-    bullets.sprites[i].body.position.y = bullets.points[i].vec.y;
-    if(bullets.tweens[i].totalProgress >= 1) {
-      removeBullet(i);
+  game.graphics.fillStyle(getPhaserColorFromHex('#fff280'));
+  bullets.hits.forEach((hit, i) => {
+    if(hit.enemyId) {
+      hit.x -= hit.enemySpeed;
+    } else {
+      hit.x -= game.speed;
+    }
+    game.graphics.fillCircle(hit.x, hit.y, hit.radius);
+    if(hit.radius > 15) {
+      bullets.hits.splice(i, 1);
+      i -= 1;
     }
   });
 };

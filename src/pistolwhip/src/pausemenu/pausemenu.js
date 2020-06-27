@@ -26,8 +26,8 @@ export const showPauseMenu = () => {
     pauseMenu.optionsText.visible = true;
     pauseMenu.quitText.visible = true;
   } else {
-    pauseMenu.background = game.scene.add.rectangle(game.width / 2, game.height / 2, game.width, game.height / 8, getPhaserColorFromHex('#333'));
-    pauseMenu.background.alpha = 0.75;
+    pauseMenu.background = game.scene.add.rectangle(game.width / 2, game.height / 2, game.width, game.height / 6, getPhaserColorFromHex('#333'));
+    pauseMenu.background.alpha = 0.85;
     const addMenuItem = (x, y, key, clickFunc = undefined) => {
       const menuItem = game.scene.add.image(x, y, key);
       menuItem.setInteractive();

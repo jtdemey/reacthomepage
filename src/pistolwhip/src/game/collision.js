@@ -74,9 +74,16 @@ export const detectAimLineHit = () => {
   const enemyHits = getAimLineEnemyCollisionPts();
   const groundHits = getAimLineGroundCollisionPts();
   const closestPt = getClosestPtTo(player.sprite.body.position.x, player.sprite.body.position.y, enemyHits.concat(groundHits));
-  // addTracer(closestPt);
+  if(!closestPt) {
+    addTracer(800);
+  }
   if(closestPt) {
     addHit(closestPt);
+    const dist = getDistBetweenPts(closestPt.x, closestPt.y, player.gunSprite.body.position.x, player.gunSprite.body.position.y);
+    if(dist > 400) {
+      console.log('ye')
+      addTracer(dist);
+    }
     if(closestPt.enemyId) {
       hurtEnemy(closestPt.enemyId, player.damage);
     }

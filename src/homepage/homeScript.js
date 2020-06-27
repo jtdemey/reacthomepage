@@ -11,12 +11,12 @@ const uiState = {
 };
 
 //--- Const ---//
-//Home #4B4E6D, Imposter #334152, Survive #451119, Pistolwhip #284c4a
+//Home #4B4E6D, Imposter #334152, Civil Dawn #771C2A, Survive #451119
 const bgColors = [
   '#4B4E6D',
   '#334152',
-  '#451119',
-  '#284c4a'
+  '#771C2A',
+  '#451119'
 ];
 
 //--- Refs ---//
@@ -32,7 +32,7 @@ const clearBgShift = () => {
 };
 
 const startBgShift = v => {
-  //Home #4B4E6D, Imposter #334152, Survive #451119, Pistolwhip #284c4a
+  //Home #4B4E6D, Imposter #334152, Civil Dawn #771C2A, Survive #451119
   //About #595F62, Skills #7F9C96, Contact #92BEA6, Doodles #6C474F
   const c = bgColors[v];
   if(uiState.bgShiftTimer) {

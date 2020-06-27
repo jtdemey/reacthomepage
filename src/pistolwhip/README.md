@@ -1,5 +1,6 @@
 # Civil Dawn 
 _Currently in development_
+
 Civil Dawn is a 2D side-scrolling arcade shooter.
 Traverse waves of deadly mechanical monstrosities to escape the city by the break of dawn.
 It is heavily inspired by Gun Run, an old Flash game available on a variety of websites.

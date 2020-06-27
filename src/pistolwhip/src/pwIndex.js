@@ -15,7 +15,7 @@ let config = (() => {
     physics: {
       default: 'matter',
       matter: {
-        debug: true,
+        // debug: true,
         gravity: {
           x: 0,
           y: 0.6
@@ -31,4 +31,4 @@ let config = (() => {
   return conf;
 })();
 
-const gameInstance = new Phaser.Game(config);
+const glhf = new Phaser.Game(config);

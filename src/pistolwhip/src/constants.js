@@ -8,7 +8,30 @@ export const ENEMY_TYPES = {
 
 export const ENEMY_TYPE_NAMES = ['roller', 'glider', 'hopper', 'driver', 'bomber'];
 
+export const GUI_COLORS = {
+  green: '#556F49',
+  blue: '#2d5986'
+};
+
 export const LEVEL_COLORS = ['#E77329', '#B15243', '#2D2E55', '#1F2347', '#382F58', '#9A371E'];
+
+export const LEVEL_DISPLAYS = [
+  '1: CIVIL DUSK',
+  '2: NAUTICAL DUSK',
+  '3: ASTRONOMICAL DUSK',
+  '4: NIGHTFALL I',
+  '5: NIGHTFALL II',
+  '6: NIGHTFALL III',
+  '7: NIGHT',
+  '8: MIDNIGHT',
+  '9: MORNING',
+  '10: SUNRISE I',
+  '11: SUNRISE II',
+  '12: SUNRISE III',
+  '13: ASTRONOMICAL DAWN',
+  '14: NAUTICAL DAWN',
+  '15: CIVIL DAWN'
+];
 
 export const LEVEL_IDS = {
   CIVIL_DUSK: 1,
@@ -128,3 +151,15 @@ export const LEVEL_DATA = [
     groundAltRange: [100, 220]
   },
 ];
+
+export const POWERUP_IDS = {
+  HEAL: 0,
+  DAMAGE: 1,
+  MAX_AMMO: 2,
+  RELOAD_SPEED: 3,
+  JUMP_HEIGHT: 4,
+  JUMP_AMOUNT: 5,
+  RAGE: 6
+};
+
+export const POWERUP_NAMES = ['powerupHeal', 'powerupDamage', 'powerupMaxAmmo', 'powerupReload', 'powerupJumpHeight', 'powerupJumpAmount', 'powerupRage'];

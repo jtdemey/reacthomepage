@@ -5,12 +5,14 @@ import { setMousePos } from './controls';
 import { updateProgressBar } from './progressBar';
 import enemies from './enemies';
 import { updateBullets } from './bullets';
+import { updatePowerups } from './powerups';
+import pistol from './pistol';
 
 export default function() {
   if(game.paused) {
     return;
   } else {
-    game.graphics.strokeLineShape(player.aimLine);
+    game.graphics.strokeLineShape(pistol.aimLine);
     game.onTick();
     player.onTick();
     if(enemies.length > 0) {
@@ -21,5 +23,6 @@ export default function() {
     drawGround();
     updateProgressBar();
     updateBullets();
+    updatePowerups();
   }
 }

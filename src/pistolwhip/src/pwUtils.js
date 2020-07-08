@@ -65,6 +65,15 @@ export const getRandBetween = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
 
+export const getRandomProperty = obj => {
+  const keys = Object.keys(obj);
+  return obj[keys[keys.length * Math.random() << 0]];
+};
+
 export const isCollCat = (body, cat) => body.collisionFilter.category === cat;
 
 export const makePt = (x, y) => new Phaser.Geom.Point(x, y);
+
+export const xPos = entity => entity.body.position.x;
+
+export const yPos = entity => entity.body.position.y;

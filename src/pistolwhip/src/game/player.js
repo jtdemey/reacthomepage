@@ -1,22 +1,21 @@
 import Phaser from 'phaser';
 import controls from "./controls";
-import { getLineLength, getHypotenuseAngle } from '../pwUtils';
-import { detectAimLineHit } from './collision';
+import { getLineLength, getHypotenuseAngle, getDistBetweenPts } from '../pwUtils';
+import { detectAimLineHits } from './collision';
 import { refreshHealthBar } from './gui';
 import { gameOver } from './game';
+import { addTracer, addHit, addShell } from './bullets';
+import { hurtEnemy } from './enemies';
+import { updateGunSprite, updateAimLine } from './pistol';
 
 const player = {
-  aimLine: null,
-  damage: 40,
-  gunPosition: null,
-  gunSprite: null,
   hasControl: true,
   hitCooldown: 0,
   hp: 100,
   jumps: 0,
+  jumpHeight: -9,
   maxJumps: 1,
   maxSpeed: 3,
-  range: 600,
   scene: null,
   score: 0,
   sprite: null,
@@ -30,7 +29,7 @@ const player = {
 player.jump = () => {
   if(player.jumps < player.maxJumps) {
     player.jumps++;
-    player.sprite.setVelocityY(-9);
+    player.sprite.setVelocityY(player.jumpHeight);
   }
 };
 
@@ -52,8 +51,8 @@ player.onTick = () => {
       player.isEnteringLevel = false;
     }
   }
-  player.updateAimLine();
-  player.updateGunSprite();
+  updateAimLine();
+  updateGunSprite();
   if(player.hitCooldown > 0) {
     player.hitCooldown -= 1;
   }
@@ -63,39 +62,30 @@ player.setScene = scene => {
   player.scene = scene;
 };
 
-player.shoot = () => {
-  if(detectAimLineHit()) {
-    console.log('oi');
-  }
-  // console.log(player.aimLine.getPoints(100));
-  //let shot = player.scene.matter.add.image(player.sprite.x, player.sprite.y, 'shot_tracer');
-};
-
 player.stopMoving = () => {
   player.isJumping = false;
   player.isMovingLeft = false;
   player.isMovingRight = false;
 };
 
-player.updateAimLine = () => {
-  player.aimLine.x1 = player.sprite.body.position.x;
-  player.aimLine.y1 = player.sprite.body.position.y;
-  player.aimLine.x2 = controls.mouseX;
-  player.aimLine.y2 = controls.mouseY;
-};
-
-player.updateGunSprite = () => {
-  player.gunPosition = player.aimLine.getPoint(24 / getLineLength(player.aimLine), player.gunSprite.body);
-  if(controls.mouseX - player.sprite.body.position.x < 0) {
-    player.gunSprite.angle = Math.floor(100 * getHypotenuseAngle(controls.mouseY - player.sprite.body.position.y, controls.mouseX - player.sprite.body.position.x)) / 2 - 180;
-  } else {
-    player.gunSprite.angle = Math.floor(100 * getHypotenuseAngle(controls.mouseY - player.sprite.body.position.y, controls.mouseX - player.sprite.body.position.x)) / 2;
-  }
-  player.gunSprite.setPosition(player.gunPosition.x, player.gunPosition.y);
-};
-
 export const disablePlayerCollision = () => {
   player.sprite.body.collisionFilter.mask = 0;
+};
+
+export const fadingPlayerAlert = msg => {
+  const text = player.scene.add.text(player.sprite.x - player.sprite.width, player.sprite.y - 10, msg, {
+    color: '#fff',
+    fontFamily: `Coda`,
+    fontSize: '1.5rem' 
+  });
+  player.scene.tweens.add({
+    targets: text,
+    alpha: 0,
+    y: player.sprite.y - 100,
+    ease: 'Sine.easeOut',
+    duration: 1000,
+    repeat: 0
+  });
 };
 
 export const hurtPlayer = amt => {
@@ -109,18 +99,14 @@ export const hurtPlayer = amt => {
   }
 };
 
-export const initSprite = () => {
+export const initPlayerSprite = () => {
   player.sprite = player.scene.matter.add.sprite(50, 190, 'player');
   player.sprite.setBody({
     type: 'circle',
     radius: 16 
   });
+  console.log(player)
   player.sprite.setBounce(0);
-  player.gunSprite = player.scene.matter.add.image(60, 190, 'pistol');
-  player.gunSprite.setScale(0.15, 0.15);
-  player.gunSprite.setIgnoreGravity(true);
-  player.gunSprite.body.collisionFilter.mask = 0;
-  player.aimLine = new Phaser.Geom.Line(player.sprite.body.position.x, player.sprite.body.position.y, 500, 500);
   player.scene.anims.create({
     key: 'walk',
     frames: player.scene.anims.generateFrameNumbers('player'),

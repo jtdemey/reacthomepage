@@ -1,12 +1,12 @@
 import { mapInputEvents } from './controls';
-import player, { initSprite } from './player';
-import { setGroundGraphics } from './ground';
+import player, { initPlayerSprite } from './player';
 import game, { loadLevel, setGraphics } from './game';
 import { handleCollisions, initCollisionCats } from './collision';
 import { LEVEL_IDS } from '../constants';
 import { initProgressBar } from './progressBar';
 import { initBounds, setExtendedBounds } from './bounds';
 import { initGui } from './gui';
+import { initPistolSprite } from './pistol';
 
 export default function() {
 
@@ -32,11 +32,11 @@ export default function() {
   this.matter.world.on('collisionstart', e => handleCollisions(e));
 
   //Init
+  initGui();
   loadLevel(this, LEVEL_IDS.CIVIL_DUSK);
-  initSprite();
-  //setGroundGraphics(this);
+  initPlayerSprite();
+  initPistolSprite();
   setGraphics(this);
   initBounds();
   initProgressBar(this);
-  initGui();
 }

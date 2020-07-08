@@ -1,11 +1,11 @@
 import Phaser from 'phaser';
 import player, { hurtPlayer } from './player';
-import enemies, { hurtEnemy, hurtEnemyByBodyId } from './enemies';
-import { detectCatColl, getDistBetweenPts, getClosestPtTo } from '../pwUtils';
-import { addHit, addTracer } from './bullets';
+import enemies from './enemies';
+import { detectCatColl, getClosestPtTo } from '../pwUtils';
 import { ENEMY_TYPES } from '../constants';
-import game from './game';
 import ground from './ground';
+import { consumePowerup } from './powerups';
+import pistol from './pistol';
 
 const collisionCatNames = ['PLAYER', 'GROUND', 'ENEMY', 'CONSUMABLE', 'BULLET', 'BOUNDARY'];
 
@@ -28,6 +28,14 @@ const checkPlayerGroundColl = pair => {
   }
 };
 
+const checkPlayerPowerupColl = pair => {
+  if(detectCatColl(pair.bodyA, pair.bodyB, collisionCats.PLAYER, collisionCats.CONSUMABLE)) {
+    const powerupBody = pair.bodyA.collisionFilter.category === collisionCats.PLAYER ? pair.bodyB : pair.bodyA;
+    console.log(pair);
+    consumePowerup(powerupBody.id);
+  }
+};
+
 const getAimLineEnemyCollisionPts = () => {
   const enemyHits = [];
   let ptContainer;
@@ -46,10 +54,10 @@ const getAimLineEnemyCollisionPts = () => {
     }
     if(e.type === ENEMY_TYPES.ROLLER) {
       const circle = new Phaser.Geom.Circle(e.sprite.body.position.x, e.sprite.body.position.y, e.sprite.body.circleRadius);
-      ptContainer = Phaser.Geom.Intersects.GetLineToCircle(player.aimLine, circle);
+      ptContainer = Phaser.Geom.Intersects.GetLineToCircle(pistol.aimLine, circle);
     } else if(e.type === ENEMY_TYPES.GLIDER) {
-      const rect = new Phaser.Geom.Rectangle(e.sprite.body.position.x - e.sprite.width / 2, e.sprite.body.position.y - e.sprite.width / 2, e.sprite.width, e.sprite.height);
-      ptContainer = Phaser.Geom.Intersects.GetLineToRectangle(player.aimLine, rect);
+      const rect = new Phaser.Geom.Rectangle(e.sprite.body.position.x - e.sprite.width / 2, e.sprite.body.position.y - e.sprite.height / 2, e.sprite.width, e.sprite.height);
+      ptContainer = Phaser.Geom.Intersects.GetLineToRectangle(pistol.aimLine, rect);
     }
     collectPts(e.enemyId, e.speed);
   });
@@ -62,7 +70,7 @@ const getAimLineGroundCollisionPts = () => {
   ground.paths.forEach(path => {
     path.forEach((pt, i) => {
       if(!path[i + 1]) return;
-      if(Phaser.Geom.Intersects.LineToLine(new Phaser.Geom.Line(pt.x, pt.y, path[i + 1].x, path[i + 1].y), player.aimLine, outPt)) {
+      if(Phaser.Geom.Intersects.LineToLine(new Phaser.Geom.Line(pt.x, pt.y, path[i + 1].x, path[i + 1].y), pistol.aimLine, outPt)) {
         pts.push(new Phaser.Geom.Point(outPt.x, outPt.y));
       }
     });
@@ -70,30 +78,22 @@ const getAimLineGroundCollisionPts = () => {
   return pts;
 };
 
-export const detectAimLineHit = () => {
+export const detectAimLineHits = () => {
   const enemyHits = getAimLineEnemyCollisionPts();
   const groundHits = getAimLineGroundCollisionPts();
   const closestPt = getClosestPtTo(player.sprite.body.position.x, player.sprite.body.position.y, enemyHits.concat(groundHits));
-  if(!closestPt) {
-    addTracer(800);
-  }
-  if(closestPt) {
-    addHit(closestPt);
-    const dist = getDistBetweenPts(closestPt.x, closestPt.y, player.gunSprite.body.position.x, player.gunSprite.body.position.y);
-    if(dist > 400) {
-      console.log('ye')
-      addTracer(dist);
-    }
-    if(closestPt.enemyId) {
-      hurtEnemy(closestPt.enemyId, player.damage);
-    }
-  }
+  return {
+    closestPt,
+    enemyHits,
+    groundHits
+  };
 };
 
 export const handleCollisions = event => {
   event.pairs.forEach(pair => {
     checkPlayerEnemyColl(pair);
     checkPlayerGroundColl(pair);
+    checkPlayerPowerupColl(pair);
   });
 };
 

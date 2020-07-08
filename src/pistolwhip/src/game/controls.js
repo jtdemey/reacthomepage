@@ -1,6 +1,6 @@
 import player from './player';
-import { fireBullet } from './bullets';
 import { togglePause } from './game';
+import { shoot } from './pistol';
 
 const controls = {
   mouseX: 0,
@@ -18,19 +18,17 @@ export const handleClick = e => {
   if(!player.hasControl) {
     return;
   }
-  player.shoot();
-  //fireBullet();
-  // shootBullet();
+  shoot();
 };
 
 export const handleKeyDown = e => {
+  if(e.key === 'Escape') {
+    togglePause();
+  }
   if(!player.hasControl) {
     return;
   }
   switch(e.key) {
-    case 'Escape':
-      togglePause();
-      break;
     case 'a':
     case 'ArrowLeft':
       player.isMovingLeft = true;
@@ -46,7 +44,7 @@ export const handleKeyDown = e => {
       break;
     case 'f':
     case 'j':
-      player.shoot();
+      shoot();
       break;
     default:
       break;

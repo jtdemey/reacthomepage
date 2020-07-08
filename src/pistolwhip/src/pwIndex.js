@@ -15,7 +15,7 @@ let config = (() => {
     physics: {
       default: 'matter',
       matter: {
-        // debug: true,
+        debug: true,
         gravity: {
           x: 0,
           y: 0.6

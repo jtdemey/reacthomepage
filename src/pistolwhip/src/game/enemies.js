@@ -116,6 +116,7 @@ export const killEnemy = enemyId => {
       e.sprite.setVelocity(getRandBetween(-1, 1), getRandBetween(-3, -6));
       e.sprite.setAngularVelocity(getRandBetween(1, 3) / 10);
       e.sprite.body.collisionFilter.category = 0;
+      e.sprite.setIgnoreGravity(false);
       e.onTick = () => { return; }
       setTimeout(() => {
         deleteEnemy(enemyId);

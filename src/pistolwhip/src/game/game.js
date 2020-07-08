@@ -5,6 +5,9 @@ import { getRandBetween } from '../pwUtils';
 import player, { tweenPlayerVelocityX } from './player';
 import { showPauseMenu, hidePauseMenu } from '../pausemenu/pauseMenu';
 import { disableBoundCollision, enableBoundCollision } from './bounds';
+import { refreshLvlLabel } from './gui';
+import { attemptPowerupSpawn } from './powerups';
+import pistol from './pistol';
 
 const game = {
   background: null,
@@ -26,6 +29,9 @@ const game = {
 game.onTick = () => {
   game.graphics.clear();
   game.tick += 1;
+  if(game.tick % 500 === 0) {
+    attemptPowerupSpawn();
+  }
   spawnCheck();
 };
 
@@ -40,11 +46,10 @@ export const advanceLevel = () => {
   player.hasControl = false;
   player.isInvulnerable = true;
   disableBoundCollision();
-  // clearEnemies();
   killAllEnemies();
   tweenPlayerVelocityX(-10, 2000, () => {
     player.sprite.visible = false;
-    player.gunSprite.visible = false;
+    pistol.sprite.visible = false;
   });
   game.scene.tweens.add({
     targets: game,
@@ -55,7 +60,7 @@ export const advanceLevel = () => {
     onComplete: () => {
       loadLevel(game.scene, game.level + 1);
       player.sprite.visible = true;
-      player.gunSprite.visible = true;
+      pistol.sprite.visible = true;
       player.sprite.x = -100;
       game.scene.tweens.add({
         targets: player.sprite,
@@ -87,14 +92,15 @@ export const advanceLevel = () => {
 
 export const gameOver = () => {
   game.paused = true;
-  player.gunSprite.setIgnoreGravity(false);
-  player.gunSprite.setVelocityX(3);
-  player.gunSprite.setVelocityY(-10);
+  pistol.sprite.setIgnoreGravity(false);
+  pistol.sprite.setVelocityX(3);
+  pistol.sprite.setVelocityY(-10);
 };
 
 export const loadLevel = (scene, lvlId) => {
   const lvlData = LEVEL_DATA[lvlId - 1];
   game.level = lvlId;
+  refreshLvlLabel();
   game.levelStartTick = game.tick;
   game.nextLevelTick = game.tick + 2000;
   game.enemySpawnRange = lvlData.enemySpawnRange;
@@ -106,6 +112,7 @@ export const loadLevel = (scene, lvlId) => {
 
 export const pauseGame = () => {
   game.paused = true;
+  player.hasControl = false;
   game.scene.matter.world.pause();
   showPauseMenu();
 };
@@ -143,6 +150,7 @@ export const togglePause = () => {
 
 export const unpauseGame = () => {
   game.paused = false;
+  player.hasControl = true;
   game.scene.matter.world.resume();
   hidePauseMenu();
 };

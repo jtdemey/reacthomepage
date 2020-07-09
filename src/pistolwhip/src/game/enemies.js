@@ -1,5 +1,5 @@
-import game, { rollNextEnemySpawnDist } from './game';
-import { ENEMY_TYPES, LEVEL_IDS, ENEMY_TYPE_NAMES } from '../constants';
+import game, { rollNextEnemySpawnDist, increaseScore } from './game';
+import { ENEMY_TYPES, LEVEL_IDS, ENEMY_TYPE_NAMES, ENEMY_SCORES } from '../constants';
 import collisionCats from './collision';
 import { genId, getRandBetween } from '../pwUtils';
 
@@ -21,6 +21,27 @@ export const clearEnemies = () => {
   while(enemies.length) {
     enemies.pop().sprite.destroy();
   }
+};
+
+export const fadingEnemyAlert = (enemyId, msg) => {
+  enemies.map(e => {
+    if(e.enemyId === enemyId) {
+      const text = game.scene.add.text(e.sprite.x - e.sprite.width, e.sprite.y - 10, msg, {
+        color: '#fff',
+        fontFamily: `Coda`,
+        fontSize: '1.5rem' 
+      });
+      text.setX(e.sprite.x - text.width / 2);
+      game.scene.tweens.add({
+        targets: text,
+        alpha: 0,
+        y: e.sprite.y - 100,
+        ease: 'Sine.easeOut',
+        duration: 1000,
+        repeat: 0
+      });
+    }
+  });
 };
 
 export const getEnemy = enemyId => {
@@ -106,12 +127,12 @@ export const hurtEnemyByBodyId = (bodyId, amt) => {
 };
 
 export const killAllEnemies = () => {
-  enemies.map(e => killEnemy(e.enemyId));
+  enemies.map(e => killEnemy(e.enemyId, false));
 };
 
-export const killEnemy = enemyId => {
+export const killEnemy = (enemyId, addScore = true) => {
   enemies.map(e => {
-    if(e.enemyId === enemyId) {
+    if(e.enemyId === enemyId && e.speed !== 0) {
       e.speed = 0;
       e.sprite.setVelocity(getRandBetween(-1, 1), getRandBetween(-3, -6));
       e.sprite.setAngularVelocity(getRandBetween(1, 3) / 10);
@@ -121,6 +142,10 @@ export const killEnemy = enemyId => {
       setTimeout(() => {
         deleteEnemy(enemyId);
       }, 500);
+      if(addScore) {
+        increaseScore(ENEMY_SCORES[e.type]);
+        fadingEnemyAlert(e.enemyId, `+${ENEMY_SCORES[e.type]}`);
+      }
     }
   });
 };
@@ -141,7 +166,7 @@ const makeRoller = (enemyId, type, sprite) => {
   sprite.setBounce(0);
   let onTick = () => {
     sprite.rotation = 0;
-    sprite.setVelocityX(-2);
+    sprite.setVelocityX(-2.5);
     if(sprite.body.position.x < -50) {
       deleteEnemy(enemyId);
     }

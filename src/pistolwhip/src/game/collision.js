@@ -30,8 +30,10 @@ const checkPlayerGroundColl = pair => {
 
 const checkPlayerPowerupColl = pair => {
   if(detectCatColl(pair.bodyA, pair.bodyB, collisionCats.PLAYER, collisionCats.CONSUMABLE)) {
+    if(pair.bodyA.label !== 'Circle Body' && pair.bodyB.label !== 'Circle Body') {
+      return;
+    }
     const powerupBody = pair.bodyA.collisionFilter.category === collisionCats.PLAYER ? pair.bodyB : pair.bodyA;
-    console.log(pair);
     consumePowerup(powerupBody.id);
   }
 };

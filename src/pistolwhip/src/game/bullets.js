@@ -38,9 +38,9 @@ export const addShell = () => {
 const getTracerAlignment = a => {
   if(a > -89 && a < 0) {
     return Phaser.Display.Align.BOTTOM_LEFT;
-  } else if(a > 0 && a < 90) {
+  } else if(a >= 0 && a < 90) {
     return Phaser.Display.Align.TOP_LEFT;
-  } else if(a > 90 && a < 180) {
+  } else if(a >= 90 && a < 180) {
     return Phaser.Display.Align.TOP_RIGHT;
   } else {
     return Phaser.Display.Align.BOTTOM_RIGHT;
@@ -48,7 +48,7 @@ const getTracerAlignment = a => {
 };
 
 export const addTracer = distance => {
-  const anchor = pistol.aimLine.getPoints(10)[0];
+  const anchor = pistol.aimLine.getPoints(20)[0];
   const gunshot = game.scene.matter.add.image(pistol.sprite.x, pistol.sprite.y, 'gunshot');
   gunshot.setScale(distance * 0.0065, 1);
   gunshot.setCollisionCategory(0);

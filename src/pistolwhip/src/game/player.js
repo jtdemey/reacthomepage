@@ -1,11 +1,5 @@
-import Phaser from 'phaser';
-import controls from "./controls";
-import { getLineLength, getHypotenuseAngle, getDistBetweenPts } from '../pwUtils';
-import { detectAimLineHits } from './collision';
-import { refreshHealthBar } from './gui';
+import { refreshHealthCt } from './gui';
 import { gameOver } from './game';
-import { addTracer, addHit, addShell } from './bullets';
-import { hurtEnemy } from './enemies';
 import { updateGunSprite, updateAimLine } from './pistol';
 
 const player = {
@@ -17,7 +11,6 @@ const player = {
   maxJumps: 1,
   maxSpeed: 3,
   scene: null,
-  score: 0,
   sprite: null,
   isInvulnerable: false,
   isJumping: false,
@@ -78,6 +71,7 @@ export const fadingPlayerAlert = msg => {
     fontFamily: `Coda`,
     fontSize: '1.5rem' 
   });
+  text.setX(player.sprite.x - text.width / 2);
   player.scene.tweens.add({
     targets: text,
     alpha: 0,
@@ -95,7 +89,7 @@ export const hurtPlayer = amt => {
     if(player.hp === 0) {
       gameOver();
     }
-    refreshHealthBar();
+    refreshHealthCt();
   }
 };
 
@@ -105,7 +99,6 @@ export const initPlayerSprite = () => {
     type: 'circle',
     radius: 16 
   });
-  console.log(player)
   player.sprite.setBounce(0);
   player.scene.anims.create({
     key: 'walk',

@@ -2,11 +2,11 @@ import ground, { makeGroundSegments } from './ground';
 import { LEVEL_IDS, LEVEL_NAMES, LEVEL_DATA } from '../constants';
 import { spawnCheck, killAllEnemies } from './enemies';
 import { getRandBetween } from '../pwUtils';
-import player, { tweenPlayerVelocityX } from './player';
+import player, { tweenPlayerVelocityX, fadingPlayerAlert } from './player';
 import { showPauseMenu, hidePauseMenu } from '../pausemenu/pauseMenu';
 import { disableBoundCollision, enableBoundCollision } from './bounds';
-import { refreshLvlLabel } from './gui';
-import { attemptPowerupSpawn } from './powerups';
+import { refreshLvlLabel, refreshGui } from './gui';
+import { attemptPowerupSpawn, deleteAllPowerups } from './powerups';
 import pistol from './pistol';
 
 const game = {
@@ -21,6 +21,7 @@ const game = {
   nextLevelTick: 0,
   paused: false,
   scene: null,
+  score: 0,
   speed: 1,
   tick: 0,
   isTransitioningLevels: false
@@ -42,11 +43,14 @@ game.setScene = scene => {
 export default game;
 
 export const advanceLevel = () => {
+  increaseScore(100);
+  fadingPlayerAlert('+100');
   game.isTransitioningLevels = true;
   player.hasControl = false;
   player.isInvulnerable = true;
   disableBoundCollision();
   killAllEnemies();
+  deleteAllPowerups();
   tweenPlayerVelocityX(-10, 2000, () => {
     player.sprite.visible = false;
     pistol.sprite.visible = false;
@@ -54,7 +58,7 @@ export const advanceLevel = () => {
   game.scene.tweens.add({
     targets: game,
     ease: 'Sine.easeInOut',
-    duration: 4000,
+    duration: 3000,
     repeat: 0,
     speed: 8,
     onComplete: () => {
@@ -95,6 +99,11 @@ export const gameOver = () => {
   pistol.sprite.setIgnoreGravity(false);
   pistol.sprite.setVelocityX(3);
   pistol.sprite.setVelocityY(-10);
+};
+
+export const increaseScore = amt => {
+  game.score += amt;
+  refreshGui();
 };
 
 export const loadLevel = (scene, lvlId) => {

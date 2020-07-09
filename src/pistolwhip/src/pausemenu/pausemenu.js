@@ -24,6 +24,7 @@ export const hidePauseMenu = () => {
 const addMenuItem = (x, y, key, hoverInteraction, clickFunc = undefined) => {
   const menuItem = game.scene.add.image(x, y, key);
   menuItem.setInteractive();
+  menuItem.depth = 2;
   if(hoverInteraction) {
     let xOrigin = menuItem.x;
     let yOrigin = menuItem.y;
@@ -86,11 +87,13 @@ export const showPauseMenu = () => {
     pauseMenu.background = game.scene.add.rectangle(game.width / 2, game.height / 2, game.width * 2, game.height / 7, getPhaserColorFromHex('#333'));
     pauseMenu.background.angle = 350;
     pauseMenu.background.alpha = 0.9;
+    pauseMenu.background.depth = 1;
     pauseMenu.header = addMenuItem(game.width / 2, game.height / 2 - 160, 'pausedHeader', false);
     pauseMenu.resumeText = addMenuItem(game.width / 2, game.height / 2 - 20, 'resumeBtn', true, () => unpauseGame());
     pauseMenu.optionsText = addMenuItem(game.width / 2, game.height / 2 + 60, 'optionsBtn', true);
     pauseMenu.quitText = addMenuItem(game.width / 2, game.height / 2 + 140, 'quitBtn', true);
   }
+  console.log(pauseMenu.background)
   animateMenuItems();
   game.scene.tweens.add({
     targets: pauseMenu.background,

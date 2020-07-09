@@ -15,8 +15,7 @@ export default function() {
 
   //undo this dummy
   setInterval(() => {
-    // console.log(enemies[0].sprite.body.position.x)
-    // console.log(game.width - game.enemySpawnDist, game.width + 50);
+    // fadingPlayerAlert('ahoyahoyahoy');
   }, 1000);
 
   //Client dims

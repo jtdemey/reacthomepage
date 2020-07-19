@@ -19,23 +19,42 @@ const getView = view => {
   }
 };
 
-const iterateView = (e, viewInd, setView, currView) => {
-  if(e.keyCode === 39 || e.keyCode === 32) {
-    if(!currView) {
-      return false;
-    }
-    setView(viewInd + 1);
-  } else if(e.keyCode === 37) {
-    setView(viewInd - 1);
+const handleClick = (roadmapVisible, setRoadmapVisible) => {
+  if(roadmapVisible) {
+    setRoadmapVisible(false);
+  }
+};
+
+const handleKey = (e, viewInd, setView, roadmapVisible, setRoadmapVisible, isLast) => {
+  console.log(e.keyCode)
+  switch(e.keyCode) {
+    case 39:
+    case 32:
+      if(isLast) {
+        return false;
+      }
+      setView(viewInd + 1);
+      break;
+    case 37:
+      setView(viewInd - 1);
+      break;
+    case 9:
+    case 82:
+      setRoadmapVisible(!roadmapVisible);
+      break;
   }
   return false;
 };
 
 const TutApp = props => {
+  const [roadmapVisible, setRoadmapVisible] = useState(false);
   const [viewIndex, setViewIndex] = useState(0);
+  const isLast = props.scene.views[viewIndex + 1] === undefined;
+  const clickFunc = () => handleClick(roadmapVisible, setRoadmapVisible);
+  const keyFunc = e => handleKey(e, viewIndex, setViewIndex, roadmapVisible, setRoadmapVisible, isLast);
   return (
-    <div id="content-area" tabIndex="0" onKeyDown={e => iterateView(e, viewIndex, setViewIndex, props.scene.views[viewIndex + 1])}>
-      <Roadmap roadmap={props.scene.roadmap} roadmapIndex={props.scene.views[viewIndex].roadmapIndex} />
+    <div id="content-area" tabIndex="0" onClick={clickFunc} onKeyDown={keyFunc}>
+      <Roadmap roadmap={props.scene.roadmap} roadmapIndex={props.scene.views[viewIndex].roadmapIndex} isVisible={roadmapVisible} />
       {getView(props.scene.views[viewIndex])}
     </div>
   );

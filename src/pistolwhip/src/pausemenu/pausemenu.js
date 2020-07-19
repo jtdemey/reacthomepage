@@ -93,7 +93,6 @@ export const showPauseMenu = () => {
     pauseMenu.optionsText = addMenuItem(game.width / 2, game.height / 2 + 60, 'optionsBtn', true);
     pauseMenu.quitText = addMenuItem(game.width / 2, game.height / 2 + 140, 'quitBtn', true);
   }
-  console.log(pauseMenu.background)
   animateMenuItems();
   game.scene.tweens.add({
     targets: pauseMenu.background,

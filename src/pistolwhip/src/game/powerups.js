@@ -1,9 +1,10 @@
 import { getRandomProperty, getRandBetween } from "../pwUtils";
-import { POWERUP_IDS, POWERUP_NAMES } from "../constants";
+import { POWERUP_IDS, POWERUP_NAMES, POWERUP_TYPES } from "../constants";
 import game from "./game";
 import collisionCats from "./collision";
 import player, { fadingPlayerAlert } from "./player";
 import { refreshHealthCt } from "./gui";
+import { addPackageDestructible } from "./destructibles";
 
 /*
 Reload speed up (gears of war style action reload)
@@ -43,20 +44,44 @@ const getPowerupId = () => {
   return goodId;
 };
 
-export const addPowerup = () => {
-  const nextId = getPowerupId();
-  const pickup = game.scene.matter.add.sprite(game.width + 32, getRandBetween(game.height - 300, game.height - 400), POWERUP_NAMES[nextId]);
+const makeLinearPowerup = id => {
+  const pickup = game.scene.matter.add.sprite(game.width + 32, getRandBetween(game.height - 300, game.height - 400), POWERUP_NAMES[id]);
   pickup.setBody({
     type: 'circle',
     radius: 32 
   });
-  console.log(pickup)
-  pickup.powerupId = nextId;
+  pickup.powerupId = id;
+  pickup.powerupType = POWERUP_TYPES.LINEAR;
   pickup.setIgnoreGravity(true);
   pickup.setCollisionCategory(collisionCats.CONSUMABLE);
   pickup.body.collisionFilter.mask = collisionCats.PLAYER;
   pickup.body.mass = 0.01;
+  pickup.onTick = () => {
+    pickup.rotation = 0;
+    pickup.setVelocityX(getRandBetween(-4, -6));
+    if(pickup.x < 0 - pickup.width) {
+      deletePowerup(pickup.body.id);
+    }
+  };
   powerups.sprites.push(pickup);
+};
+
+export const addPowerup = () => {
+  const powerupType = getRandomProperty(POWERUP_TYPES);
+  const nextId = getPowerupId();
+  switch(powerupType) {
+    case POWERUP_TYPES.LINEAR:
+      // makeLinearPowerup(nextId);
+      addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
+      break;
+    case POWERUP_TYPES.PACKAGE:
+      addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
+      break;
+    case POWERUP_TYPES.MISSILE:
+      // makeLinearPowerup(nextId);
+      addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
+      break;
+  }
 };
 
 export const applyPower = powerupId => {
@@ -95,6 +120,17 @@ export const applyPower = powerupId => {
   }
 };
 
+export const attemptPowerupSpawn = () => {
+  if(!game.paused && !game.isTransitioningLevels && Math.random() < powerups.spawnChance) {
+    addPowerup();
+    powerups.spawnChance = 0.5;
+  } else {
+    if(powerups.spawnChance < 1) {
+      powerups.spawnChance += 0.1;
+    }
+  }
+};
+
 export const consumePowerup = bodyId => {
   const powerup = powerups.sprites.filter(s => s.body.id === bodyId)[0];
   deletePowerup(bodyId);
@@ -115,25 +151,8 @@ export const deletePowerup = bodyId => {
   });
 };
 
-export const attemptPowerupSpawn = () => {
-  if(!game.paused && !game.isTransitioningLevels && Math.random() < powerups.spawnChance) {
-    addPowerup();
-    powerups.spawnChance = 0.5;
-  } else {
-    if(powerups.spawnChance < 1) {
-      powerups.spawnChance += 0.1;
-    }
-  }
-};
-
 export const updatePowerups = () => {
   if(powerups.sprites.length > 0) {
-    powerups.sprites.forEach(sprite => {
-      sprite.rotation = 0;
-      sprite.setVelocityX(getRandBetween(-2, -3));
-      if(sprite.x < 0 - sprite.width) {
-        deletePowerup(sprite.body.id);
-      }
-    });
+    powerups.sprites.forEach(sprite => sprite.onTick());
   }
 };

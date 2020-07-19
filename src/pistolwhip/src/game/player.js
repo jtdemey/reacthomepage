@@ -65,9 +65,9 @@ export const disablePlayerCollision = () => {
   player.sprite.body.collisionFilter.mask = 0;
 };
 
-export const fadingPlayerAlert = msg => {
+export const fadingPlayerAlert = (msg, color = '#fff') => {
   const text = player.scene.add.text(player.sprite.x - player.sprite.width, player.sprite.y - 10, msg, {
-    color: '#fff',
+    color: color,
     fontFamily: `Coda`,
     fontSize: '1.5rem' 
   });
@@ -89,6 +89,7 @@ export const hurtPlayer = amt => {
     if(player.hp === 0) {
       gameOver();
     }
+    fadingPlayerAlert(`-${amt}`, '#b30000');
     refreshHealthCt();
   }
 };

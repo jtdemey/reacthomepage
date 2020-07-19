@@ -163,6 +163,7 @@ const makeRoller = (enemyId, type, sprite) => {
     mask: collisionCats.PLAYER | collisionCats.GROUND | collisionCats.ENEMY | collisionCats.BULLET
   };
   sprite.body.friction = 0;
+  sprite.body.damage = getRandBetween(15, 18);
   sprite.setBounce(0);
   let onTick = () => {
     sprite.rotation = 0;
@@ -194,8 +195,9 @@ const makeGlider = (enemyId, type, sprite) => {
     group: 0,
     mask: collisionCats.PLAYER | collisionCats.GROUND | collisionCats.ENEMY | collisionCats.BULLET
   };
-  sprite.setBounce(0);
   sprite.body.ignoreGravity = true;
+  sprite.body.damage = getRandBetween(22, 25);
+  sprite.setBounce(0);
   sprite.setPosition(game.width + 250, getRandBetween(game.height - 400, game.height - 600));
   let onTick = () => {
     sprite.rotation = 0;

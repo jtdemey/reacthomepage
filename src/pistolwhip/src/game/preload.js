@@ -4,6 +4,7 @@ export default function() {
   const bg = str => `assets/bg/${str}.png`;
   const png = str => `assets/${str}.png`;
   const pu = str => `assets/powerups/${str}.png`;
+  const d = str => `assets/destructibles/${str}.png`;
   //Backgrounds
   LEVEL_NAMES.forEach(n => this.load.image(n, bg(n)));
   //Sprites
@@ -24,6 +25,8 @@ export default function() {
   });
   //Powerups
   POWERUP_NAMES.forEach(n => this.load.image(n, pu(n)));
+  //Destructibles
+  this.load.image('powerupPackage', d('powerupPackage'));
   //Pause
   this.load.image('pausedHeader', png('pausedHeader'));
   this.load.image('resumeBtn', png('resumeBtn'));

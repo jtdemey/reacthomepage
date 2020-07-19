@@ -1,15 +1,11 @@
-export const makeRoad = (roadmapIndex, level, text) => {
-  return {
-    roadmapIndex,
-    level,
-    text
-  };
-};
+export const makeRoad = (roadmapIndex, level, text) => ({
+  roadmapIndex,
+  level,
+  text
+});
 
-export const makeView = (roadmapIndex, viewName, props = {}) => {
-  return {
-    roadmapIndex,
-    viewName,
-    props
-  };
-};
+export const makeView = (roadmapIndex, viewName, props = {}) => ({
+  roadmapIndex,
+  viewName,
+  props
+});

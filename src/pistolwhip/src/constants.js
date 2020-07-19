@@ -1,3 +1,7 @@
+export const DESTRUCTIBLE_TYPES = {
+  PACKAGE: 'powerupPackage'
+};
+
 export const ENEMY_SCORES = [10, 12, 15, 20, 25];
 
 export const ENEMY_TYPES = {
@@ -165,3 +169,9 @@ export const POWERUP_IDS = {
 };
 
 export const POWERUP_NAMES = ['powerupHeal', 'powerupDamage', 'powerupMaxAmmo', 'powerupReload', 'powerupJumpHeight', 'powerupJumpAmount', 'powerupRage'];
+
+export const POWERUP_TYPES = {
+  LINEAR: 0,
+  PACKAGE: 1,
+  MISSILE: 2
+};

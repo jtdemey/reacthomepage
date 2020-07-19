@@ -2,12 +2,13 @@ import Phaser from 'phaser';
 import player, { hurtPlayer } from './player';
 import enemies from './enemies';
 import { detectCatColl, getClosestPtTo } from '../pwUtils';
-import { ENEMY_TYPES } from '../constants';
+import { ENEMY_TYPES, DESTRUCTIBLE_TYPES } from '../constants';
 import ground from './ground';
 import { consumePowerup } from './powerups';
 import pistol from './pistol';
+import destructibles from './destructibles';
 
-const collisionCatNames = ['PLAYER', 'GROUND', 'ENEMY', 'CONSUMABLE', 'BULLET', 'BOUNDARY'];
+const collisionCatNames = ['PLAYER', 'GROUND', 'ENEMY', 'CONSUMABLE', 'BULLET', 'BOUNDARY', 'DESTRUCTIBLE'];
 
 const collisionCats = {};
 
@@ -15,7 +16,8 @@ export default collisionCats;
 
 const checkPlayerEnemyColl = pair => {
   if(detectCatColl(pair.bodyA, pair.bodyB, collisionCats.PLAYER, collisionCats.ENEMY)) {
-    hurtPlayer(20);
+    const enemy = pair.bodyA.collisionFilter.category === collisionCats.ENEMY ? pair.bodyA : pair.bodyB;
+    hurtPlayer(enemy.damage);
   }
 };
 
@@ -38,6 +40,26 @@ const checkPlayerPowerupColl = pair => {
   }
 };
 
+const getAimLineDestructibleCollisionPts = () => {
+  const destHits = [];
+  let ptContainer;
+  const collectPts = dType => {
+    if(ptContainer.length) {
+      ptContainer.forEach(pt => {
+        pt.destructibleType = dType;
+        destHits.push(pt);
+      });
+    }
+  };
+  destructibles.sprites.forEach(d => {
+    if(d.destructibleType === DESTRUCTIBLE_TYPES.PACKAGE) {
+      const circle = new Phaser.Geom.Circle(d.body.position.x, d.body.position.y, d.body.circleRadius);
+      ptContainer = Phaser.Geom.Intersects.GetLineToCircle(pistol.aimLine, circle);
+    }
+    collectPts(DESTRUCTIBLE_TYPES.PACKAGE);
+  });
+};
+
 const getAimLineEnemyCollisionPts = () => {
   const enemyHits = [];
   let ptContainer;
@@ -51,6 +73,7 @@ const getAimLineEnemyCollisionPts = () => {
     }
   };
   enemies.forEach(e => {
+    ptContainer = [];
     if(!e.sprite.body) {
       return;
     }

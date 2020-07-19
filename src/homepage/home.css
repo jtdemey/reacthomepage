@@ -41,6 +41,7 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
 @-webkit-keyframes fadein-now {
   0% {
   	opacity: 0;
@@ -102,7 +103,7 @@ table {
   animation: fadein-now 0.5s ease-out 0.12s 1;
   animation-fill-mode: forwards;
 }
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 @-webkit-keyframes fadeout-now {
   0% {
   	opacity: 0;
@@ -164,7 +165,7 @@ table {
   animation: fadeout-now 0.5s ease-out 0.12s 1;
   animation-fill-mode: forwards;
 }
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 @-webkit-keyframes gradient-shift {
 	0% {
 		background-position: 0% 50%;
@@ -189,7 +190,7 @@ table {
 		background-position: 100% 50%;
 	}
 }
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 @-webkit-keyframes gradient-shiftback {
 	0% {
 		background-position: 100% 50%;
@@ -214,7 +215,7 @@ table {
 		background-position: 0% 50%;
 	}
 }
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 @-webkit-keyframes highlight-slide {
   0% {
   	left: -86px;
@@ -239,7 +240,7 @@ table {
   	left: 0px;
   }
 }
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 @-webkit-keyframes navblock-shadebg {
   0% {
   	background-color: #4d4d4d;
@@ -264,7 +265,7 @@ table {
   	background-color: #404040;
   }
 }
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 @-webkit-keyframes nav-title-focus {
   0% {
   	color: #fff;
@@ -289,7 +290,7 @@ table {
   	color: #84DCC6;
   }
 }
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 @keyframes btn-hover-fade {
   0% {
   	background: rgba(87, 103, 100, 0.75);

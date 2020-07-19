@@ -1,4 +1,5 @@
 import React from 'react';
+import { animated, useSpring } from 'react-spring';
 
 const renderRoadmap = (currentInd, roadmap) => {
   const getCss = r => {
@@ -23,10 +24,17 @@ const renderRoadmap = (currentInd, roadmap) => {
 };
 
 const Roadmap = props => {
+  const { left, shadowLength } = useSpring({
+    left: props.isVisible ? 0 : -20,
+    shadowLength: props.isVisible ? 1 : 0
+  });
   return (
-    <nav>
+    <animated.nav style={{
+      left: left.interpolate(l => `${l}rem`),
+      boxShadow: shadowLength.interpolate(s => `#111 ${s}rem ${s}rem ${s}rem`)
+    }}>
       {renderRoadmap(props.roadmapIndex, props.roadmap)}
-    </nav>
+    </animated.nav>
   );
 };
 

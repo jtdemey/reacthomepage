@@ -7,6 +7,7 @@ import enemies from './enemies';
 import { updateBullets } from './bullets';
 import { updatePowerups } from './powerups';
 import pistol from './pistol';
+import { updateDestructibles } from './destructibles';
 
 export default function() {
   if(game.paused) {
@@ -24,5 +25,6 @@ export default function() {
     updateProgressBar();
     updateBullets();
     updatePowerups();
+    updateDestructibles();
   }
 }

@@ -48,6 +48,7 @@ html, body, #site-wrapper, #app-root {
 	width: 100%;
 	height: 100%;
 	color: #CECECC;
+	overflow: hidden;
 }
 
 *:focus {
@@ -72,26 +73,30 @@ p {
 
 #content-area {
 	height: 100%;
-	display: grid;
-	grid-template-columns: 1fr 3fr;
 	overflow: hidden;
 }
 
 /* Roadmap */
 nav {
+	position: absolute;
+	top: 0;
+	width: 20rem;
+	height: 100%;
 	background: #C13E2C;
+	box-shadow: 1rem 1rem 2rem #222;
+	z-index: 1;
 }
 
 nav > ul {
 	height: 100%;
-	margin: 2rem 3rem;
+	padding-left: 2rem;
 	font-family: 'Montserrat', sans-serif;
 	font-size: 1.5rem;
 	list-style-type: disc;
 }
 
 .roadmap-item {
-	padding-bottom: 0.8rem;
+	padding: 1rem;
 }
 
 .nested-1 {
@@ -112,7 +117,6 @@ nav > ul {
 	display: none;
 }
 
-/* Body */
 #title-splash > h1 {
 	margin: 13rem 6.5rem;
 	padding-left: 1rem;

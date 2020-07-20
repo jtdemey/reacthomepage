@@ -55,6 +55,11 @@ html, body, #site-wrapper, #app-root {
 	outline: none;
 }
 
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
 h1, h2, h3, h4, span {
 	font-family: 'Bebas Neue', cursive;
 }
@@ -68,7 +73,7 @@ p {
 }
 
 #site-wrapper {
-  background: #3F3937;
+  background: #222;
 }
 
 #content-area {
@@ -96,7 +101,7 @@ nav > ul {
 }
 
 .roadmap-item {
-	padding: 1rem;
+	padding: 1rem 1rem 1rem 0;
 }
 
 .nested-1 {
@@ -115,6 +120,43 @@ nav > ul {
 
 .hidden {
 	display: none;
+}
+
+#part-view {
+	display: flex;
+	height: 100vh;
+	align-items: center;
+	justify-content: center;
+}
+
+.link-card {
+	display: inline-block;
+	width: 10rem;
+	height: 14rem;
+	margin: 1rem;
+	padding: 3rem;
+	border-radius: 0.5rem;
+	cursor: grab;
+}
+.web-bg {
+	background: #9d0b0b;
+}
+.js-bg {
+	background: #274472;
+}
+.node-bg {
+	background: #778A35;
+}
+.react-bg {
+	background: #613659;
+}
+.link-card > h6 {
+	margin-bottom: 4rem;
+	font-size: 1.25rem;
+}
+.link-card > h3 {
+	font-size: 3rem;
+	text-align: center;
 }
 
 #title-splash > h1 {

@@ -1,4 +1,4 @@
-import { makeRoad, makeView } from './viewHelpers';
+import { makeRoad, makeView } from '../../../util/viewHelpers';
 
 const r = makeRoad;
 const v = makeView;

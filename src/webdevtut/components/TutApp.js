@@ -1,23 +1,29 @@
 import React, { useState } from 'react';
+import { Router } from '@reach/router';
 import Roadmap from './Roadmap';
 import TitleSplash from './TitleSplash';
 import ImageView from './ImageView';
+import PartView from './PartView';
+import { makeRoad } from '../util/viewHelpers';
+import ChapterView from './ChapterView';
 
-const getView = view => {
-  if(view === undefined) {
-    console.error('no view ' + view);
-    return;
-  }
-  const p = view.props ? {...view.props} : false;
-  switch(view.viewName) {
-    case 'TitleSplash':
-      return <TitleSplash {...p} />;
-    case 'ImageView':
-      return <ImageView images={p.images} />
-    default:
-      return <div></div>;
-  }
-};
+// const getView = view => {
+//   if(view === undefined) {
+//     console.error('no view ' + view);
+//     return;
+//   }
+//   const p = view.props ? {...view.props} : false;
+//   switch(view.viewName) {
+//     case 'TitleSplash':
+//       return <TitleSplash {...p} />;
+//     case 'ImageView':
+//       return <ImageView images={p.images} />
+//     default:
+//       return <div></div>;
+//   }
+// };
+
+const getDefaultRoadmap = () => [makeRoad(0, 0, 'Welcome!')];
 
 const handleClick = (roadmapVisible, setRoadmapVisible) => {
   if(roadmapVisible) {
@@ -25,19 +31,8 @@ const handleClick = (roadmapVisible, setRoadmapVisible) => {
   }
 };
 
-const handleKey = (e, viewInd, setView, roadmapVisible, setRoadmapVisible, isLast) => {
-  console.log(e.keyCode)
+const handleKey = (e, roadmapVisible, setRoadmapVisible) => {
   switch(e.keyCode) {
-    case 39:
-    case 32:
-      if(isLast) {
-        return false;
-      }
-      setView(viewInd + 1);
-      break;
-    case 37:
-      setView(viewInd - 1);
-      break;
     case 9:
     case 82:
       setRoadmapVisible(!roadmapVisible);
@@ -46,16 +41,20 @@ const handleKey = (e, viewInd, setView, roadmapVisible, setRoadmapVisible, isLas
   return false;
 };
 
-const TutApp = props => {
+const TutApp = () => {
   const [roadmapVisible, setRoadmapVisible] = useState(false);
-  const [viewIndex, setViewIndex] = useState(0);
-  const isLast = props.scene.views[viewIndex + 1] === undefined;
   const clickFunc = () => handleClick(roadmapVisible, setRoadmapVisible);
-  const keyFunc = e => handleKey(e, viewIndex, setViewIndex, roadmapVisible, setRoadmapVisible, isLast);
+  const keyFunc = e => handleKey(e, roadmapVisible, setRoadmapVisible);
   return (
     <div id="content-area" tabIndex="0" onClick={clickFunc} onKeyDown={keyFunc}>
-      <Roadmap roadmap={props.scene.roadmap} roadmapIndex={props.scene.views[viewIndex].roadmapIndex} isVisible={roadmapVisible} />
-      {getView(props.scene.views[viewIndex])}
+      <Roadmap roadmap={getDefaultRoadmap()} isVisible={roadmapVisible} />
+      <Router>
+        <PartView path="/" />
+        <ChapterView path="/web" chapter="web" />
+        <ChapterView path="/js" chapter="js" />
+        <ChapterView path="/node" chapter="node" />
+        <ChapterView path="/react" chapter="react" />
+      </Router>
     </div>
   );
 };

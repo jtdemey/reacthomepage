@@ -85,4 +85,9 @@ router.route('/survive')
     sendHtmlFile(res, 'survive/survive.html', 'survive.html');
   });
 
+router.route('/devtut')
+  .get((req, res) => {
+    sendHtmlFile(res, 'webdevtut/tut.html', 'tut.html');
+  });
+
 export default router;

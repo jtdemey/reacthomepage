@@ -51,6 +51,24 @@ html, body, #site-wrapper, #app-root {
 	overflow: hidden;
 }
 
+::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+::-webkit-scrollbar-track {
+  display: none;
+  background: #777;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
 *:focus {
 	outline: none;
 }
@@ -123,8 +141,14 @@ nav > ul {
 }
 
 #part-view {
-	display: flex;
 	height: 100vh;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+#part-view > article {
+	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
 }
@@ -159,6 +183,25 @@ nav > ul {
 	text-align: center;
 }
 
+#chapter-view {
+	height: 100vh;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.scroll-header {
+	padding: 1rem;
+	font-size: 6rem;
+	margin: 2rem;
+	word-wrap: normal;
+}
+
+.staggered-list {
+	margin: 1rem;
+	padding: 2rem;
+	list-style-type: none;
+}
+
 #title-splash > h1 {
 	margin: 13rem 6.5rem;
 	padding-left: 1rem;
@@ -174,4 +217,11 @@ nav > ul {
 	width: 12rem;
 	height: 12rem;
 	margin: auto;
+}
+
+@media all and (min-width: 701px) {
+	#part-view > article {
+		margin-top: 10vh;
+		margin-bottom: 10vh;
+	}
 }

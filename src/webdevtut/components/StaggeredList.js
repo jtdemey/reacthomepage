@@ -8,9 +8,9 @@ const StaggeredList = props => {
     opacity: 1
   }));
   return (
-    <ul>
+    <ul className="staggered-list">
       {props.listItems.map((listItem, i) => (
-        <li key={i} style={{opacity: springs[i].opacity}}>{listItem.content}</li>
+        <li key={i} style={{opacity: springs[i].opacity}}>{listItem}</li>
       ))}
     </ul>
   );

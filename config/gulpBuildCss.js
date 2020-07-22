@@ -26,7 +26,11 @@ const getHash = cb => {
 
 const buildCss = () => {
   const h = strCopy(hash);
-  return gulp.src(['../src/homepage/home.css', '../src/imposter/imposter.css', '../src/survive/survive.css'])
+  return gulp.src([
+    '../src/homepage/home.css',
+    '../src/imposter/imposter.css',
+    '../src/survive/survive.css'
+  ])
     .pipe(postcss([
       tailwindCss,
       postcssPresetEnv,
@@ -36,16 +40,18 @@ const buildCss = () => {
       content: [
         '../src/homepage/home.html',
         '../src/about/about.html',
+        '../src/doodles/doodles.html',
         '../src/imposter/imposter.html',
         '../src/survive/survive.html',
-        '../src/doodles/doodles.html',
+        '../src/webdevtut/tut.html',
         '../src/**/*.jsx',
         '../src/**/*.js',
       ],
       css: [
         `../src/homepage/home.${hash}.css`,
         `../src/imposter/imposter.${hash}.css`,
-        `../src/survive/survive.${hash}.css`
+        `../src/survive/survive.${hash}.css`,
+        `../src/webdevtut/tut.${hash}.css`
       ]
     }))
     .pipe(rename(p => {
@@ -58,14 +64,16 @@ const replaceHrefs = () => {
   return gulp.src([
       '../dist/public/home.html',
       '../dist/public/about.html',
+      '../dist/public/doodles.html',
       '../dist/public/imposter.html',
       '../dist/public/survive.html',
-      '../dist/public/doodles.html'
+      '../dist/public/tut.html'
     ])
     .pipe(replace('href="homepage/home.css', `href="home.${hash}.css`))
     .pipe(replace('href="/homepage/home.css', `href="/home.${hash}.css`))
     .pipe(replace('href="imposter.css', `href="imposter.${hash}.css`))
     .pipe(replace('href="survive.css', `href="survive.${hash}.css`))
+    .pipe(replace('href="tut.css', `href="tut.${hash}.css`))
     .pipe(gulp.dest(path.join('..', 'dist', 'public')));
 };
 

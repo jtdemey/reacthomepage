@@ -18,9 +18,10 @@ module.exports = {
   entry: {
     home: path.join(process.cwd(), 'src/homepage/homeScript.js'),
     about: path.join(process.cwd(), 'src/about/aboutScript.js'),
+    doodles: path.join(process.cwd(), 'src/doodles/doodleScript.js'),
     imposter: path.join(process.cwd(), 'src/imposter/imposterIndex.js'),
     survive: path.join(process.cwd(), 'src/survive/surviveIndex.js'),
-    doodles: path.join(process.cwd(), 'src/doodles/doodleScript.js')
+    webdevtut: path.join(process.cwd(), 'src/webdevtut/tutScript.js')
   },
   target: 'web',
   output: {
@@ -42,6 +43,11 @@ module.exports = {
       template: './src/about/about.html'
     }), 
     new HtmlWebpackPlugin({
+      chunks: ['doodles'],
+      filename: 'doodles.html',
+      template: './src/doodles/doodles.html'
+    }), 
+    new HtmlWebpackPlugin({
       chunks: ['imposter'],
       filename: 'imposter.html',
       template: './src/imposter/imposter.html'
@@ -52,9 +58,9 @@ module.exports = {
       template: './src/survive/survive.html'
     }),
     new HtmlWebpackPlugin({
-      chunks: ['doodles'],
-      filename: 'doodles.html',
-      template: './src/doodles/doodles.html'
+      chunks: ['webdevtut'],
+      filename: 'tut.html',
+      template: './src/webdevtut/tut.html'
     }), 
     new HtmlPluginRemove(/<\s*script[^>]*>(.*?)<\s*\/\s*script>/),
     new Terser({

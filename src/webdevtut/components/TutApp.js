@@ -50,10 +50,10 @@ const TutApp = () => {
       <Roadmap roadmap={getDefaultRoadmap()} isVisible={roadmapVisible} />
       <Router>
         <PartView path="/" />
-        <ChapterView path="/web" chapter="web" header="Part 1: Web Fundamentals" />
-        <ChapterView path="/js" chapter="js" header="Part 2: JavaScript" />
-        <ChapterView path="/node" chapter="node" header="Part 3: Node.js" />
-        <ChapterView path="/react" chapter="react" header="Part 4: React" />
+        <ChapterView path="web/*" part={1} header="Part 1: Web Fundamentals" />
+        <ChapterView path="js/*" part={2} header="Part 2: JavaScript" />
+        <ChapterView path="node/*" part={3} header="Part 3: Node.js" />
+        <ChapterView path="react/*" part={4} header="Part 4: React" />
       </Router>
     </div>
   );

@@ -1,19 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ScrollInHeader from './ScrollInHeader';
-import StaggeredList from './StaggeredList';
+import PartOneRouter from '../parts/web/1/PartOneRouter';
+
+const getRouter = props => {
+  switch(props.part) {
+    case 1:
+      return <PartOneRouter part={1} {...props} />;
+    default:
+      return <ScrollInHeader text={'404 Not Found'} />
+  }
+};
 
 const ChapterView = props => {
   return (
     <section id="chapter-view">
-      <ScrollInHeader text={props.header} />
-      <StaggeredList listItems={['hey', 'uh', 'ok']} />
+      {getRouter(props)}
     </section>
   );
 };
 
 ChapterView.propTypes = {
-  chapter: PropTypes.string,
+  part: PropTypes.number,
   header: PropTypes.string
 };
 

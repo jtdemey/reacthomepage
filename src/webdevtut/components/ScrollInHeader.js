@@ -15,6 +15,7 @@ const ScrollInHeader = props => {
     }
   }));
   set({
+    delay: props.delay || 0,
     margin: props.fromRight ? `1rem ${1 + (props.extraMargin || 0)}rem 1rem 1rem` : `1rem 1rem 1rem ${1 + (props.extraMargin || 0)}rem`, 
     opacity: 1
   });
@@ -24,6 +25,7 @@ const ScrollInHeader = props => {
 };
 
 ScrollInHeader.propTypes = {
+  delay: PropTypes.number,
   extraMargin: PropTypes.number,
   fromRight: PropTypes.bool,
   fontSize: PropTypes.number,

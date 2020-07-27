@@ -1,16 +1,17 @@
 import React from 'react';
-import { useSprings } from "react-spring";
+import { animated, useSprings } from "react-spring";
 import PropTypes from 'prop-types';
 
 const StaggeredList = props => {
-  const springs = useSprings(props.listItems.length, index => ({
-    delay: index * 200,
-    opacity: 1
+  const [springs, set] = useSprings(props.listItems.length, () => ({
+    opacity: 0,
+    marginLeft: '-2rem'
   }));
+  set(i => ({opacity: 1, marginLeft: '2rem', delay: i * 50}));
   return (
     <ul className="staggered-list">
-      {props.listItems.map((listItem, i) => (
-        <li key={i} style={{opacity: springs[i].opacity}}>{listItem}</li>
+      {springs.map((anim, i) => (
+        <animated.li key={i} style={anim}>{props.listItems[i]}</animated.li>
       ))}
     </ul>
   );

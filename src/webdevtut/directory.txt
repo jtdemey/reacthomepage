@@ -1,6 +1,5 @@
 Part 1: HOW TO WEB (#9d0b0b,#da2d2d,#eb8242,#f6da63)
   Chapter 1: Overview
-    -
   Chapter 2: Tooling - IDEs and Browsers 
   Chapter 3: Browser Dev Tools
   Chapter 4: HTTP Requests Fresh from the Oven
@@ -12,6 +11,7 @@ Part 2: HOW TO JAVASCRIPT (#C3E0E5,#274472,#5885AF,#41729F)
   Chapter 1: I Know JS About JS
   Chapter 2: Primitives in Technology
   Chapter 3: Everything is Object (JSON Explained)
+  Chapter 4: Arrays in Disarray
   Chapter 4: What's Your Function?
 
 Part 3: HOW TO NODE.JS (#31352E,#EBEBE8,#D1E2C4,#778A35)

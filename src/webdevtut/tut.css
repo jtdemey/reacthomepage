@@ -18,7 +18,6 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
 	display: block;
@@ -183,8 +182,7 @@ nav > ul {
 	text-align: center;
 }
 
-#chapter-view {
-	height: 100vh;
+#chapter-view, #page-view {
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
@@ -197,9 +195,20 @@ nav > ul {
 }
 
 .staggered-list {
-	margin: 1rem;
+	margin: 1rem 1rem 1rem 2rem;
 	padding: 2rem;
 	list-style-type: none;
+}
+.staggered-list > li {
+	padding: 0.5rem;
+}
+.staggered-list > li > span {
+	margin: 0 1rem 0 0;
+	font-size: 1rem;
+}
+.staggered-list > li > a > span {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.5rem;
 }
 
 #title-splash > h1 {

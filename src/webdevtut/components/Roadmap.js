@@ -34,6 +34,7 @@ const Roadmap = props => {
       boxShadow: shadowLength.interpolate(s => `#111 ${s}rem ${s}rem ${s}rem`)
     }}>
       {renderRoadmap(props.roadmapIndex, props.roadmap)}
+      <div id="roadmap-btn"></div>
     </animated.nav>
   );
 };

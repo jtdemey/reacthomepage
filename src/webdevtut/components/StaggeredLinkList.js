@@ -16,7 +16,7 @@ const StaggeredLinkList = props => {
         <animated.li key={i} style={anim}>
           <animated.span style={anim}>{i + 1}.</animated.span>
           <Link to={`${props.baseUri}/${i + 1}`}>
-            <HoverSpan clickFunc={props.linkClickFunc ? () => props.linkClickFunc() : () => { return false; }} fromColor="#cececc" toColor={props.spanColor} text={props.listItems[i]} />
+            <HoverSpan clickFunc={props.linkClickFunc ? () => props.linkClickFunc(i + 1) : () => { return false; }} fromColor="#cececc" toColor={props.spanColor} text={props.listItems[i]} />
           </Link>
         </animated.li>
       ))}

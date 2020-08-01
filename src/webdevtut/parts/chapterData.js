@@ -12,6 +12,7 @@ const chapterData = [
       'Styling with CSS',
       'Choosing a Stack'
     ],
+    title: 'Part 1: Web Fundamentals',
     uri: 'web'
   },
   {
@@ -25,6 +26,7 @@ const chapterData = [
       'Arrays in Disarray',
       `What's Your Function?`
     ],
+    title: 'Part 2: JavaScript',
     uri: 'js'
   },
   {
@@ -34,6 +36,7 @@ const chapterData = [
     titles: [
       'Overview'
     ],
+    title: 'Part 3: Node.js and Backend JavaScript',
     uri: 'node'
   },
   {
@@ -43,6 +46,7 @@ const chapterData = [
     titles: [
       'Overview'
     ],
+    title: 'Part 4: React',
     uri: 'react'
   },
 ];

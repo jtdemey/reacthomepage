@@ -1,13 +1,15 @@
 import React from 'react';
 import { animated, useSpring } from "react-spring";
 import PropTypes from 'prop-types';
+import clientSettings from '../util/clientSettings';
 
 const ScrollInHeader = props => {
+  const xTrans = x => `translateX(${x}px)`;
   const [anim, set] = useSpring(() => ({
-    fontSize: props.fontSize ? `${props.fontSize}rem` : '6rem',
-    margin: props.fromRight ? `1rem -20rem 1rem 1rem` : `1rem 1rem 1rem -20rem`,
+    fontSize: props.fontSize ? `${props.fontSize}rem` : '',
     opacity: 0,
     textAlign: props.fromRight ? 'right' : 'left',
+    x: props.fromRight ? clientSettings.width + 800 : -800,
     config: {
       mass: 1,
       tension: 820,
@@ -16,11 +18,11 @@ const ScrollInHeader = props => {
   }));
   set({
     delay: props.delay || 0,
-    margin: props.fromRight ? `1rem ${1 + (props.extraMargin || 0)}rem 1rem 1rem` : `1rem 1rem 1rem ${1 + (props.extraMargin || 0)}rem`, 
-    opacity: 1
+    opacity: 1,
+    x: 0
   });
   return (
-    <animated.h2 className="scroll-header" style={anim}>{props.text}</animated.h2>
+    <animated.h2 className="scroll-header" style={{...anim, transform: anim.x.interpolate(xTrans)}}>{props.text}</animated.h2>
   );
 };
 

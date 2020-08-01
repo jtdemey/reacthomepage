@@ -19,6 +19,7 @@ const LinkCard = props => {
     <Link to={props.linkUri}>
       <animated.div
         className={getClasses(props)}
+        onClick={props.clickFunc ? () => props.clickFunc() : () => { return false; }}
         onMouseMove={({clientY: y}) => set({background: getShaded(props), xys: calc(clientSettings.width / 2, y)})}
         onMouseLeave={() => set({background: getUnshaded(props), xys: [0, 0, 1]})}
         style={{background: transSpring.background, transform: transSpring.xys.interpolate(trans)}}>
@@ -31,6 +32,7 @@ const LinkCard = props => {
 
 LinkCard.propTypes = {
   bgColors: PropTypes.array,
+  clickFunc: PropTypes.func,
   cssClasses: PropTypes.array,
   header: PropTypes.string,
   linkUri: PropTypes.string,

@@ -111,7 +111,7 @@ nav {
 
 nav > ul {
 	height: 100%;
-	padding-left: 2rem;
+	padding-left: 2.5rem;
 	font-family: 'Montserrat', sans-serif;
 	font-size: 1.5rem;
 	list-style-type: disc;
@@ -187,16 +187,28 @@ nav > ul {
 	overflow-y: scroll;
 }
 
+#breadcrumb {
+	display: flex;
+	align-items: center;
+	justify-content: left;
+	height: 3rem;
+	padding: 0 1rem;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1rem;
+}
+#breadcrumb > span {
+	margin-top: 0.2rem;
+	padding: 0 1rem;
+}
+
 .scroll-header {
 	padding: 1rem;
-	font-size: 6rem;
-	margin: 2rem;
+	font-size: 4rem;
+	margin: 1rem;
 	word-wrap: normal;
 }
 
 .staggered-list {
-	margin: 1rem 1rem 1rem 2rem;
-	padding: 2rem;
 	list-style-type: none;
 }
 .staggered-list > li {
@@ -208,7 +220,7 @@ nav > ul {
 }
 .staggered-list > li > a > span {
 	font-family: 'Montserrat', sans-serif;
-	font-size: 1.5rem;
+	font-size: 1rem;
 }
 
 #title-splash > h1 {
@@ -232,5 +244,22 @@ nav > ul {
 	#part-view > article {
 		margin-top: 10vh;
 		margin-bottom: 10vh;
+	}
+
+	#breadcrumb {
+		font-size: 1.2rem;
+	}
+
+	.scroll-header {
+		margin: 2rem;
+		font-size: 6rem;
+	}
+
+	.staggered-list {
+		margin: 1rem 1rem 1rem 2rem;
+		padding: 2rem;
+	}
+	.staggered-list > li > a > span {
+		font-size: 1.5rem;
 	}
 }

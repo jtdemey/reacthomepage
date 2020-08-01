@@ -1,27 +1,9 @@
 import React, { useState } from 'react';
 import { Router } from '@reach/router';
 import Roadmap from './Roadmap';
-import TitleSplash from './TitleSplash';
-import ImageView from './ImageView';
 import PartView from './PartView';
 import { makeRoad } from '../util/viewHelpers';
 import ChapterView from './ChapterView';
-
-// const getView = view => {
-//   if(view === undefined) {
-//     console.error('no view ' + view);
-//     return;
-//   }
-//   const p = view.props ? {...view.props} : false;
-//   switch(view.viewName) {
-//     case 'TitleSplash':
-//       return <TitleSplash {...p} />;
-//     case 'ImageView':
-//       return <ImageView images={p.images} />
-//     default:
-//       return <div></div>;
-//   }
-// };
 
 const getDefaultRoadmap = () => [makeRoad(0, 0, 'Welcome!')];
 

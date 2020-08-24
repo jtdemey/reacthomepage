@@ -9,6 +9,7 @@ const Overview = props => {
   dispatch(setPage(1));
   return (
     <PageView {...props}>
+      lol
     </PageView>
   );
 };

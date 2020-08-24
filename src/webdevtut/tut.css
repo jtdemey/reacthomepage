@@ -85,6 +85,15 @@ p {
 	font-family: 'Montserrat', sans-serif;
 }
 
+button {
+	font-size: 100%;
+	font-family: inherit;
+	color: #CECECC;
+	border: 0;
+	padding: 0;
+	cursor: grab;
+}
+
 .text-right {
 	text-align: right;
 }
@@ -119,6 +128,7 @@ nav > ul {
 
 .roadmap-item {
 	padding: 1rem 1rem 1rem 0;
+	font-size: 1rem;
 }
 
 .nested-1 {
@@ -182,6 +192,21 @@ nav > ul {
 	text-align: center;
 }
 
+.chapter-root {
+	margin-top: 6rem;
+}
+.chapter-root > div {
+	display: flex;
+	justify-content: center;
+}
+.chapter-root > div > button {
+	margin: 1rem;
+	padding: 1rem;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.2rem;
+	box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.5) , 0px 4px 6px -2px rgba(0,0,0,0.05) ;
+}
+
 #chapter-view, #page-view {
 	overflow-x: hidden;
 	overflow-y: scroll;
@@ -194,15 +219,16 @@ nav > ul {
 	height: 3rem;
 	padding: 0 1rem;
 	font-family: 'Montserrat', sans-serif;
-	font-size: 1rem;
+	font-size: 0.8rem;
 }
 #breadcrumb > span {
 	margin-top: 0.2rem;
 	padding: 0 1rem;
+	font-size: 1rem;
 }
 
 .scroll-header {
-	padding: 1rem;
+	padding: 1rem 1rem 0.5rem;
 	font-size: 4rem;
 	margin: 1rem;
 	word-wrap: normal;
@@ -230,6 +256,19 @@ nav > ul {
   font-size: 12rem;
 }
 
+.text-tile {
+	display: flex;
+	justify-content: center;
+	font-size: 4rem;
+	text-align: center;
+	margin: 3rem 0.5rem;
+}
+.text-tile > div {
+	display: flex;
+	justify-content: center;
+  padding: 1rem 1rem 0.5rem; 
+}
+
 .image-view {
 	display: flex;
 }
@@ -247,6 +286,10 @@ nav > ul {
 	}
 
 	#breadcrumb {
+		font-size: 1.2rem;
+	}
+
+	.roadmap-item {
 		font-size: 1.2rem;
 	}
 

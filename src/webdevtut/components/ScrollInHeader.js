@@ -3,9 +3,11 @@ import { animated, useSpring } from "react-spring";
 import PropTypes from 'prop-types';
 import clientSettings from '../util/clientSettings';
 
+const xTrans = x => `translateX(${x}px)`;
+
 const ScrollInHeader = props => {
-  const xTrans = x => `translateX(${x}px)`;
   const [anim, set] = useSpring(() => ({
+    background: props.background || '',
     fontSize: props.fontSize ? `${props.fontSize}rem` : '',
     opacity: 0,
     textAlign: props.fromRight ? 'right' : 'left',
@@ -27,6 +29,7 @@ const ScrollInHeader = props => {
 };
 
 ScrollInHeader.propTypes = {
+  background: PropTypes.string,
   delay: PropTypes.number,
   extraMargin: PropTypes.number,
   fromRight: PropTypes.bool,

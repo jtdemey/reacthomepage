@@ -1,11 +1,13 @@
 const chapterData = [
   {
     colors: {
-      primary: '#9d0b0b'
+      primary: '#9d0b0b',
+      analagous: ['#9d300b', '#9d0b54'],
+      splitComplements: ['#0b9d9d', '#549d0b']
     },
     titles: [
       'Overview',
-      'Tooling: Browsers and IDEs',
+      'Browsers and IDEs',
       'Browser Dev Tools',
       'HTTP Requests',
       'HTML5',
@@ -17,7 +19,8 @@ const chapterData = [
   },
   {
     colors: {
-      primary: '#274472'
+      primary: '#274472',
+      splitComplements: ['#725827', '#723227']
     },
     titles: [
       'I Know JS About JS',
@@ -31,7 +34,8 @@ const chapterData = [
   },
   {
     colors: {
-      primary: '#778A35'
+      primary: '#778A35',
+      splitComplements: ['#8a354d', '#72358a']
     },
     titles: [
       'Overview'
@@ -41,7 +45,8 @@ const chapterData = [
   },
   {
     colors: {
-      primary: '#613659'
+      primary: '#613659',
+      splitComplements: ['#446136', '#615b36']
     },
     titles: [
       'Overview'

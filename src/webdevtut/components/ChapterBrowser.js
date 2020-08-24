@@ -9,13 +9,14 @@ import { setChapter } from '../redux/actions/pageActions';
 const ChapterBrowser = props => {
   const pageState = useSelector(state => state.page);
   const dispatch = useDispatch();
+  const data = chapterData[pageState.part - 1];
   return (
     <section id="chapter-browser">
-      <ScrollInHeader text={props.header} />
-      <StaggeredLinkList  baseUri={`/${chapterData[pageState.part - 1].uri}`}
+      <ScrollInHeader background={data.colors.primary} text={props.header} />
+      <StaggeredLinkList  baseUri={`/${data.uri}`}
                           linkClickFunc={index => dispatch(setChapter(index))}
-                          listItems={chapterData[pageState.part - 1].titles}
-                          spanColor={chapterData[pageState.part - 1].colors.primary} />
+                          listItems={data.titles}
+                          spanColor={data.colors.primary} />
     </section>
   );
 };

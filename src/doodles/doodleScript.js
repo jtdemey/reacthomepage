@@ -27,19 +27,18 @@ const loadDoodle = async ind => {
 const loadDoodles = amt => {
   const s = uiState.doodlesLoaded;
   for(let i = s; i < (s + amt); i++) {
-    if(uiState.doodlesLoaded <= uiState.doodleTotal) {
+    if(uiState.doodlesLoaded < uiState.doodleTotal) {
       uiState.doodlesLoaded += 1;
       loadDoodle(i);
+    } else {
+      document.querySelector('#load-doodles-btn').style.display = 'none';
     }
   }
 };
 
 const setBtnListener = () => {
-  console.log('ay');
   const moreBtn = document.querySelector('.content-btn');
-  console.log(moreBtn);
   moreBtn.addEventListener('click', () => {
-    console.log('wut');
     loadDoodles(4);
   });
 };

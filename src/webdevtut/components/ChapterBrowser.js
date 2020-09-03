@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ScrollInHeader from './ScrollInHeader';
-import chapterData from '../parts/chapterData';
-import StaggeredLinkList from './StaggeredLinkList';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setChapter } from '../redux/actions/pageActions';
+import StaggeredLinkList from './StaggeredLinkList';
+import ScrollInHeader from './common/ScrollInHeader';
+import partMetadata from '../parts/partMetadata';
+import { getIndicesFromHref } from '../util/uriHelpers';
 
 const ChapterBrowser = props => {
-  const pageState = useSelector(state => state.page);
+  const data = partMetadata[getIndicesFromHref().part - 1];
   const dispatch = useDispatch();
-  const data = chapterData[pageState.part - 1];
   return (
     <section id="chapter-browser">
       <ScrollInHeader background={data.colors.primary} text={props.header} />

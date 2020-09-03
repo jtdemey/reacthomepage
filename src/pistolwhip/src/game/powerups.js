@@ -67,21 +67,22 @@ const makeLinearPowerup = id => {
 };
 
 export const addPowerup = () => {
-  const powerupType = getRandomProperty(POWERUP_TYPES);
   const nextId = getPowerupId();
-  switch(powerupType) {
-    case POWERUP_TYPES.LINEAR:
-      // makeLinearPowerup(nextId);
-      addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
-      break;
-    case POWERUP_TYPES.PACKAGE:
-      addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
-      break;
-    case POWERUP_TYPES.MISSILE:
-      // makeLinearPowerup(nextId);
-      addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
-      break;
-  }
+  // const powerupType = getRandomProperty(POWERUP_TYPES);
+  // switch(powerupType) {
+  //   case POWERUP_TYPES.LINEAR:
+  //     // makeLinearPowerup(nextId);
+  //     addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
+  //     break;
+  //   case POWERUP_TYPES.PACKAGE:
+  //     addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
+  //     break;
+  //   case POWERUP_TYPES.MISSILE:
+  //     // makeLinearPowerup(nextId);
+  //     addPackageDestructible(game.width + 64, getRandBetween(100, 200), nextId);
+  //     break;
+  // }
+  makeLinearPowerup(nextId);
 };
 
 export const applyPower = powerupId => {

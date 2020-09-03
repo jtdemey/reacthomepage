@@ -7,10 +7,10 @@ const yTrans = x => `translateY(${x}px)`;
 const TextTile = props => {
   const [bgAnim, setBgAnim] = useSpring(() => ({
     xy: [0, 800],
-    y: 800,
+    y: 400,
     background: props.background || '',
     fontSize: props.fontSize ? `${props.fontSize}rem` : '',
-    opacity: 0,
+    opacity: 0.0,
     config: {
       mass: 1,
       tension: 1020,
@@ -48,6 +48,7 @@ const TextTile = props => {
 
 TextTile.propTypes = {
   background: PropTypes.string,
+  delay: PropTypes.number,
   fontSize: PropTypes.number,
   text: PropTypes.string
 };

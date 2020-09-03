@@ -1,8 +1,5 @@
 Part 1: HOW TO WEB (#9d0b0b,#da2d2d,#eb8242,#f6da63)
   Chapter 1: Overview
-    -Goals
-    -Typical web conversation
-    -Reading HTML
   Chapter 2: Tooling - IDEs and Browsers 
   Chapter 3: Browser Dev Tools
   Chapter 4: HTTP Requests Fresh from the Oven

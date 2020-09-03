@@ -2,7 +2,7 @@ import React from 'react';
 import { animated, useSpring } from "react-spring";
 import { Link } from '@reach/router';
 import PropTypes from 'prop-types';
-import clientSettings from '../util/clientSettings';
+import clientSettings from '../../util/clientSettings';
 
 const calc = (x, y) => [-(y - clientSettings.height / 2) / 20, (x - clientSettings.width / 2) / 20, 1.2];
 const trans = (x, y, s) => `perspective(800px) rotateX(${x}deg) rotateY(${y / 2}deg) scale(${s})`;

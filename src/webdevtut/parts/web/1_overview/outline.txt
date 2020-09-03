@@ -1,0 +1,13 @@
+Part 1 Chapter 1: Overview
+
+-Foreword
+-Goals
+  -Scope of whole tutorial: MERN application
+  -Scope of this part
+    -A general knowledge of how the web works
+    -Familiarity with relevant engineering and computer science principles
+    -Getting set up to code
+    -Becoming prepared to choose and use any stack
+      -Learning how to learn
+-Typical web conversation
+-Reading HTML

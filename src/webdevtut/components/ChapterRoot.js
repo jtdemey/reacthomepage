@@ -1,30 +1,33 @@
 import React from 'react';
 import TextTile from './TextTile';
-import { useDispatch, useSelector } from 'react-redux';
-import chapterData from '../parts/chapterData';
-import { setChapter } from '../redux/actions/pageActions';
+import partMetadata from '../parts/partMetadata';
+import LinkBtn from './common/LinkBtn';
+import { getIndicesFromHref } from '../util/uriHelpers';
+import PageRouterController from '../parts/PageRouterController';
 
-const getChapter = () => {
-  const href = location.href.split('/');
-  return href[href.length - 1];
-};
+const chapterIsValid = (chapter, data) => !isNaN(chapter) && data.titles[chapter - 1] !== undefined;
 
 const ChapterRoot = () => {
-  const pageState = useSelector(state => state.page);
-  const chapter = getChapter();
-  if(chapter !== pageState.chapter) {
-    useDispatch()(setChapter(chapter));
+  const indices = getIndicesFromHref();
+  if(indices.page) {
+    return <PageRouterController />;
   }
-  const complementInd = chapter % 2 === 0 ? 0 : 1;
+  let chapter = indices.chapter;
+  const data = partMetadata[indices.part - 1];
+  if(chapterIsValid(chapter, data)) {
+    return (
+      <section className="chapter-root">
+        <TextTile text={data.title} background={data.colors.primary} />
+        <TextTile text={`Chapter ${chapter}: ${data.titles[chapter - 1]}`} background={data.colors.splitComplements[chapter % 2 === 0 ? 0 : 1]} delay={200} />
+        <div>
+          <LinkBtn href={`/${data.uri}/${chapter}/1`} background={data.colors.analagous[0]} text="Start Chapter"></LinkBtn>
+          <LinkBtn href="/" background={data.colors.analagous[1]} delay={100} text="Main Menu"></LinkBtn>
+        </div>
+      </section>
+    );
+  }
   return (
-    <section className="chapter-root">
-      <TextTile text={chapterData[pageState.part - 1].title} background={chapterData[pageState.part - 1].colors.primary} />
-      <TextTile text={`Chapter ${chapter}: ${chapterData[pageState.part - 1].titles[chapter - 1]}`} background={chapterData[pageState.part - 1].colors.splitComplements[complementInd]} delay={200} />
-      <div>
-        <button style={{background: `${chapterData[pageState.part - 1].colors.analagous[0]}`}}>Start Chapter</button>
-        <button style={{background: `${chapterData[pageState.part - 1].colors.analagous[1]}`}}>Main Menu</button>
-      </div>
-    </section>
+    <partMetadata text={`404: Chapter ${chapter} not found`} /> 
   );
 };
 

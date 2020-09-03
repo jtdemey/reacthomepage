@@ -1,20 +1,18 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import PageBreadcrumb from './PageBreadcrumb';
-import { setPage } from '../redux/actions/pageActions';
-
-const getPage = () => {
-  const split = location.href.split('/');
-  console.log(split);
-};
+import { getIndicesFromHref } from '../util/uriHelpers';
+import { useDispatch } from 'react-redux';
+import { setIndices } from '../redux/actions/pageActions';
 
 const PageView = props => {
-  const dispatch = useDispatch();
-  dispatch(setPage(getPage()));
+  const indices = getIndicesFromHref();
+  useDispatch()(setIndices(indices.part, indices.chapter, indices.page));
   return (
     <section id="page-view">
       <PageBreadcrumb {...props} />
-      {props.children}
+      <main>
+        {props.children}
+      </main>
     </section>
   );
 };

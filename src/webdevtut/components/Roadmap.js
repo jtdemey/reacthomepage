@@ -1,40 +1,41 @@
 import React from 'react';
 import { animated, useSpring } from 'react-spring';
 
+const getCss = (r, ind) => {
+  let c = 'roadmap-item';
+  if(r.level > 0) {
+    c += ` nested-${r.level}`;
+  }
+  if(r.roadmapIndex === ind) {
+    c += ' focused';
+  } else if(r.roadmapIndex > ind) {
+    c += ' hidden';
+  }
+  return c;
+};
+
 const renderRoadmap = (currentInd, roadmap) => {
-  const getCss = r => {
-    let c = 'roadmap-item';
-    if(r.level > 0) {
-      c += ` nested-${r.level}`;
-    }
-    if(r.roadmapIndex === currentInd) {
-      c += ' focused';
-    } else if(r.roadmapIndex > currentInd) {
-      c += ' hidden';
-    }
-    return c;
-  };
   return (
     <ul>
       {roadmap.map((e, ind) => (
-        <li key={ind} className={getCss(e)}>{e.text}</li>
+        <li key={ind} className={getCss(e, currentInd)}>{e.text}</li>
       ))}
     </ul>
   );
 };
 
 const Roadmap = props => {
-  const { left, shadowLength } = useSpring({
-    left: props.isVisible ? 0 : -20,
+  const { marginLeft, shadowLength } = useSpring({
+    marginLeft: props.isVisible ? 0 : -24,
     shadowLength: props.isVisible ? 1 : 0
   });
   return (
     <animated.nav style={{
-      left: left.interpolate(l => `${l}rem`),
-      boxShadow: shadowLength.interpolate(s => `#111 ${s}rem ${s}rem ${s}rem`)
+      marginLeft: marginLeft.interpolate(l => `${l}rem`),
+      boxShadow: shadowLength.interpolate(s => `#111 ${s}rem ${s}rem 8px`)
     }}>
       {renderRoadmap(props.roadmapIndex, props.roadmap)}
-      <div id="roadmap-btn"></div>
+      <button id="roadmap-btn"></button>
     </animated.nav>
   );
 };

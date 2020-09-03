@@ -2,7 +2,7 @@ import React from 'react';
 import { animated, useSprings } from "react-spring";
 import { Link } from '@reach/router';
 import PropTypes from 'prop-types';
-import HoverSpan from './HoverSpan';
+import HoverSpan from './common/HoverSpan';
 
 const StaggeredLinkList = props => {
   const [springs, set] = useSprings(props.listItems.length, () => ({

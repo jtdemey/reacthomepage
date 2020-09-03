@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Router } from '@reach/router';
 import Roadmap from './Roadmap';
 import PartView from './PartView';
-import { makeRoad } from '../util/viewHelpers';
 import ChapterView from './ChapterView';
 
-const getDefaultRoadmap = () => [makeRoad(0, 0, 'Welcome!')];
+const getDefaultRoadmap = () => [{index: 0, level: 0, text: 'Welcome!'}];
 
 const handleClick = (roadmapVisible, setRoadmapVisible) => {
   if(roadmapVisible) {
@@ -28,9 +27,9 @@ const TutApp = () => {
   const clickFunc = () => handleClick(roadmapVisible, setRoadmapVisible);
   const keyFunc = e => handleKey(e, roadmapVisible, setRoadmapVisible);
   return (
-    <div id="content-area" tabIndex="0" onClick={clickFunc} onKeyDown={keyFunc}>
+    <div id="content-area" tabIndex="0" onKeyDown={keyFunc}>
       <Roadmap roadmap={getDefaultRoadmap()} isVisible={roadmapVisible} />
-      <Router>
+      <Router onClick={clickFunc}>
         <PartView path="/" />
         <ChapterView path="web/*" part={1} header="Part 1: Web Fundamentals" />
         <ChapterView path="js/*" part={2} header="Part 2: JavaScript" />

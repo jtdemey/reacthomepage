@@ -20,6 +20,7 @@ const chapterData = [
   {
     colors: {
       primary: '#274472',
+      analagous: ['#9d300b', '#9d0b54'],
       splitComplements: ['#725827', '#723227']
     },
     titles: [
@@ -35,6 +36,7 @@ const chapterData = [
   {
     colors: {
       primary: '#778A35',
+      analagous: ['#9d300b', '#9d0b54'],
       splitComplements: ['#8a354d', '#72358a']
     },
     titles: [
@@ -46,6 +48,7 @@ const chapterData = [
   {
     colors: {
       primary: '#613659',
+      analagous: ['#9d300b', '#9d0b54'],
       splitComplements: ['#446136', '#615b36']
     },
     titles: [

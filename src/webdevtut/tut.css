@@ -45,9 +45,9 @@ table {
 /* Base */
 html, body, #site-wrapper, #app-root {
 	width: 100%;
-	height: 100%;
+	min-height: 100%;
+  background: #222;
 	color: #CECECC;
-	overflow: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -98,22 +98,20 @@ button {
 	text-align: right;
 }
 
-#site-wrapper {
-  background: #222;
-}
-
 #content-area {
-	height: 100%;
-	overflow: hidden;
+	display: flex;
+	flex-flow: row;
+}
+#content-area > div {
+	width: 100%;
 }
 
 /* Roadmap */
 nav {
-	position: absolute;
 	top: 0;
-	width: 20rem;
+	width: 24rem;
 	height: 100%;
-	background: #C13E2C;
+	background: #4d4d4d;
 	box-shadow: 1rem 1rem 2rem #222;
 	z-index: 1;
 }
@@ -199,7 +197,8 @@ nav > ul {
 	display: flex;
 	justify-content: center;
 }
-.chapter-root > div > button {
+
+.link-btn {
 	margin: 1rem;
 	padding: 1rem;
 	font-family: 'Montserrat', sans-serif;
@@ -207,9 +206,17 @@ nav > ul {
 	box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.5) , 0px 4px 6px -2px rgba(0,0,0,0.05) ;
 }
 
-#chapter-view, #page-view {
+#chapter-view {
 	overflow-x: hidden;
 	overflow-y: scroll;
+}
+
+#page-view {
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+#page-view > main {
+	padding: 1rem;
 }
 
 #breadcrumb {
@@ -224,6 +231,12 @@ nav > ul {
 #breadcrumb > span {
 	margin-top: 0.2rem;
 	padding: 0 1rem;
+	font-size: 1rem;
+}
+
+.fade-paragraph {
+	margin: 1rem 2rem;
+	line-height: 1.5rem;
 	font-size: 1rem;
 }
 
@@ -283,6 +296,10 @@ nav > ul {
 	#part-view > article {
 		margin-top: 10vh;
 		margin-bottom: 10vh;
+	}
+
+	#content-area > div {
+		margin: 0.5rem 1rem;
 	}
 
 	#breadcrumb {

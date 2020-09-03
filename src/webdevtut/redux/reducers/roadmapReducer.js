@@ -1,6 +1,7 @@
 const initialState = {
+  buttonVisible: false,
   index: 0,
-  tree: {}
+  items: []
 };
 
 export default function(state = initialState, action) {
@@ -11,6 +12,11 @@ export default function(state = initialState, action) {
         index: state.index + 1
       };
     case 'PREV_ROADMAP_IND':
+      return {
+        ...state,
+        index: state.index - 1
+      };
+    case 'UPDATE_ROADMAP':
       return {
         ...state,
         index: state.index - 1
